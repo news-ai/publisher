@@ -10,14 +10,18 @@ import { Link } from 'react-router';
 import { asyncGetFeed } from '../../actions/AppActions'
 import { store } from '../../app';
 
+import { ArticleList } from '../pieces/ArticleList'
+
 class HomePage extends Component {
   render() {
     const dispatch = this.props.dispatch;
     dispatch(asyncGetFeed());
     const { projectName, articles } = this.props.data;
+    console.log(articles);
     return (
       <div>
         <h1>{projectName}</h1>
+        <ArticleList list={articles} />
       </div>
     );
   }
