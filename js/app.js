@@ -12,6 +12,8 @@ import 'file?name=[name].[ext]!../serviceworker.js';
 import 'file?name=[name].[ext]!../manifest.json';
 import 'file?name=[name].[ext]!../.htaccess';
 
+import { asyncGetFeed } from './actions/AppActions'
+
 // Check for ServiceWorker support before trying to install it
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/serviceworker.js').then(() => {
@@ -65,16 +67,19 @@ if (module.hot) {
   });
 }
 
-// Mostly boilerplate, except for the Routes. These are the pages you can go to,
-// which are all wrapped in the App component, which contains the navigation etc
-ReactDOM.render(
-  <Provider store={store}>
-    <Router history={createHistory()}>
-      <Route component={App}>
-        <Route path="/" component={HomePage} />
-        <Route path="*" component={NotFoundPage} />
-      </Route>
-    </Router>
-  </Provider>,
-  document.getElementById('app')
+store.dispatch(asyncGetFeed()).then(() => {
+    // Mostly boilerplate, except for the Routes. These are the pages you can go to,
+    // which are all wrapped in the App component, which contains the navigation etc
+    ReactDOM.render(
+      <Provider store={store}>
+        <Router history={createHistory()}>
+          <Route component={App}>
+            <Route path="/" component={HomePage} />
+            <Route path="*" component={NotFoundPage} />
+          </Route>
+        </Router>
+      </Provider>,
+      document.getElementById('app')
+    );
+  }
 );

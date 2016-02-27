@@ -3,7 +3,7 @@ import { GET_FEED } from '../constants/AppConstants';
 export function asyncGetFeed() {
   let contextURL = `https://context.newsai.org/api/feeds`;
   return (dispatch) => {
-    fetch('https://context.newsai.org/api/feeds/', {
+    return fetch('https://context.newsai.org/api/feeds/', {
       method: "GET"
     }).then(function(response) {
       return response.text()
