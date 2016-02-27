@@ -7,10 +7,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
+import { asyncGetFeed } from '../../actions/AppActions'
+import { store } from '../../app';
+
 class HomePage extends Component {
   render() {
     const dispatch = this.props.dispatch;
-    const { projectName, ownerName } = this.props.data;
+    dispatch(asyncGetFeed());
+    const { projectName, articles } = this.props.data;
     return (
       <div>
         <h1>{projectName}</h1>

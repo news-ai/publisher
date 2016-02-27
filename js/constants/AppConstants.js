@@ -6,3 +6,5 @@
  * Follow this format:
  * export const YOUR_ACTION_CONSTANT = 'YOUR_ACTION_CONSTANT';
  */
+
+export const GET_FEED = 'GET_FEED';

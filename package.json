@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Publisher platform for NewsAI data",
   "dependencies": {
+    "axios": "^0.9.1",
     "fontfaceobserver": "^1.5.1",
     "history": "1.17.0",
     "react": "^0.14.2",
@@ -10,7 +11,7 @@
     "react-redux": "^4.0.0",
     "react-router": "^1.0.3",
     "redux": "^3.0.0",
-    "redux-thunk": "^1.0.0"
+    "redux-thunk": "^1.0.3"
   },
   "devDependencies": {
     "appcache-webpack-plugin": "^1.2.0",
