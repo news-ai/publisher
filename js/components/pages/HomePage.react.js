@@ -5,13 +5,11 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 
 import ArticleList from '../pieces/ArticleList.react';
 
 class HomePage extends Component {
   render() {
-    const dispatch = this.props.dispatch;
     const { projectName, articles } = this.props.data;
     return (
       <div>
