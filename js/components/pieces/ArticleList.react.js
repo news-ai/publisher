@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Article from './Article.react';
+import ArticleListItem from './ArticleListItem.react';
 
 class ArticleList extends Component {
   // <div className='three columns'>Entities</div>
@@ -13,11 +13,10 @@ class ArticleList extends Component {
         </div>
         <div>
         {articles.map((article) => {
-        return (<Article
+        return (<ArticleListItem
           key={article.id}
-          url={article.url}
-          name={article.name}
-          basic_summary={article.basic_summary} />);
+          {...article}
+          />);
       })}
         </div>
       </div>

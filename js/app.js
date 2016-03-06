@@ -29,25 +29,15 @@ if ('serviceWorker' in navigator) {
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router, Route } from 'react-router';
-import { createStore, applyMiddleware } from 'redux';
+import { Router, Route, IndexRoute } from 'react-router';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-// import FontFaceObserver from 'fontfaceobserver';
 import createHistory from 'history/lib/createBrowserHistory';
-
-// Observer loading of Open Sans (to remove open sans, remove the <link> tag in the index.html file and this observer)
-// const openSansObserver = new FontFaceObserver('Open Sans', {});
-
-// When Open Sans is loaded, add the js-open-sans-loaded class to the body
-// openSansObserver.check().then(() => {
-//   document.body.classList.add('js-open-sans-loaded');
-// }, () => {
-//   document.body.classList.remove('js-open-sans-loaded');
-// });
 
 // Import the pages
 import HomePage from './components/pages/HomePage.react';
 import NotFoundPage from './components/pages/NotFound.react';
+import Article from './components/pages/Article.react';
 import App from './components/App.react';
 
 // Import the CSS file, which HtmlWebpackPlugin transfers to the build folder
@@ -75,6 +65,7 @@ store.dispatch(asyncGetFeed()).then(() => {
       <Router history={createHistory()}>
         <Route component={App}>
           <Route path='/' component={HomePage} />
+          <Route path='/article' component={Article} />
           <Route path='*' component={NotFoundPage} />
         </Route>
       </Router>

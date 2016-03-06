@@ -8,9 +8,9 @@ console.log('Starting server...\n');
 
 new WebpackDevServer(webpack(config), { // Start a server
   publicPath: config.output.publicPath,
-  // hot: true, // With hot reloading
+  hot: true, // With hot reloading
   inline: false,
-  // historyApiFallback: true,
+  historyApiFallback: true,
   quiet: true // Without logging
 }).listen(3000, 'localhost', function(err, result) {
   if (err) {

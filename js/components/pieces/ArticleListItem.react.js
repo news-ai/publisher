@@ -1,6 +1,8 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
+// import { Link } from 'react-router';
+// <div className='btn'><Link to={`/article/`}>BUTTON</Link></div>
 
-function Article({id, name, url, basic_summary}) {
+function ArticleListItem({id, name, url, basic_summary}) {
   return (
     <div className='row article-body' key={id}>
         <div className='five columns article-name'>
@@ -15,11 +17,11 @@ function Article({id, name, url, basic_summary}) {
     );
 }
 
-Article.PropTypes = {
+ArticleListItem.PropTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
   basic_summary: PropTypes.array.isRequired,
-}
+};
 
-export default Article;
+export default ArticleListItem;

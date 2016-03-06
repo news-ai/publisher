@@ -5,6 +5,7 @@
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import ArticleList from '../pieces/ArticleList.react';
 
@@ -14,6 +15,10 @@ class HomePage extends Component {
     return (
       <div>
         <h1>{projectName}</h1>
+        <div className='row'>
+        <div className='one columns'><Link to='/article'>ONE</Link></div>
+        <div className='one columns'>TWO</div>
+        </div>
         <ArticleList list={articles} />
       </div>
       );
