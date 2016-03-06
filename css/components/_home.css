@@ -42,3 +42,28 @@
 	border-color: grey;
 	padding: 0.3em;
 }
+
+.article-list-container {
+/*	border-bottom: 2px solid gray;
+*/
+}
+
+.article-list-categories {
+	font-weight: 900;
+}
+
+.article-body {
+	border-top: 1px solid gray;
+	padding: 0.5em 2em .2em 2em;
+}
+
+.article-name {
+	font-size: 1.1em;
+	font-weight: 500;
+}
+
+.article-bulletpoints {
+	font-size: 0.9em;
+}
+
+

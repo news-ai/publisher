@@ -10,13 +10,13 @@ import ArticleList from '../pieces/ArticleList.react';
 
 class HomePage extends Component {
   render() {
-    const { projectName, articles } = this.props.data;
+    const {projectName, articles} = this.props.data;
     return (
       <div>
         <h1>{projectName}</h1>
         <ArticleList list={articles} />
       </div>
-    );
+      );
   }
 }
 

@@ -32,18 +32,18 @@ import { Provider } from 'react-redux';
 import { Router, Route } from 'react-router';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import FontFaceObserver from 'fontfaceobserver';
+// import FontFaceObserver from 'fontfaceobserver';
 import createHistory from 'history/lib/createBrowserHistory';
 
 // Observer loading of Open Sans (to remove open sans, remove the <link> tag in the index.html file and this observer)
-const openSansObserver = new FontFaceObserver('Open Sans', {});
+// const openSansObserver = new FontFaceObserver('Open Sans', {});
 
 // When Open Sans is loaded, add the js-open-sans-loaded class to the body
-openSansObserver.check().then(() => {
-  document.body.classList.add('js-open-sans-loaded');
-}, () => {
-  document.body.classList.remove('js-open-sans-loaded');
-});
+// openSansObserver.check().then(() => {
+//   document.body.classList.add('js-open-sans-loaded');
+// }, () => {
+//   document.body.classList.remove('js-open-sans-loaded');
+// });
 
 // Import the pages
 import HomePage from './components/pages/HomePage.react';
@@ -60,12 +60,12 @@ const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 const store = createStoreWithMiddleware(rootReducer);
 
 // Make reducers hot reloadable, see http://stackoverflow.com/questions/34243684/make-redux-reducers-and-other-non-components-hot-loadable
-if (module.hot) {
-  module.hot.accept('./reducers/rootReducer', () => {
-    const nextRootReducer = require('./reducers/rootReducer').default;
-    store.replaceReducer(nextRootReducer);
-  });
-}
+// if (module.hot) {
+//   module.hot.accept('./reducers/rootReducer', () => {
+//     const nextRootReducer = require('./reducers/rootReducer').default;
+//     store.replaceReducer(nextRootReducer);
+//   });
+// }
 
 store.dispatch(asyncGetFeed()).then(() => {
   // Mostly boilerplate, except for the Routes. These are the pages you can go to,
@@ -74,8 +74,8 @@ store.dispatch(asyncGetFeed()).then(() => {
     <Provider store={store}>
       <Router history={createHistory()}>
         <Route component={App}>
-          <Route path="/" component={HomePage} />
-          <Route path="*" component={NotFoundPage} />
+          <Route path='/' component={HomePage} />
+          <Route path='*' component={NotFoundPage} />
         </Route>
       </Router>
     </Provider>,
