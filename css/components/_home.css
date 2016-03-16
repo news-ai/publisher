@@ -1,8 +1,8 @@
 .wrapper {
 	background-color: #FEFEFE;
 	color: #222222;
-	max-width: 978px;
-	margin: 0 auto;
+/*	max-width: 978px;
+*/	margin: 0 auto;
 }
 
 .home__wrapper a {
@@ -58,12 +58,20 @@
 }
 
 .article-name {
-	font-size: 1.1em;
-	font-weight: 500;
+	font-size: 1.2em;
+	font-weight: 700;
 }
 
 .article-bulletpoints {
 	font-size: 0.9em;
+}
+
+.article-header-image-container {
+	vertical-align: middle;
+}
+
+.article-header-image {
+	border-radius: 3%;
 }
 
 

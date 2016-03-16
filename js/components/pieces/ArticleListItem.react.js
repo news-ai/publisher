@@ -1,17 +1,23 @@
 import React, { PropTypes } from 'react';
+import { Link } from 'react-router';
 // import { Link } from 'react-router';
 // <div className='btn'><Link to={`/article/`}>BUTTON</Link></div>
 
-function ArticleListItem({id, name, url, basic_summary}) {
+function ArticleListItem({id, name, url, basic_summary, header_image}) {
   return (
     <div className='row article-body' key={id}>
-        <div className='five columns article-name'>
-        <span>{name}</span>
-        </div>
-        <div className='seven columns article-bulletpoints'>
-        <ul>
-        {basic_summary.map((bulletPoint, i) => (i < 3) ? <li key={i}>{bulletPoint}</li> : null)}
-        </ul>
+      <div className='five columns article-header-image-container'>
+      <img className='u-max-full-width article-header-image' src={header_image} />
+      </div>
+      <div className='seven columns'>
+          <div className='article-name'>
+            <span><Link to={'/article/' + id}>{name}</Link></span>
+          </div>
+          <div className='article-bulletpoints'>
+            <ul>
+            {basic_summary.map((bulletPoint, i) => (i < 3 && bulletPoint.length > 5) ? <li key={i}>{bulletPoint}</li> : null)}
+            </ul>
+          </div>
         </div>
       </div>
     );
