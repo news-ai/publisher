@@ -15,7 +15,7 @@ class HomePage extends Component {
     return (
       <div>
         <h1>{projectName}</h1>
-        <ArticleList list={articles} />
+        <ArticleList articles={articles} />
       </div>
       );
   }
