@@ -15,15 +15,15 @@ import 'file?name=[name].[ext]!../.htaccess';
 import { asyncGetFeed } from './actions/AppActions';
 
 // Check for ServiceWorker support before trying to install it
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/serviceworker.js').then(() => {
-    // Registration was successful
-  }).catch(() => {
-    // Registration failed
-  });
-} else {
-  // No ServiceWorker Support
-}
+// if ('serviceWorker' in navigator) {
+//   navigator.serviceWorker.register('/serviceworker.js').then(() => {
+//     // Registration was successful
+//   }).catch(() => {
+//     // Registration failed
+//   });
+// } else {
+//   // No ServiceWorker Support
+// }
 
 // Import all the third party stuff
 import React from 'react';
@@ -63,11 +63,12 @@ store.dispatch(asyncGetFeed()).then(() => {
   ReactDOM.render(
     <Provider store={store}>
       <Router history={createHistory()}>
-        <Route component={App}>
-          <Route path='/' component={HomePage} />
-          <Route path='/article' component={Article} />
-          <Route path='*' component={NotFoundPage} />
+        <Route path='/' component={App}>
+          <IndexRoute component={HomePage} />
+          <Route path='article' component={HomePage} />
+          <Route path='/article/:articleId' component={Article} />
         </Route>
+        <Route path='*' component={NotFoundPage} />
       </Router>
     </Provider>,
     document.getElementById('app')

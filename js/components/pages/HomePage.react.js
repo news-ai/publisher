@@ -16,7 +16,7 @@ class HomePage extends Component {
       <div>
         <h1>{projectName}</h1>
         <div className='row'>
-        <div className='one columns'><Link to='/article'>ONE</Link></div>
+        <div className='one columns'><Link to='/article/1' activeClassName='active'>ONE</Link></div>
         <div className='one columns'>TWO</div>
         </div>
         <ArticleList list={articles} />
