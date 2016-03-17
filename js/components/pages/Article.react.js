@@ -1,19 +1,8 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import * as actionCreators from '../../actions/AppActions';
+import { bindActionCreators } from 'redux'
 
-// function Article() {
-//   return (<span>THIS IS ARTICLE PAGE {this.props.params.articleId} </span>);
-// }
-
-// class Article extends Component {
-//   render() {
-//     return (
-//       <span>
-//     	THIS IS ARTICLE {this.props.params.articleId}
-//     	</span>
-//       );
-//   }
-// }
 function Article({article, articleId}) {
   return (
     <span>THIS IS ARTCLE {articleId}</span>
@@ -22,24 +11,22 @@ function Article({article, articleId}) {
 
 const mapStateToProps = (state, props) => {
   return {
-    article: state.articles.filter((article) => article.id === parseInt(props.params.articleId, 10))[0],
+    article: state.feedReducer.articles.filter((article) => article.id === parseInt(props.params.articleId, 10))[0],
     articleId: props.params.articleId
   };
 };
 
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     onFbClick: () => dispatch(shouldFetchFb())
-//   };
-// };
-
-// const Welcome = connect(
-//     mapStateToProps,
-//     mapDispatchToProps
-// )(NoLogin);
+const mergeProps = (stateProps, dispatchProps, ownProps) => {
+  // console.log(stateProps);
+  // console.log(dispatchProps);
+  // console.log(ownProps);
+  let entityIds = stateProps.article.entity_scores.map((entity) => entity.entity_id);
+  dispatchProps.fetchArticleEntities(entityIds);
+  return {};
+};
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  actionCreators,
+  mergeProps
 )(Article);
-
-// export default Article;

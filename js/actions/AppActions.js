@@ -1,4 +1,4 @@
-import { GET_FEED } from '../constants/AppConstants';
+import { GET_FEED, RECEIVE_ENTITY, REQUEST_ENTITIES, RECEIVE_ENTITIES } from '../constants/AppConstants';
 const CONTEXT_API_BASE = `https://context.newsai.org/api`;
 
 export function getFeed(articles) {
@@ -21,7 +21,6 @@ export function asyncGetFeed() {
   };
 }
 
-export const RECEIVE_ENTITY = 'RECEIVE_ENTITY';
 export function receiveEntity(json) {
   return {
     type: RECEIVE_ENTITY,
@@ -37,17 +36,24 @@ export function fetchEntity(entityId) {
   };
 }
 
-export const RECEIVE_ENTITIES = 'RECEIVE_ENTITIES';
 function doneFetchingArticleEntities() {
   return {
     type: RECEIVE_ENTITIES
   };
 }
 
-export const REQUEST_ENTITIES = 'REQUEST_ENTITIES';
+export function requestArticleEntities() {
+  return {
+    type: REQUEST_ENTITIES
+  };
+}
+
 export function fetchArticleEntities(entityIds) {
-  return (dispatch) => Promise.all(entityIds.map((id) => fetchEntity(id)))
-    .then(() => dispatch(doneFetchingArticleEntities()))
-    .fail((e) => console.log(e));
+  return (dispatch, getState) => {
+    dispatch(requestArticleEntities);
+    Promise.all(entityIds.map((id) => fetchEntity(id)))
+      .then(() => dispatch(doneFetchingArticleEntities()));
+    console.log(getState());
+  };
 }
 

@@ -3,32 +3,39 @@
  * This is the first thing users see of our App
  */
 
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
-
 import ArticleList from '../pieces/ArticleList.react';
 
-class HomePage extends Component {
-  render() {
-    const {projectName, articles} = this.props.data;
-    return (
-      <div>
+// class HomePage extends Component {
+//   render() {
+//     return (
+//       <div>
+//         <h1>{projectName}</h1>
+//         <ArticleList articles={articles} />
+//       </div>
+//       );
+//   }
+// }
+
+function HomePage({projectName, articles}) {
+  return (
+    <div>
         <h1>{projectName}</h1>
         <ArticleList articles={articles} />
       </div>
-      );
-  }
+    );
 }
 
-// REDUX STUFF
 
-// Which props do we want to inject, given the global state?
-function select(state) {
+const mapStateToProps = (state) => {
   return {
-    data: state
+    projectName: state.feedReducer.projectName,
+    articles: state.feedReducer.articles
   };
-}
+};
 
 // Wrap the component to inject dispatch and state into it
-export default connect(select)(HomePage);
+export default connect(
+  mapStateToProps
+)(HomePage);

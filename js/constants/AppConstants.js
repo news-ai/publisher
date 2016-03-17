@@ -8,3 +8,6 @@
  */
 
 export const GET_FEED = 'GET_FEED';
+export const RECEIVE_ENTITIES = 'RECEIVE_ENTITIES';
+export const REQUEST_ENTITIES = 'REQUEST_ENTITIES';
+export const RECEIVE_ENTITY = 'RECEIVE_ENTITY';

@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-// import { Link } from 'react-router';
-// <div className='btn'><Link to={`/article/`}>BUTTON</Link></div>
+import { connect } from 'react-redux';
 
 function ArticleListItem({id, name, url, basic_summary, header_image}) {
   return (
@@ -29,5 +28,11 @@ ArticleListItem.PropTypes = {
   url: PropTypes.string.isRequired,
   basic_summary: PropTypes.array.isRequired,
 };
+
+
+
+// export default connect(
+//   mapDispatchToProps
+// )(ArticleListItem);
 
 export default ArticleListItem;

@@ -6,19 +6,14 @@
 
 import { GET_FEED } from '../constants/AppConstants';
 import assignToEmpty from '../utils/assign';
-
-const initialState = {
-  projectName: 'NewsAI Publisher',
-  articles: []
-};
+import { initialState } from './initialState';
 
 function extractSummary(summary) {
   return summary.split('.').map((sentence) => sentence.concat('.'));
-// return summary;
 }
 
-function feedReducer(state = initialState, action) {
-  Object.freeze(state); // Don't mutate state directly, always use assign()!
+function feedReducer(state = initialState.feedReducer, action) {
+  Object.freeze(state);
   switch (action.type) {
   case GET_FEED:
     return assignToEmpty(state, {
