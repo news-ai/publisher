@@ -6,9 +6,9 @@ import Entity from '../pieces/Entity';
 
 class Article extends Component {
   componentDidMount() {
-    let {dispatch, article} = this.props;
+    let {dispatch, article, entities} = this.props;
     let action = actionCreators.fetchArticleEntities(article.id);
-    dispatch(action);
+    if (entities === undefined) dispatch(action);
   }
 
   render() {
