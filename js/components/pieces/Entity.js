@@ -2,10 +2,15 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 // import { connect } from 'react-redux';
 
+function truncate(num, decimalPoint) {
+  return Math.floor(num * 100 * (10 ** decimalPoint)) / (10 ** decimalPoint);
+}
+
 function Entity({name, entityScore}) {
   return (
-    <div>
-    <span>{name}</span>
+    <div className='row'>
+    <span className='ten columns'>{name}</span>
+    <span className='two columns'>{truncate(entityScore, 2)}</span>
     </div>
     );
 }

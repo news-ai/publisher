@@ -25,7 +25,7 @@ class Article extends Component {
                 <div className='four columns'>
                     <h5>Entities</h5>
                 { (entities.length !== article.entity_scores.length) ? loading :
-        entities.map((entity, i) => <Entity key={entity.id} entityScore={article.entity_scores[i]} {...entity} />)}
+        entities.map((entity, i) => <Entity key={entity.id} entityScore={article.entity_scores[i].score} {...entity} />)}
                 </div>
                 <div className='eight columns'>
                     <h5>Article Details</h5>
