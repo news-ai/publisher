@@ -7,25 +7,21 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import ArticleList from '../pieces/ArticleList.react';
 
-// class HomePage extends Component {
-//   render() {
-//     return (
-//       <div>
-//         <h1>{projectName}</h1>
-//         <ArticleList articles={articles} />
-//       </div>
-//       );
-//   }
-// }
-
 function HomePage({projectName, articles}) {
   return (
     <div>
-        <h1>{projectName}</h1>
+        <div className='container'>
+          <h1 className='row'>{projectName}</h1>
+        </div>
         <ArticleList articles={articles} />
       </div>
     );
 }
+
+HomePage.PropTypes = {
+  projectName: PropTypes.string.isRequired,
+  articles: PropTypes.array.isRequired
+};
 
 
 const mapStateToProps = (state) => {
@@ -35,7 +31,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-// Wrap the component to inject dispatch and state into it
 export default connect(
   mapStateToProps
 )(HomePage);

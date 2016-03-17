@@ -20,18 +20,6 @@ function ArticleList({articles}) {
     );
 }
 
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     onFbClick: () => dispatch(shouldFetchFb())
-//   };
-// };
-
-// const Welcome = connect(
-//     mapStateToProps,
-//     mapDispatchToProps
-// )(NoLogin);
-
-
 ArticleList.PropTypes = {
   articles: PropTypes.array.isRequired,
 };

@@ -29,10 +29,4 @@ ArticleListItem.PropTypes = {
   basic_summary: PropTypes.array.isRequired,
 };
 
-
-
-// export default connect(
-//   mapDispatchToProps
-// )(ArticleListItem);
-
 export default ArticleListItem;

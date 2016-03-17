@@ -43,6 +43,7 @@
 	padding: 0.3em;
 }
 
+/*HOMEPAGE - ARTICLE LIST ITEMS*/
 .article-list-container {
 /*	border-bottom: 2px solid gray;
 */
@@ -58,20 +59,32 @@
 }
 
 .article-name {
-	font-size: 1.2em;
-	font-weight: 700;
+	font-size: 1.3em;
+	font-weight: 500;
 }
 
 .article-bulletpoints {
 	font-size: 0.9em;
 }
 
-.article-header-image-container {
+/*.article-header-image-container {
 	vertical-align: middle;
 }
-
+*/
 .article-header-image {
 	border-radius: 3%;
 }
+
+/*ARTICLE PAGE*/
+.article-categories {
+	font-size: 1.1em;
+	font-weight: 500;
+}
+
+
+
+
+
+
 
 

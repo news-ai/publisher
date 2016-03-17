@@ -31,8 +31,10 @@ export function receiveEntity(json) {
 export function fetchEntity(entityId) {
   return (dispatch) => {
     return fetch(CONTEXT_API_BASE + '/entities/' + entityId)
-      .done((response) => dispatch(receiveEntity(response)))
-      .fail((e) => console.log(e));
+      .then((response) => {
+        console.log(response);
+        dispatch(receiveEntity(response));
+      });
   };
 }
 
@@ -50,10 +52,10 @@ export function requestArticleEntities() {
 
 export function fetchArticleEntities(entityIds) {
   return (dispatch, getState) => {
-    dispatch(requestArticleEntities);
-    Promise.all(entityIds.map((id) => fetchEntity(id)))
+    console.log(entityIds);
+    dispatch(requestArticleEntities());
+    Promise.all(entityIds.map((id) => dispatch(fetchEntity(id))))
       .then(() => dispatch(doneFetchingArticleEntities()));
-    console.log(getState());
   };
 }
 

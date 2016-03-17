@@ -32,6 +32,8 @@ import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute } from 'react-router';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
+import createLogger from 'redux-logger'
+
 import createHistory from 'history/lib/createBrowserHistory';
 
 // Import the pages
@@ -46,7 +48,11 @@ import '../css/main.css';
 // Create the store with the redux-thunk middleware, which allows us
 // to do asynchronous things in the actions
 import rootReducer from './reducers/rootReducer';
-const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+const loggerMiddleware = createLogger();
+const createStoreWithMiddleware = applyMiddleware(
+  thunk,
+  loggerMiddleware
+)(createStore);
 const store = createStoreWithMiddleware(rootReducer);
 
 // Make reducers hot reloadable, see http://stackoverflow.com/questions/34243684/make-redux-reducers-and-other-non-components-hot-loadable
@@ -58,8 +64,6 @@ const store = createStoreWithMiddleware(rootReducer);
 // }
 
 store.dispatch(asyncGetFeed()).then(() => {
-  // Mostly boilerplate, except for the Routes. These are the pages you can go to,
-  // which are all wrapped in the App component, which contains the navigation etc
   ReactDOM.render(
     <Provider store={store}>
       <Router history={createHistory()}>
