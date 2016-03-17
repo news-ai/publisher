@@ -1,4 +1,5 @@
 import { GET_FEED, RECEIVE_ENTITY, REQUEST_ENTITIES, RECEIVE_ENTITIES } from '../constants/AppConstants';
+import fetch from 'isomorphic-fetch';
 const CONTEXT_API_BASE = `https://context.newsai.org/api`;
 
 export function getFeed(articles) {
@@ -31,10 +32,8 @@ export function receiveEntity(json) {
 export function fetchEntity(entityId) {
   return (dispatch) => {
     return fetch(CONTEXT_API_BASE + '/entities/' + entityId)
-      .then((response) => {
-        console.log(response);
-        dispatch(receiveEntity(response));
-      });
+      .then((response) => response.text())
+      .then((body) => dispatch(receiveEntity(JSON.parse(body))));
   };
 }
 
@@ -52,7 +51,6 @@ export function requestArticleEntities() {
 
 export function fetchArticleEntities(entityIds) {
   return (dispatch, getState) => {
-    console.log(entityIds);
     dispatch(requestArticleEntities());
     Promise.all(entityIds.map((id) => dispatch(fetchEntity(id))))
       .then(() => dispatch(doneFetchingArticleEntities()));
