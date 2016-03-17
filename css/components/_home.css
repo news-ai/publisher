@@ -76,11 +76,15 @@
 }
 
 /*ARTICLE PAGE*/
-.article-categories {
+/*.article-categories {
 	font-size: 1.1em;
 	font-weight: 500;
-}
+}*/
 
+.entity-item {
+	padding: 0.3em;
+	line-height: 1em;
+}
 
 
 

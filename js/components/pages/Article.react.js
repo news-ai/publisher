@@ -7,25 +7,20 @@ import Entity from '../pieces/Entity';
 class Article extends Component {
   componentDidMount() {
     let {dispatch, article} = this.props;
-    let entityIds = article.entity_scores.map((entity) => entity.entity_id);
-    let action = actionCreators.fetchArticleEntities(entityIds);
+    let action = actionCreators.fetchArticleEntities(article.id);
     dispatch(action);
   }
 
   render() {
-    let {article, articleId, entities} = this.props;
+    let {article, articleId, entities, entityScores, isReceiving} = this.props;
     let loading = (<span>The article is loading</span>);
-    // console.log(entities);
-    //   <div key={entity.id}>
-    //                 {entity.name}
-    //                 </div>
     return (
       <div className='container'>
             <div className='row'>
                 <div className='four columns'>
                     <h5>Entities</h5>
-                { (entities.length !== article.entity_scores.length) ? loading :
-        entities.map((entity, i) => <Entity key={entity.id} entityScore={article.entity_scores[i].score} {...entity} />)}
+                { (isReceiving && entities.length > 0) ? loading :
+        entities.map((entity, i) => <Entity key={entity.id} entityScore={entityScores[i]} {...entity} />)}
                 </div>
                 <div className='eight columns'>
                     <h5>Article Details</h5>
@@ -37,10 +32,13 @@ class Article extends Component {
 }
 
 const mapStateToProps = (state, props) => {
+  const article = state.feedReducer.articles.filter((article) => article.id === parseInt(props.params.articleId, 10))[0];
   return {
-    article: state.feedReducer.articles.filter((article) => article.id === parseInt(props.params.articleId, 10))[0],
+    article: article,
     articleId: props.params.articleId,
-    entities: state.entityReducer.entities
+    entities: state.entityReducer.entities,
+    isReceiving: state.entityReducer.isReceiving,
+    entityScores: article.entity_scores.map((obj) => obj.score)
   };
 };
 

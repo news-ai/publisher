@@ -4,22 +4,22 @@ import { initialState } from './initialState';
 
 function entityReducer(state = initialState.entityReducer, action) {
   Object.freeze(state);
+  let obj = assignToEmpty(state, {});
   switch (action.type) {
   case REQUEST_ENTITIES:
-    return assignToEmpty(state, {
-      isReceiving: true
-    });
+    obj.isReceiving = true;
+    obj[action.articleId] = [];
+    return obj;
   case RECEIVE_ENTITIES:
     return assignToEmpty(state, {
       isReceiving: false
     });
   case RECEIVE_ENTITY:
-    return assignToEmpty(state, {
-      entities: [
-        ...state.entities,
-        action.json
-      ]
-    });
+    obj[action.articleId] = [
+      ...state[action.articleId],
+      action.json
+    ];
+    return obj;
   default:
     return state;
   }

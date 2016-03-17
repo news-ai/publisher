@@ -22,18 +22,19 @@ export function asyncGetFeed() {
   };
 }
 
-export function receiveEntity(json) {
+export function receiveEntity(json, articleId) {
   return {
     type: RECEIVE_ENTITY,
-    json
+    json,
+    articleId
   };
 }
 
-export function fetchEntity(entityId) {
+export function fetchEntity(entityId, articleId) {
   return (dispatch) => {
     return fetch(CONTEXT_API_BASE + '/entities/' + entityId)
       .then((response) => response.text())
-      .then((body) => dispatch(receiveEntity(JSON.parse(body))));
+      .then((body) => dispatch(receiveEntity(JSON.parse(body), articleId)));
   };
 }
 
@@ -43,16 +44,19 @@ function doneFetchingArticleEntities() {
   };
 }
 
-export function requestArticleEntities() {
+export function requestArticleEntities(articleId) {
   return {
-    type: REQUEST_ENTITIES
+    type: REQUEST_ENTITIES,
+    articleId
   };
 }
 
-export function fetchArticleEntities(entityIds) {
+export function fetchArticleEntities(articleId) {
   return (dispatch, getState) => {
-    dispatch(requestArticleEntities());
-    Promise.all(entityIds.map((id) => dispatch(fetchEntity(id))))
+    const article = getState().feedReducer.articles.filter((article) => article.id === articleId)[0];
+    const entityIds = article.entity_scores.map((entity) => entity.entity_id);
+    dispatch(requestArticleEntities(articleId));
+    Promise.all(entityIds.map((id) => dispatch(fetchEntity(id, articleId))))
       .then(() => dispatch(doneFetchingArticleEntities()));
   };
 }

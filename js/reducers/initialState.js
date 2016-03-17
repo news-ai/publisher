@@ -5,7 +5,6 @@ export const initialState = {
     isReceiving: false
   },
   entityReducer: {
-    entities: [],
     isReceiving: false
   }
 };
