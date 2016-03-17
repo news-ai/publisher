@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/AppActions';
-import Entity from '../pieces/Entity';
+import EntityList from '../pieces/EntityList';
 // import { bindActionCreators } from 'redux';
 
 class Article extends Component {
@@ -17,13 +17,15 @@ class Article extends Component {
     return (
       <div className='container'>
             <div className='row'>
-                <div className='four columns'>
-                    <h5>Entities</h5>
-                { (isReceiving && entities.length > 0) ? loading :
-        entities.map((entity, i) => <Entity key={entity.id} entityScore={entityScores[i]} {...entity} />)}
-                </div>
                 <div className='eight columns'>
                     <h5>Article Details</h5>
+                </div>
+            </div>
+            <div className='row'>
+            <div className='eight columns'>
+                    <h5>Entities</h5>
+                { ((isReceiving && entities.length >= 0) || entities === undefined) ? loading :
+        <EntityList entities={entities} entityScores={entityScores} />}
                 </div>
             </div>
         </div>

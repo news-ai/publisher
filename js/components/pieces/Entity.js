@@ -8,9 +8,9 @@ function truncate(num, decimalPoint) {
 
 function Entity({name, entityScore}) {
   return (
-    <div className='row entity-item'>
-    <span className='ten columns'>{name}</span>
-    <span className='two columns'>{truncate(entityScore, 2)}</span>
+    <div className='row'>
+      <span className='ten columns'>{name}</span>
+      <span className='two columns'>{truncate(entityScore, 2)}</span>
     </div>
     );
 }
