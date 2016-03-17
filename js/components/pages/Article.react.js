@@ -36,7 +36,7 @@ const mapStateToProps = (state, props) => {
   return {
     article: article,
     articleId: props.params.articleId,
-    entities: state.entityReducer.entities,
+    entities: state.entityReducer[article.id],
     isReceiving: state.entityReducer.isReceiving,
     entityScores: article.entity_scores.map((obj) => obj.score)
   };
