@@ -7,8 +7,9 @@ function EntityList({entities, entityScores}) {
   return (
     <div>
       <div className='row entity-categories'>
-      <span className='ten columns'>Name</span>
-      <span className='two columns'>Relevance Score</span>
+      <span className='eight columns'>Name</span>
+      <span className='two columns'>Type</span>
+      <span className='two columns'>Relevance</span>
       </div>
       <div className='entity-body'>
     {entities.map((entity, i) => <Entity key={entity.id} entityScore={entityScores[i]} {...entity} />)}

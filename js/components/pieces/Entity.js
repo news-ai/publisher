@@ -6,10 +6,11 @@ function truncate(num, decimalPoint) {
   return Math.floor(num * 100 * (10 ** decimalPoint)) / (10 ** decimalPoint);
 }
 
-function Entity({name, entityScore}) {
+function Entity({name, main_type, entityScore}) {
   return (
     <div className='row'>
-      <span className='ten columns'>{name}</span>
+      <span className='eight columns'>{name}</span>
+      <span className='two columns'>{main_type}</span>
       <span className='two columns'>{truncate(entityScore, 2)}</span>
     </div>
     );
