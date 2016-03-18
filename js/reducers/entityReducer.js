@@ -1,4 +1,4 @@
-import { RECEIVE_ENTITY, REQUEST_ENTITIES, RECEIVE_ENTITIES } from '../constants/AppConstants';
+import { RECEIVE_ENTITY, REQUEST_ENTITIES, RECEIVE_ENTITIES, RECEIVE_ENTITY_ARTICLES } from '../constants/AppConstants';
 import assignToEmpty from '../utils/assign';
 import { initialState } from './initialState';
 
@@ -15,6 +15,9 @@ function entityReducer(state = initialState.entityReducer, action) {
     });
   case RECEIVE_ENTITY:
     obj[parseInt(action.json.id)] = action.json;
+    return obj;
+  case RECEIVE_ENTITY_ARTICLES:
+    obj.entity_articles = action.json.map((article) => article.id);
     return obj;
   default:
     return state;

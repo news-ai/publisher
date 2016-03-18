@@ -7,11 +7,15 @@ import { combineReducers } from 'redux';
 import feedReducer from './feedReducer';
 import entityReducer from './entityReducer';
 import authorReducer from './authorReducer';
+import publisherReducer from './publisherReducer';
+import articleReducer from './articleReducer';
 
 const rootReducer = combineReducers({
   feedReducer,
   entityReducer,
-  authorReducer
+  authorReducer,
+  publisherReducer,
+  articleReducer
 });
 
 export default rootReducer;

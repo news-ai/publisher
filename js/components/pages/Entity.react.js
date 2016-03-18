@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import * as actionCreators from '../../actions/AppActions';
 import { connect } from 'react-redux';
+import ArticleList from '../pieces/ArticleList.react';
+
 
 class Entity extends Component {
   componentDidMount() {
     let {dispatch, entityId, entity} = this.props;
-    let action = actionCreators.fetchEntity(entityId);
-    if (entity === undefined) dispatch(action);
+    if (entity === undefined) {
+      dispatch(actionCreators.fetchEntity(entityId));
+      dispatch(actionCreators.fetchEntityArticles(entityId));
+    }
   }
 
   render() {
@@ -14,14 +18,14 @@ class Entity extends Component {
     const loading = (<span>The entity is loading</span>);
     return (
       <div className='container entity'>
-      	<div className='row'>
-      		{ (entity === undefined) ? loading : (
+        <div className='row'>
+          { (entity === undefined) ? loading : (
         <div className='twelve columns'>
-      			<h5>{entity.name}</h5>
-      			<p>Type: {entity.main_type}</p>
-      		</div>
+            <h5>{entity.name}</h5>
+            <p>Type: {entity.main_type}</p>
+          </div>
         )}
-      	</div>
+        </div>
       </div>
       );
   }

@@ -9,5 +9,11 @@ export const initialState = {
   },
   authorReducer: {
     isReceiving: false
+  },
+  publisherReducer: {
+    isReceiving: false
+  },
+  articleReducer: {
+    isReceiving: false
   }
 };

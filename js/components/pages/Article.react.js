@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/AppActions';
 import EntityList from '../pieces/EntityList.react';
+import { Link } from 'react-router';
 
 class Article extends Component {
   componentDidMount() {
@@ -20,9 +21,9 @@ class Article extends Component {
                     <h5>Article Details</h5>
                     <div>
                         <p>Title: {article.name}</p>
-                        <p>Publisher: {article.publisher}</p>
+                        <p>Publisher: {article.publisher.name}</p>
                         <p>Summary: {article.summary}</p>
-                        <p>Authors: {article.authors.map((author) => <Link to={'/authors/' + author.id}><span>{author.name} </span></Link>)}</p>
+                        <p>Authors: {article.authors.map((author, i) => <span key={i}><Link to={'/authors/' + author.id}>{author.name} </Link></span>)}</p>
                     </div>
                 </div>
             </div>
