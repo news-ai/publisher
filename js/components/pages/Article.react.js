@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/AppActions';
 import EntityList from '../pieces/EntityList.react';
-// import { bindActionCreators } from 'redux';
 
 class Article extends Component {
   componentDidMount() {
