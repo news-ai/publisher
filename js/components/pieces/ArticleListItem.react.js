@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 // import { connect } from 'react-redux';
 
-function ArticleListItem({id, name, url, basic_summary, header_image}) {
+function ArticleListItem({id, name, url, basic_summary, header_image, authors}) {
   return (
     <div className='row article-body' key={id}>
       <div className='five columns article-header-image-container'>
@@ -11,6 +11,9 @@ function ArticleListItem({id, name, url, basic_summary, header_image}) {
       <div className='seven columns'>
           <div className='article-name'>
             <span><Link to={'/articles/' + id}>{name}</Link></span>
+          </div>
+          <div className='article-authors'>
+          {authors.map((author) => <Link to={'/authors/' + author.id}><span>{author.name} </span></Link>)}
           </div>
           <div className='article-bulletpoints'>
             <ul>
@@ -28,6 +31,7 @@ ArticleListItem.PropTypes = {
   url: PropTypes.string.isRequired,
   header_image: PropTypes.string.isRequired,
   basic_summary: PropTypes.array.isRequired,
+  authors: PropTypes.array.isRequired,
 };
 
 export default ArticleListItem;

@@ -22,6 +22,7 @@ class Article extends Component {
                         <p>Title: {article.name}</p>
                         <p>Publisher: {article.publisher}</p>
                         <p>Summary: {article.summary}</p>
+                        <p>Authors: {article.authors.map((author) => <Link to={'/authors/' + author.id}><span>{author.name} </span></Link>)}</p>
                     </div>
                 </div>
             </div>
