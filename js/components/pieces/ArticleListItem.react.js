@@ -13,7 +13,7 @@ function ArticleListItem({id, name, url, basic_summary, header_image, authors}) 
             <span><Link to={'/articles/' + id}>{name}</Link></span>
           </div>
           <div className='article-authors'>
-          {authors.map((author) => <Link to={'/authors/' + author.id}><span>{author.name} </span></Link>)}
+          {authors.map((author) => <Link to={'/authors/' + author.id}><span key={author.id}>{author.name} </span></Link>)}
           </div>
           <div className='article-bulletpoints'>
             <ul>

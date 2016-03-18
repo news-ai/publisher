@@ -11,7 +11,7 @@ export function getFeed(articles) {
 
 export function asyncGetFeed() {
   return (dispatch) => {
-    return fetch(CONTEXT_API_BASE + '/feeds/', {
+    return fetch(CONTEXT_API_BASE + '/feeds' + '?' + Date.now(), {
       method: 'GET'
     }).then((response) => {
       return response.text();

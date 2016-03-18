@@ -39,7 +39,7 @@ class Article extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-  const article = state.feedReducer.articles.filter((article) => article.id === parseInt(props.params.articleId, 10))[0];
+  const article = state.feedReducer.articles.find((article) => article.id === parseInt(props.params.articleId, 10));
   const entitiesNotLoaded = article.entity_scores.some((score) => state.entityReducer[score.entity_id] === undefined);
   return {
     article: article,
