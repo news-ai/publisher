@@ -18,6 +18,7 @@ class Author extends Component {
           { (author === undefined) ? loading : (
         <div className='twelve columns'>
             <h5>{author.name}</h5>
+            <p>Writes for: {author.writes_for.map((publisher) => <span key={publisher.id}>{publisher.name}</span>)}</p>
           </div>
         )}
         </div>
