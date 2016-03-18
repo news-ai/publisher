@@ -41,6 +41,7 @@ import HomePage from './components/pages/HomePage.react';
 import NotFoundPage from './components/pages/NotFound.react';
 import Article from './components/pages/Article.react';
 import Entity from './components/pages/Entity.react';
+import Author from './components/pages/Author.react';
 import App from './components/App.react';
 
 // Import the CSS file, which HtmlWebpackPlugin transfers to the build folder
@@ -70,8 +71,9 @@ store.dispatch(asyncGetFeed()).then(() => {
       <Router history={createHistory()}>
         <Route path='/' component={App}>
           <IndexRoute component={HomePage} />
-          <Route path='/article/:articleId' component={Article} />
-          <Route path='/entity/:entityId' component={Entity} />
+          <Route path='/articles/:articleId' component={Article} />
+          <Route path='/entities/:entityId' component={Entity} />
+          <Route path='/authors/:authorId' component={Author} />
         </Route>
         <Route path='*' component={NotFoundPage} />
       </Router>

@@ -1,4 +1,4 @@
-import { GET_FEED, RECEIVE_ENTITY, REQUEST_ENTITIES, RECEIVE_ENTITIES } from '../constants/AppConstants';
+import { GET_FEED, RECEIVE_ENTITY, REQUEST_ENTITIES, RECEIVE_ENTITIES, REQUEST_AUTHOR, RECEIVE_AUTHOR } from '../constants/AppConstants';
 import fetch from 'isomorphic-fetch';
 const CONTEXT_API_BASE = `https://context.newsai.org/api`;
 
@@ -60,3 +60,23 @@ export function fetchArticleEntities(articleId) {
   };
 }
 
+export function requestAuthor() {
+  return {
+    type: REQUEST_AUTHOR
+  };
+}
+
+export function receiveAuthor(json) {
+  return {
+    type: RECEIVE_AUTHOR,
+    json
+  };
+}
+
+export function fetchAuthor(authorId) {
+  return (dispatch) => {
+    fetch(CONTEXT_API_BASE + '/authors/' + authorId)
+      .then((response) => response.text())
+      .then((body) => dispatch(receiveAuthor(JSON.parse(body))));
+  };
+}

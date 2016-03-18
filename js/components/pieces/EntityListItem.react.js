@@ -7,7 +7,7 @@ function truncate(num, decimalPoint) {
 
 function EntityListItem({name, main_type, id, entityScore}) {
   return (
-    <Link to={'/entity/' + id}>
+    <Link to={'/entities/' + id}>
       <div className='row entity-item'>
         <span className='eight columns'>{name}</span>
         <span className='two columns'>{main_type}</span>

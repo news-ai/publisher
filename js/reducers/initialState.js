@@ -6,5 +6,8 @@ export const initialState = {
   },
   entityReducer: {
     isReceiving: false
+  },
+  authorReducer: {
+    isReceiving: false
   }
 };

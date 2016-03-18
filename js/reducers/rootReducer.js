@@ -6,10 +6,12 @@ import { combineReducers } from 'redux';
 
 import feedReducer from './feedReducer';
 import entityReducer from './entityReducer';
+import authorReducer from './authorReducer';
 
 const rootReducer = combineReducers({
   feedReducer,
-  entityReducer
+  entityReducer,
+  authorReducer
 });
 
 export default rootReducer;

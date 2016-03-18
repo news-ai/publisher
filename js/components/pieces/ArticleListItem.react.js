@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 
 function ArticleListItem({id, name, url, basic_summary, header_image}) {
   return (
@@ -10,7 +10,7 @@ function ArticleListItem({id, name, url, basic_summary, header_image}) {
       </div>
       <div className='seven columns'>
           <div className='article-name'>
-            <span><Link to={'/article/' + id}>{name}</Link></span>
+            <span><Link to={'/articles/' + id}>{name}</Link></span>
           </div>
           <div className='article-bulletpoints'>
             <ul>
@@ -26,6 +26,7 @@ ArticleListItem.PropTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
+  header_image: PropTypes.string.isRequired,
   basic_summary: PropTypes.array.isRequired,
 };
 
