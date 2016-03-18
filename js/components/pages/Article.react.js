@@ -16,17 +16,17 @@ class Article extends Component {
     return (
       <div className='container'>
             <div className='row'>
-                <div className='ten columns'>
+                <div className='twelve columns'>
                     <h5>Article Details</h5>
                     <div>
-                        <p>Title : {article.name}</p>
-                        <p>Publisher : {article.publisher}</p>
-                        <p>Summary : {article.summary}</p>
+                        <p>Title: {article.name}</p>
+                        <p>Publisher: {article.publisher}</p>
+                        <p>Summary: {article.summary}</p>
                     </div>
                 </div>
             </div>
             <div className='row'>
-            <div className='ten columns'>
+            <div className='twelve columns'>
                 <h5>Entities</h5>
                 { (isReceiving && entities.length >= 0) ? loading :
         <EntityList entities={entities} entityScores={entityScores} />}

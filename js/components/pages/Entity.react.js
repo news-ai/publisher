@@ -4,16 +4,24 @@ import { connect } from 'react-redux';
 
 class Entity extends Component {
   componentDidMount() {
-    let {entityId, entity} = this.props;
-    // let action = actionCreators.fetchArticleEntities(article.id);
+    let {dispatch, entityId, entity} = this.props;
+    let action = actionCreators.fetchEntity(entityId);
     if (entity === undefined) dispatch(action);
   }
 
   render() {
-    let {entityId} = this.props;
+    let {entityId, entity} = this.props;
+    const loading = (<span>The entity is loading</span>);
     return (
-      <div className='entity'>
-      ENTITY PAGE {entityId}
+      <div className='container entity'>
+      	<div className='row'>
+      		{ (entity === undefined) ? loading : (
+        <div className='twelve columns'>
+      			<h5>{entity.name}</h5>
+      			<p>Type: {entity.main_type}</p>
+      		</div>
+        )}
+      	</div>
       </div>
       );
   }
