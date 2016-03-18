@@ -6,9 +6,9 @@ function truncate(num, decimalPoint) {
   return Math.floor(num * 100 * (10 ** decimalPoint)) / (10 ** decimalPoint);
 }
 
-function Entity({name, main_type, entityScore}) {
+function EntityListItem({name, main_type, entityScore}) {
   return (
-    <div className='row'>
+    <div className='row entity-item'>
       <span className='eight columns'>{name}</span>
       <span className='two columns'>{main_type}</span>
       <span className='two columns'>{truncate(entityScore, 2)}</span>
@@ -16,12 +16,10 @@ function Entity({name, main_type, entityScore}) {
     );
 }
 
-// EntityList.PropTypes = {
-//   id: PropTypes.string.isRequired,
-//   name: PropTypes.string.isRequired,
-//   url: PropTypes.string.isRequired,
-//   header_image: PropTypes.string.isRequired,
-//   basic_summary: PropTypes.array.isRequired,
-// };
+EntityListItem.PropTypes = {
+  name: PropTypes.string.isRequired,
+  main_type: PropTypes.string.isRequired,
+  entityScore: PropTypes.number.isRequired,
+};
 
-export default Entity;
+export default EntityListItem;

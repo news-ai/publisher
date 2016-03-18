@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-import Entity from '../pieces/Entity';
+import EntityListItem from '../pieces/EntityListItem.react';
 // import { connect } from 'react-redux';
 
 function EntityList({entities, entityScores}) {
@@ -12,7 +12,7 @@ function EntityList({entities, entityScores}) {
       <span className='two columns'>Relevance</span>
       </div>
       <div className='entity-body'>
-    {entities.map((entity, i) => <Entity key={entity.id} entityScore={entityScores[i]} {...entity} />)}
+    {entities.map((entity, i) => <EntityListItem key={entity.id} entityScore={entityScores[i]} {...entity} />)}
       </div>
     </div>
     );

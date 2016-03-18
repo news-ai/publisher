@@ -32,7 +32,7 @@ import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute } from 'react-router';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-import createLogger from 'redux-logger'
+import createLogger from 'redux-logger';
 
 import createHistory from 'history/lib/createBrowserHistory';
 
@@ -40,6 +40,7 @@ import createHistory from 'history/lib/createBrowserHistory';
 import HomePage from './components/pages/HomePage.react';
 import NotFoundPage from './components/pages/NotFound.react';
 import Article from './components/pages/Article.react';
+import Entity from './components/pages/Entity.react';
 import App from './components/App.react';
 
 // Import the CSS file, which HtmlWebpackPlugin transfers to the build folder
@@ -69,8 +70,8 @@ store.dispatch(asyncGetFeed()).then(() => {
       <Router history={createHistory()}>
         <Route path='/' component={App}>
           <IndexRoute component={HomePage} />
-          <Route path='article' component={HomePage} />
           <Route path='/article/:articleId' component={Article} />
+          <Route path='/entity/:entityId' component={Entity} />
         </Route>
         <Route path='*' component={NotFoundPage} />
       </Router>

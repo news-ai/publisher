@@ -1,9 +1,3 @@
-/**
- *
- * App.react.js
- *
- */
-
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
@@ -20,11 +14,11 @@ class App extends Component {
 // REDUX STUFF
 
 // Which props do we want to inject, given the global state?
-function select(state) {
+const mapStateToProps = (state) => {
   return {
     data: state
   };
-}
+};
 
 // Wrap the component to inject dispatch and state into it
-export default connect(select)(App);
+export default connect(mapStateToProps)(App);
