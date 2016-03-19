@@ -16,7 +16,7 @@ class Entity extends Component {
   }
 
   render() {
-    let {entity, entityArticles} = this.props;
+    let {entity, entityArticles, onScrollBottom} = this.props;
     const entityLoading = (<span>The entity is loading</span>);
     const articleLoading = (<span>The articles are loading</span>);
     return (
@@ -31,7 +31,10 @@ class Entity extends Component {
         </div>
         <div className='row'>
           { (entityArticles === undefined) ? articleLoading : (
+        <div>
+            <button onClick={() => onScrollBottom()}>ADDITIONAL LOADING</button>
         <ArticleList articles={entityArticles} />
+        </div>
         )}
           </div>
       </div>
@@ -42,14 +45,26 @@ class Entity extends Component {
 const mapStateToProps = (state, props) => {
   const entityId = parseInt(props.params.entityId, 10);
   const entity = state.entityReducer[entityId];
-  console.log(state.articleReducer.isReceiving);
-  console.log(state.entityReducer.isReceiving);
   return {
     entityId: entityId,
     entity: entity,
-    // entityArticleIds: (state.entityReducer[entityId] === undefined || state.articleReducer.isReceiving) ? undefined : state.entityReducer[entityId].entity_articles,
     entityArticles: (entity === undefined || entity['entity_articles'] === undefined) ? undefined : (entity.entity_articles.some((id) => state.articleReducer[id] === undefined)) ? undefined : entity.entity_articles.map((id) => state.articleReducer[id])
   };
 };
 
-export default connect(mapStateToProps)(Entity);
+const mapDispatchToProps = (dispatch, props) => {
+  const entityId = parseInt(props.params.entityId, 10);
+  return {
+    onScrollBottom: () => {
+      // ev.preventDefault();
+      // if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) 
+      dispatch(actionCreators.fetchAdditionalEntityArticles(entityId));
+    },
+    dispatch: action => dispatch(action)
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Entity);

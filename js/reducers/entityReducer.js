@@ -1,4 +1,4 @@
-import { RECEIVE_ENTITY, REQUEST_ENTITIES, RECEIVE_ENTITIES, RECEIVE_ENTITY_ARTICLES } from '../constants/AppConstants';
+import { RECEIVE_ENTITY, REQUEST_ENTITIES, RECEIVE_ENTITIES, RECEIVE_ENTITY_ARTICLES, REQUEST_ADDITIONAL_ENTITY_ARTICLES, RECEIVE_ADDITIONAL_ENTITY_ARTICLES } from '../constants/AppConstants';
 import assignToEmpty from '../utils/assign';
 import { initialState } from './initialState';
 
@@ -18,6 +18,15 @@ function entityReducer(state = initialState.entityReducer, action) {
     return obj;
   case RECEIVE_ENTITY_ARTICLES:
     obj[parseInt(action.entityId)].entity_articles = action.json.map((article) => article.id);
+    obj[parseInt(action.entityId)].next = action.next;
+    return obj;
+  case REQUEST_ADDITIONAL_ENTITY_ARTICLES:
+    obj.isReceiving = true;
+    return obj;
+  case RECEIVE_ADDITIONAL_ENTITY_ARTICLES:
+    obj[parseInt(action.entityId)].entity_articles = [...state[parseInt(action.entityId)].entity_articles, ...action.json.map((article) => article.id)];
+    obj[parseInt(action.entityId)].next = action.next;
+    obj.isReceiving = false;
     return obj;
   default:
     return state;

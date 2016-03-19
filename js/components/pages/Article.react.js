@@ -8,11 +8,6 @@ class Article extends Component {
   componentDidMount() {
     let {dispatch, article, articleId} = this.props;
     if (article === undefined) dispatch(actionCreators.fetchArticle(articleId));
-
-  // if (article === undefined)
-  //   Promise.all([dispatch(actionCreators.fetchArticle(articleId))]).then(() => dispatch(actionCreators.fetchArticleEntities(articleId)));
-  // if (article !== undefined && entities)
-  //   if (entities.some((entity) => entity === undefined)) dispatch(actionCreators.fetchArticleEntities(articleId));
   }
 
   render() {
@@ -53,7 +48,6 @@ const mapStateToProps = (state, props) => {
   return {
     article: article,
     articleId: props.params.articleId,
-    // entities: (article === undefined) ? undefined : article.entity_scores.map((score) => state.entityReducer[score.entity_id]),
     entities: (article === undefined) ? undefined : article.entity_scores.map((score) => score.entity),
     entityScores: (article === undefined) ? undefined : article.entity_scores.map((obj) => obj.score)
   };

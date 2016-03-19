@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
 import EntityListItem from '../pieces/EntityListItem.react';
 // import { connect } from 'react-redux';
 
