@@ -38,13 +38,14 @@ class Entity extends Component {
 
 const mapStateToProps = (state, props) => {
   const entityId = parseInt(props.params.entityId, 10);
+  const entity = state.entityReducer[entityId];
   console.log(state.articleReducer.isReceiving);
   console.log(state.entityReducer.isReceiving);
   return {
     entityId: entityId,
-    entity: state.entityReducer[entityId],
+    entity: entity,
     // entityArticleIds: (state.entityReducer[entityId] === undefined || state.articleReducer.isReceiving) ? undefined : state.entityReducer[entityId].entity_articles,
-    entityArticles: (state.entityReducer[entityId] === undefined || state.articleReducer.isReceiving) ? undefined : (state.entityReducer[entityId].entity_articles === undefined) ? undefined : state.entityReducer[entityId].entity_articles.map((id) => state.articleReducer[id])
+    entityArticles: (entity === undefined || entity['entity_articles'] === undefined) ? undefined : (entity.entity_articles.some((id) => state.articleReducer[id] === undefined)) ? undefined : entity.entity_articles.map((id) => state.articleReducer[id])
   };
 };
 

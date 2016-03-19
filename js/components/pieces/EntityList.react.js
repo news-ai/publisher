@@ -4,12 +4,10 @@ import EntityListItem from '../pieces/EntityListItem.react';
 // import { connect } from 'react-redux';
 
 function EntityList({entities, entityScores}) {
-  console.log(entities);
   return (
     <div>
       <div className='row entity-categories'>
-      <span className='eight columns'>Name</span>
-      <span className='two columns'>Type</span>
+      <span className='ten columns'>Name</span>
       <span className='two columns'>Relevance</span>
       </div>
       <div className='entity-body'>

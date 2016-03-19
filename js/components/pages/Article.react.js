@@ -6,21 +6,19 @@ import { Link } from 'react-router';
 
 class Article extends Component {
   componentDidMount() {
-    let {dispatch, article, articleId, entities} = this.props;
+    let {dispatch, article, articleId} = this.props;
+    if (article === undefined) dispatch(actionCreators.fetchArticle(articleId));
 
-    if (article === undefined)
-      Promise.all([dispatch(actionCreators.fetchArticle(articleId))]).then(() => dispatch(actionCreators.fetchArticleEntities(articleId)));
-    if (article !== undefined && entities.some((entity) => entity === undefined)) dispatch(actionCreators.fetchArticleEntities(articleId));
-    console.log(entities);
-    console.log(article);
+  // if (article === undefined)
+  //   Promise.all([dispatch(actionCreators.fetchArticle(articleId))]).then(() => dispatch(actionCreators.fetchArticleEntities(articleId)));
+  // if (article !== undefined && entities)
+  //   if (entities.some((entity) => entity === undefined)) dispatch(actionCreators.fetchArticleEntities(articleId));
   }
 
   render() {
     let {article, articleId, entities, entityScores} = this.props;
     const entitiesLoading = (<span>The entities are loading</span>);
     const articleLoading = (<span>The article is loading</span>);
-    console.log(article);
-    console.log(entities);
     return (
       <div className='container'>
             <div className='row'>
@@ -50,13 +48,11 @@ class Article extends Component {
 
 const mapStateToProps = (state, props) => {
   const article = state.articleReducer[parseInt(props.params.articleId, 10)];
-  console.log(article);
-  console.log(state.articleReducer.isReceiving);
-  console.log(state.entityReducer.isReceiving);
   return {
     article: article,
     articleId: props.params.articleId,
-    entities: (article === undefined || article.entity_scores.some((score) => state.entityReducer[score.entity_id] === undefined)) ? undefined : article.entity_scores.map((score) => state.entityReducer[score.entity_id]),
+    // entities: (article === undefined) ? undefined : article.entity_scores.map((score) => state.entityReducer[score.entity_id]),
+    entities: (article === undefined) ? undefined : article.entity_scores.map((score) => score.entity),
     entityScores: (article === undefined) ? undefined : article.entity_scores.map((obj) => obj.score)
   };
 };
