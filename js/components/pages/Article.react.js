@@ -26,9 +26,11 @@ class Article extends Component {
                 {(article === undefined) ? articleLoading : (
         <div>
                     <h5>Article Details</h5>
+                        <img className='u-max-full-width' src={article.header_image} />
                         <p>Title: {article.name}</p>
                         <p>Publisher: {article.publisher.name}</p>
                         <p>Summary: {article.summary}</p>
+                        <p>Link: <a>{article.url}</a></p>
                         <p>Authors: {article.authors.map((author, i) => <span key={i}><Link to={'/authors/' + author.id}>{author.name} </Link></span>)}</p>
                     </div>
         )}

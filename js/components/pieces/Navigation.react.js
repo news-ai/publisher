@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 function Navigation() {
   return (
     <div>
-    <Link to={'/'}><h5>Home</h5></Link>
+    <Link to={'/'}><h5>NewsAI</h5></Link>
   	</div>
     );
 }

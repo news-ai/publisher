@@ -4,7 +4,6 @@
  */
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-// import { bindActionCreators } from 'redux';
 import * as actionCreators from '../../actions/AppActions';
 import ArticleList from '../pieces/ArticleList.react';
 
@@ -25,9 +24,6 @@ class HomePage extends Component {
   render() {
     let {projectName, articles, feedIsReceving, articleIsReceiving, onScrollBottom, next} = this.props;
     const loading = (<span>The feed is loading</span>);
-
-    // detect if scrolled to bottom
-    // window.onscroll = ev => ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) ? onScrollBottom() : null;
 
     return (
       <div>

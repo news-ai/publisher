@@ -16,21 +16,24 @@ class Entity extends Component {
   }
 
   render() {
-    let {entityId, entity, entityArticles} = this.props;
-    const loading = (<span>The entity is loading</span>);
-    console.log(entity);
-    console.log(entityArticles);
+    let {entity, entityArticles} = this.props;
+    const entityLoading = (<span>The entity is loading</span>);
+    const articleLoading = (<span>The articles are loading</span>);
     return (
       <div className='container entity'>
         <div className='row'>
-          { (entity === undefined || entityArticles === undefined) ? loading : (
+        {(entity === undefined) ? entityLoading : (
         <div className='twelve columns'>
             <h5>{entity.name}</h5>
             <p>Type: {entity.main_type}</p>
-          <ArticleList articles={entityArticles} />
-          </div>
+            </div>
         )}
         </div>
+        <div className='row'>
+          { (entityArticles === undefined) ? articleLoading : (
+        <ArticleList articles={entityArticles} />
+        )}
+          </div>
       </div>
       );
   }
