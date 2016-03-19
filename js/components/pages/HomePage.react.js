@@ -17,11 +17,14 @@ class HomePage extends Component {
   render() {
     let {projectName, articles, feedIsReceving, articleIsReceiving, onScrollBottom, next} = this.props;
     const loading = (<span>The feed is loading</span>);
+
+    // detect if scrolled to bottom
+    window.onscroll = ev => ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) ? onScrollBottom() : null;
+
     return (
       <div>
           <div className='container'>
             <h1 className='row'>{projectName}</h1>
-            <button onClick={() => onScrollBottom()}>CLICK TO GET MORE FEED</button>
           </div>
           <div className='container article-list-container'>
           {(articles === undefined || next === undefined) ? loading :
@@ -54,7 +57,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onScrollBottom: () => dispatch(actionCreators.fetchAdditionalFeed()),
-    dispatch: (action) => dispatch(action)
+    dispatch: action => dispatch(action)
   };
 };
 
