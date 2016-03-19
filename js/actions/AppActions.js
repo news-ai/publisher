@@ -86,6 +86,7 @@ export function receiveAdditionalEntityArticles(entityId, json, next) {
 
 export function fetchAdditionalEntityArticles(entityId) {
   return (dispatch, getState) => {
+    if (getState().entityReducer[entityId] === undefined) return;
     dispatch(requestAdditionalEntityArticles());
     dispatch(requestArticles());
     return fetch(getState().entityReducer[entityId].next)
