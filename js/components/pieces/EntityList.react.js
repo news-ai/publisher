@@ -17,12 +17,9 @@ function EntityList({entities, entityScores}) {
     );
 }
 
-// EntityList.PropTypes = {
-//   id: PropTypes.string.isRequired,
-//   name: PropTypes.string.isRequired,
-//   url: PropTypes.string.isRequired,
-//   header_image: PropTypes.string.isRequired,
-//   basic_summary: PropTypes.array.isRequired,
-// };
+EntityList.PropTypes = {
+  entities: PropTypes.array.isRequired,
+  entityScores: PropTypes.array.isRequired,
+};
 
 export default EntityList;

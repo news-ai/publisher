@@ -1,4 +1,4 @@
-import { REQUEST_FEED, RECEIVE_FEED, RECEIVE_ENTITY, REQUEST_ENTITIES, RECEIVE_ENTITIES, REQUEST_AUTHOR, RECEIVE_AUTHOR, REQUEST_PUBLISHER, RECEIVE_PUBLISHER, RECEIVE_ENTITY_ARTICLES, REQUEST_ARTICLES, RECEIVE_ARTICLES } from '../constants/AppConstants';
+import { REQUEST_FEED, RECEIVE_FEED, RECEIVE_ENTITY, REQUEST_ENTITIES, RECEIVE_ENTITIES, REQUEST_AUTHOR, RECEIVE_AUTHOR, REQUEST_PUBLISHER, RECEIVE_PUBLISHER, RECEIVE_ENTITY_ARTICLES, REQUEST_ARTICLES, RECEIVE_ARTICLES, RECEIVE_ADDITIONAL_FEED } from '../constants/AppConstants';
 import fetch from 'isomorphic-fetch';
 
 const CONTEXT_API_BASE = `https://context.newsai.org/api`;
@@ -63,6 +63,7 @@ export function fetchEntityArticles(entityId) {
     dispatch(requestArticles());
     fetch(CONTEXT_API_BASE + '/entities/' + entityId + '/articles' + removeCache())
       .then((response) => response.text())
+      .catch((e) => console.log(e))
       .then((body) => {
         Promise.all([
           dispatch(receiveEntityArticles(JSON.parse(body).results, entityId)),
@@ -82,9 +83,7 @@ export function fetchEntity(entityId) {
 
 export function fetchArticleEntities(articleId) {
   return (dispatch, getState) => {
-    console.log(getState().articleReducer);
     const article = getState().articleReducer[articleId];
-    console.log(article);
     const entityIds = article.entity_scores.map((entity) => entity.entity_id);
     dispatch(requestArticleEntities(articleId));
     Promise.all(entityIds.map((id) => dispatch(fetchEntity(id))))
@@ -98,11 +97,40 @@ export function requestFeed() {
   };
 }
 
-export function receiveFeed(json) {
+export function receiveFeed(json, next) {
   return {
     type: RECEIVE_FEED,
-    json
+    json,
+    next
   };
+}
+
+export function requestAdditionalFeed() {
+  return {
+    type: REQUEST_FEED
+  };
+}
+
+export function receiveAdditionFeed(json, next) {
+  return {
+    type: RECEIVE_ADDITIONAL_FEED,
+    json,
+    next
+  };
+}
+
+export function fetchAdditionalFeed() {
+  return (dispatch, getState) => {
+    dispatch(requestAdditionalFeed());
+    dispatch(requestArticles());
+    return fetch(getState().feedReducer.next)
+      .then((response) => response.text())
+      .catch((e) => console.log(e))
+      .then((body) => {
+        const json = JSON.parse(body);
+        Promise.all([dispatch(receiveAdditionalFeed(json.results, json.next)), dispatch(receiveArticles(json.results))]);
+      });
+  }
 }
 
 export function fetchFeed() {
@@ -113,9 +141,8 @@ export function fetchFeed() {
       .then((response) => response.text())
       .catch((e) => console.log(e))
       .then((body) => {
-        Promise.all([dispatch(receiveFeed(JSON.parse(body).results)), dispatch(receiveArticles(JSON.parse(body).results))]);
-      // dispatch(receiveFeed(JSON.parse(body).results));
-      // dispatch(receiveArticles(JSON.parse(body).results));
+        const json = JSON.parse(body);
+        Promise.all([dispatch(receiveFeed(json.results, json.next)), dispatch(receiveArticles(json.results))]);
       });
   };
 }

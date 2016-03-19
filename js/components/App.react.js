@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Navigation from './pieces/Navigation.react';
 
 class App extends Component {
   render() {
     return (
       <div className='wrapper'>
+      <Navigation />
         { this.props.children }
       </div>
       );

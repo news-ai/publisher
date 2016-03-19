@@ -7,9 +7,9 @@
  * export const YOUR_ACTION_CONSTANT = 'YOUR_ACTION_CONSTANT';
  */
 
-export const GET_FEED = 'GET_FEED';
 export const REQUEST_FEED = 'REQUEST_FEED';
 export const RECEIVE_FEED = 'RECEIVE_FEED';
+export const RECEIVE_ADDITIONAL_FEED = 'RECEIVE_FEED';
 
 
 export const RECEIVE_ENTITIES = 'RECEIVE_ENTITIES';
