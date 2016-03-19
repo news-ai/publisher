@@ -6,23 +6,28 @@ import ArticleList from '../pieces/ArticleList.react';
 
 class Entity extends Component {
   componentDidMount() {
-    let {dispatch, entityId, entity} = this.props;
+    let {dispatch, entityId, entity, entityArticles} = this.props;
     if (entity === undefined) {
-      dispatch(actionCreators.fetchEntity(entityId));
-      dispatch(actionCreators.fetchEntityArticles(entityId));
+      Promise.all([
+        dispatch(actionCreators.fetchEntity(entityId))])
+        .then(() => dispatch(actionCreators.fetchEntityArticles(entityId)));
     }
+    if (entity !== undefined && entityArticles === undefined) dispatch(actionCreators.fetchEntityArticles(entityId));
   }
 
   render() {
-    let {entityId, entity} = this.props;
+    let {entityId, entity, entityArticles} = this.props;
     const loading = (<span>The entity is loading</span>);
+    console.log(entity);
+    console.log(entityArticles);
     return (
       <div className='container entity'>
         <div className='row'>
-          { (entity === undefined) ? loading : (
+          { (entity === undefined || entityArticles === undefined) ? loading : (
         <div className='twelve columns'>
             <h5>{entity.name}</h5>
             <p>Type: {entity.main_type}</p>
+          <ArticleList articles={entityArticles} />
           </div>
         )}
         </div>
@@ -32,10 +37,14 @@ class Entity extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-  const entityId = parseInt(props.params.entityId);
+  const entityId = parseInt(props.params.entityId, 10);
+  console.log(state.articleReducer.isReceiving);
+  console.log(state.entityReducer.isReceiving);
   return {
     entityId: entityId,
-    entity: state.entityReducer[entityId]
+    entity: state.entityReducer[entityId],
+    // entityArticleIds: (state.entityReducer[entityId] === undefined || state.articleReducer.isReceiving) ? undefined : state.entityReducer[entityId].entity_articles,
+    entityArticles: (state.entityReducer[entityId] === undefined || state.articleReducer.isReceiving) ? undefined : (state.entityReducer[entityId].entity_articles === undefined) ? undefined : state.entityReducer[entityId].entity_articles.map((id) => state.articleReducer[id])
   };
 };
 

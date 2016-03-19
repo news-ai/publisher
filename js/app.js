@@ -66,9 +66,8 @@ const store = createStoreWithMiddleware(rootReducer);
 //   });
 // }
 
-store.dispatch(asyncGetFeed()).then(() => {
-  ReactDOM.render(
-    <Provider store={store}>
+ReactDOM.render(
+  <Provider store={store}>
       <Router history={createHistory()}>
         <Route path='/' component={App}>
           <IndexRoute component={HomePage} />
@@ -80,6 +79,5 @@ store.dispatch(asyncGetFeed()).then(() => {
         <Route path='*' component={NotFoundPage} />
       </Router>
     </Provider>,
-    document.getElementById('app')
-  );
-});
+  document.getElementById('app')
+);

@@ -3,7 +3,7 @@ import ArticleListItem from './ArticleListItem.react';
 
 function ArticleList({articles}) {
   return (
-    <div className='container article-list-container'>
+    <div>
         <div className='row article-list-categories'>
         <div className='five columns'>Name</div>
         <div className='seven columns'>Summary</div>

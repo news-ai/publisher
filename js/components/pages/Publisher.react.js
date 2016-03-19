@@ -17,9 +17,9 @@ class Publisher extends Component {
         <div className='row'>
           { (publisher === undefined) ? loading : (
         <div className='twelve columns'>
-            <h5>{publisher.name}</h5>
-            <span>{publisher.url}</span>
-          </div>
+              <h5>{publisher.name}</h5>
+              <span>{publisher.url}</span>
+            </div>
         )}
         </div>
       </div>

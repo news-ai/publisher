@@ -4,6 +4,7 @@ import EntityListItem from '../pieces/EntityListItem.react';
 // import { connect } from 'react-redux';
 
 function EntityList({entities, entityScores}) {
+  console.log(entities);
   return (
     <div>
       <div className='row entity-categories'>

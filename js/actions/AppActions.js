@@ -1,44 +1,34 @@
-import { GET_FEED, RECEIVE_ENTITY, REQUEST_ENTITIES, RECEIVE_ENTITIES, REQUEST_AUTHOR, RECEIVE_AUTHOR, REQUEST_PUBLISHER, RECEIVE_PUBLISHER, RECEIVE_ENTITY_ARTICLES, REQUEST_ARTICLES, RECEIVE_ARTICLES } from '../constants/AppConstants';
+import { REQUEST_FEED, RECEIVE_FEED, RECEIVE_ENTITY, REQUEST_ENTITIES, RECEIVE_ENTITIES, REQUEST_AUTHOR, RECEIVE_AUTHOR, REQUEST_PUBLISHER, RECEIVE_PUBLISHER, RECEIVE_ENTITY_ARTICLES, REQUEST_ARTICLES, RECEIVE_ARTICLES } from '../constants/AppConstants';
 import fetch from 'isomorphic-fetch';
+
 const CONTEXT_API_BASE = `https://context.newsai.org/api`;
+
 function removeCache() {
   return '?' + Date.now();
 }
 
-export function getFeed(articles) {
+export function requestArticles() {
   return {
-    type: GET_FEED,
-    articles
+    type: REQUEST_ARTICLES
   };
 }
 
-export function asyncGetFeed() {
-  return (dispatch) => {
-    return fetch(CONTEXT_API_BASE + '/feeds' + removeCache(), {
-      method: 'GET'
-    }).then((response) => {
-      return response.text();
-    }).then((body) => {
-      const jsonBody = JSON.parse(body);
-      dispatch(getFeed(jsonBody.results));
-    });
-  };
-}
-
-export function receiveEntity(json) {
+export function receiveArticles(json) {
   return {
-    type: RECEIVE_ENTITY,
+    type: RECEIVE_ARTICLES,
     json
   };
 }
 
-export function fetchEntity(entityId) {
+export function fetchArticle(articleId) {
   return (dispatch) => {
-    return fetch(CONTEXT_API_BASE + '/entities/' + entityId)
+    dispatch(requestArticles());
+    return fetch(CONTEXT_API_BASE + '/articles/' + articleId)
       .then((response) => response.text())
-      .then((body) => dispatch(receiveEntity(JSON.parse(body))));
+      .then((body) => dispatch(receiveArticles(JSON.parse(body))));
   };
 }
+
 
 function doneFetchingArticleEntities() {
   return {
@@ -53,15 +43,83 @@ export function requestArticleEntities(articleId) {
   };
 }
 
+export function receiveEntity(json) {
+  return {
+    type: RECEIVE_ENTITY,
+    json
+  };
+}
+
+export function receiveEntityArticles(json, entityId) {
+  return {
+    type: RECEIVE_ENTITY_ARTICLES,
+    json,
+    entityId
+  };
+}
+
+export function fetchEntityArticles(entityId) {
+  return (dispatch) => {
+    dispatch(requestArticles());
+    fetch(CONTEXT_API_BASE + '/entities/' + entityId + '/articles' + removeCache())
+      .then((response) => response.text())
+      .then((body) => {
+        Promise.all([
+          dispatch(receiveEntityArticles(JSON.parse(body).results, entityId)),
+          dispatch(receiveArticles(JSON.parse(body).results))
+        ]);
+      });
+  };
+}
+
+export function fetchEntity(entityId) {
+  return (dispatch) => {
+    return fetch(CONTEXT_API_BASE + '/entities/' + entityId)
+      .then((response) => response.text())
+      .then((body) => dispatch(receiveEntity(JSON.parse(body))));
+  };
+}
+
 export function fetchArticleEntities(articleId) {
   return (dispatch, getState) => {
-    const article = getState().feedReducer.articles.filter((article) => article.id === articleId)[0];
+    console.log(getState().articleReducer);
+    const article = getState().articleReducer[articleId];
+    console.log(article);
     const entityIds = article.entity_scores.map((entity) => entity.entity_id);
     dispatch(requestArticleEntities(articleId));
     Promise.all(entityIds.map((id) => dispatch(fetchEntity(id))))
       .then(() => dispatch(doneFetchingArticleEntities()));
   };
 }
+
+export function requestFeed() {
+  return {
+    type: REQUEST_FEED
+  };
+}
+
+export function receiveFeed(json) {
+  return {
+    type: RECEIVE_FEED,
+    json
+  };
+}
+
+export function fetchFeed() {
+  return (dispatch) => {
+    dispatch(requestFeed());
+    dispatch(requestArticles());
+    return fetch(CONTEXT_API_BASE + '/feeds' + removeCache())
+      .then((response) => response.text())
+      .catch((e) => console.log(e))
+      .then((body) => {
+        Promise.all([dispatch(receiveFeed(JSON.parse(body).results)), dispatch(receiveArticles(JSON.parse(body).results))]);
+      // dispatch(receiveFeed(JSON.parse(body).results));
+      // dispatch(receiveArticles(JSON.parse(body).results));
+      });
+  };
+}
+
 
 export function requestAuthor() {
   return {
@@ -107,34 +165,4 @@ export function fetchPublisher(publisherId) {
   };
 }
 
-export function requestArticles() {
-  return {
-    type: REQUEST_ARTICLES
-  };
-}
 
-export function receiveArticles(json) {
-  return {
-    type: RECEIVE_ARTICLES,
-    json
-  };
-}
-
-export function receiveEntityArticles(json) {
-  return {
-    type: RECEIVE_ENTITY_ARTICLES,
-    json
-  };
-}
-
-export function fetchEntityArticles(entityId) {
-  return (dispatch) => {
-    dispatch(requestArticles());
-    fetch(CONTEXT_API_BASE + '/entities/' + entityId + '/articles' + removeCache())
-      .then((response) => response.text())
-      .then((body) => {
-        dispatch(receiveEntityArticles(JSON.parse(body).results));
-        dispatch(receiveArticles(JSON.parse(body).results));
-      });
-  };
-}

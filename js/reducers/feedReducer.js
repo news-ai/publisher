@@ -4,7 +4,7 @@
  * To add a new action, add it to the switch statement in the feedReducer function
  */
 
-import { GET_FEED } from '../constants/AppConstants';
+import { REQUEST_FEED, RECEIVE_FEED } from '../constants/AppConstants';
 import assignToEmpty from '../utils/assign';
 import { initialState } from './initialState';
 
@@ -14,15 +14,15 @@ function extractSummary(summary) {
 
 function feedReducer(state = initialState.feedReducer, action) {
   Object.freeze(state);
+  let obj = assignToEmpty(state, {});
   switch (action.type) {
-  case GET_FEED:
-    return assignToEmpty(state, {
-      articles: action.articles.map((article, i) => {
-        return assignToEmpty(article, {
-          basic_summary: extractSummary(action.articles[i].summary)
-        });
-      })
-    });
+  case REQUEST_FEED:
+    obj.isReceiving = true;
+    return obj;
+  case RECEIVE_FEED:
+    obj.isReceiving = false;
+    obj.feedArticleIds = action.json.map((article) => article.id);
+    return obj;
   default:
     return state;
   }

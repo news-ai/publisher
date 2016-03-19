@@ -10,14 +10,14 @@ function entityReducer(state = initialState.entityReducer, action) {
     obj.isReceiving = true;
     return obj;
   case RECEIVE_ENTITIES:
-    return assignToEmpty(state, {
-      isReceiving: false
-    });
+    obj.isReceiving = false;
+    return obj;
   case RECEIVE_ENTITY:
     obj[parseInt(action.json.id)] = action.json;
+    obj[parseInt(action.json.id)].entity_articles = undefined;
     return obj;
   case RECEIVE_ENTITY_ARTICLES:
-    obj.entity_articles = action.json.map((article) => article.id);
+    obj[parseInt(action.entityId)].entity_articles = action.json.map((article) => article.id);
     return obj;
   default:
     return state;
