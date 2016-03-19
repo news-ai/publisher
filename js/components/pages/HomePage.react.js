@@ -6,10 +6,9 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/AppActions';
 import ArticleList from '../pieces/ArticleList.react';
+import AdditionalLoading from '../pieces/AdditionalLoading.react';
 
 class HomePage extends Component {
-  _handleScroll(ev) {}
-
   componentDidMount() {
     let {dispatch, articleIds, onScrollBottom} = this.props;
     window.addEventListener('scroll', onScrollBottom);
@@ -24,23 +23,13 @@ class HomePage extends Component {
   render() {
     let {projectName, articles, feedIsReceving, articleIsReceiving, onScrollBottom, next} = this.props;
     const loading = (<span>The feed is loading</span>);
-    const additionalLoading = (
-    <div style={{
-      backgroundColor: 'gray',
-      color: 'white',
-      fontSize: '2em',
-      width: '100% !important',
-      position: 'absolute',
-      textAlign: 'center'
-    }}>The feed is loading</div>
-    );
 
     return (
       <div className='container article-list-container'>
           {(articles === undefined || next === undefined) ? loading :
         <ArticleList articles={articles} />
       }
-      {(articles !== undefined && next !== undefined && articleIsReceiving) ? additionalLoading : null}
+      {(articles !== undefined && next !== undefined && next !== 0 && articleIsReceiving) ? <AdditionalLoading name='feed' /> : null}
         </div>
       );
   }

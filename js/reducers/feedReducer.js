@@ -30,7 +30,7 @@ function feedReducer(state = initialState.feedReducer, action) {
   case RECEIVE_ADDITIONAL_FEED:
     obj.isReceiving = false;
     obj.feedArticleIds = [...state.feedArticleIds, ...action.json.map((article) => article.id)];
-    obj.next = action.next;
+    obj.next = (action.next === null) ? 0 : action.next;
     return obj;
   default:
     return state;
