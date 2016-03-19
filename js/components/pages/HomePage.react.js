@@ -29,7 +29,7 @@ class HomePage extends Component {
           {(articles === undefined || next === undefined) ? loading :
         <ArticleList articles={articles} />
       }
-      {(articles !== undefined && next !== undefined && next !== 0 && articleIsReceiving) ? <AdditionalLoading name='feed' /> : null}
+      {(articles !== undefined && next !== undefined && next !== 0 && articleIsReceiving) ? <AdditionalLoading name='feed is' /> : null}
         </div>
       );
   }
