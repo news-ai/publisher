@@ -17,14 +17,15 @@ class Article extends Component {
 
   render() {
     let {article, articleId, entities, entityScores} = this.props;
-    const loading = (<span>The entities are loading</span>);
+    const entitiesLoading = (<span>The entities are loading</span>);
+    const articleLoading = (<span>The article is loading</span>);
     console.log(article);
     console.log(entities);
     return (
       <div className='container'>
             <div className='row'>
                 <div className='twelve columns'>
-                {(article === undefined) ? loading : (
+                {(article === undefined) ? articleLoading : (
         <div>
                     <h5>Article Details</h5>
                         <p>Title: {article.name}</p>
@@ -38,7 +39,7 @@ class Article extends Component {
             <div className='row'>
             <div className='twelve columns'>
                 <h5>Entities</h5>
-                { (entities === undefined || entities.some((entity) => entity === undefined)) ? loading :
+                { (entities === undefined) ? entitiesLoading :
         <EntityList entities={entities} entityScores={entityScores} />}
                 </div>
             </div>
@@ -55,7 +56,7 @@ const mapStateToProps = (state, props) => {
   return {
     article: article,
     articleId: props.params.articleId,
-    entities: (article === undefined || state.articleReducer.isReceiving || state.entityReducer.isReceiving) ? undefined : article.entity_scores.map((score) => state.entityReducer[score.entity_id]),
+    entities: (article === undefined || article.entity_scores.some((score) => state.entityReducer[score.entity_id] === undefined)) ? undefined : article.entity_scores.map((score) => state.entityReducer[score.entity_id]),
     entityScores: (article === undefined) ? undefined : article.entity_scores.map((obj) => obj.score)
   };
 };
