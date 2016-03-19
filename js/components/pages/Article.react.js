@@ -22,9 +22,14 @@ class Article extends Component {
         <div>
                     <h5>Article Details</h5>
                         <img className='u-max-full-width' src={article.header_image} />
-                        <p>Title: {article.name}</p>
-                        <p>Publisher: {article.publisher.name}</p>
-                        <p>Summary: {article.summary}</p>
+                        <div style={{
+          fontSize: '2em',
+          fontWeight: 500
+        }}>{article.name}</div>
+        <Link to={'/publishers/' + article.publisher.id}><div>{article.publisher.name}</div></Link>
+                        <p><span style={{
+          fontWeight: 'bold'
+        }}>Summary: </span>{article.summary}</p>
                         <p>Link: <a>{article.url}</a></p>
                         <p>Authors: {article.authors.map((author, i) => <span key={i}><Link to={'/authors/' + author.id}>{author.name} </Link></span>)}</p>
                     </div>

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 
-function ArticleListItem({id, name, url, basic_summary, header_image, authors}) {
+function ArticleListItem({id, name, url, basic_summary, header_image, authors, publisher}) {
   return (
     <div className='row article-body' key={id}>
       <div className='five columns article-header-image-container'>
@@ -10,6 +10,9 @@ function ArticleListItem({id, name, url, basic_summary, header_image, authors}) 
       <div className='seven columns'>
           <div className='article-name'>
             <span><Link to={'/articles/' + id}>{name}</Link></span>
+          </div>
+          <div className='article-publisher'>
+          <Link to={'/publishers/' + publisher.id}><span>{publisher.name}</span></Link>
           </div>
           <div className='article-authors'>
           {authors.map((author, i) => <span key={i}><Link to={'/authors/' + author.id}>{author.name} </Link></span>)}

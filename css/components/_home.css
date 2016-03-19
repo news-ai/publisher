@@ -5,6 +5,12 @@
 */	margin: 0 auto;
 }
 
+#projectName {
+	color: black;
+	font-size: 2.3em;
+	font-weight: 600;
+}
+
 .home__wrapper a {
 	color: #222222;
 }
@@ -90,6 +96,9 @@
 	background-color: lightgray;
 }
 
+a {
+	text-decoration: none;
+}
 
 
 
