@@ -34,6 +34,7 @@ class HomePage extends Component {
           {(articles === undefined || next === undefined) ? loading :
         <ArticleList articles={articles} />
       }
+      {(articles !== undefined && next !== undefined && articleIsReceiving) ? loading : null}
         </div>
         </div>
       );
