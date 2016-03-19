@@ -24,18 +24,23 @@ class HomePage extends Component {
   render() {
     let {projectName, articles, feedIsReceving, articleIsReceiving, onScrollBottom, next} = this.props;
     const loading = (<span>The feed is loading</span>);
+    const additionalLoading = (
+    <div style={{
+      backgroundColor: 'gray',
+      color: 'white',
+      fontSize: '2em',
+      width: '100% !important',
+      position: 'absolute',
+      textAlign: 'center'
+    }}>The feed is loading</div>
+    );
 
     return (
-      <div>
-          <div className='container'>
-            <h1 className='row'>{projectName}</h1>
-          </div>
-          <div className='container article-list-container'>
+      <div className='container article-list-container'>
           {(articles === undefined || next === undefined) ? loading :
         <ArticleList articles={articles} />
       }
-      {(articles !== undefined && next !== undefined && articleIsReceiving) ? loading : null}
-        </div>
+      {(articles !== undefined && next !== undefined && articleIsReceiving) ? additionalLoading : null}
         </div>
       );
   }

@@ -6,7 +6,9 @@ class App extends Component {
   render() {
     return (
       <div className='wrapper'>
-      <Navigation />
+          <div className='container'>
+            <Navigation />
+          </div>
         { this.props.children }
       </div>
       );
