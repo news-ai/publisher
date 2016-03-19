@@ -9,9 +9,17 @@ import * as actionCreators from '../../actions/AppActions';
 import ArticleList from '../pieces/ArticleList.react';
 
 class HomePage extends Component {
+  _handleScroll(ev) {}
+
   componentDidMount() {
-    let {dispatch, articleIds} = this.props;
+    let {dispatch, articleIds, onScrollBottom} = this.props;
+    window.addEventListener('scroll', onScrollBottom);
     if (articleIds === undefined) dispatch(actionCreators.fetchFeed());
+  }
+
+  componentWillUnmount() {
+    let {onScrollBottom} = this.props;
+    window.removeEventListener('scroll', onScrollBottom);
   }
 
   render() {
@@ -19,7 +27,7 @@ class HomePage extends Component {
     const loading = (<span>The feed is loading</span>);
 
     // detect if scrolled to bottom
-    window.onscroll = ev => ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) ? onScrollBottom() : null;
+    // window.onscroll = ev => ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) ? onScrollBottom() : null;
 
     return (
       <div>
@@ -36,12 +44,6 @@ class HomePage extends Component {
   }
 }
 
-// HomePage.PropTypes = {
-//   projectName: PropTypes.string.isRequired,
-//   articles: PropTypes.array.isRequired
-// };
-
-
 const mapStateToProps = (state) => {
   const feedArticleIds = state.feedReducer.feedArticleIds;
   return {
@@ -56,7 +58,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onScrollBottom: () => dispatch(actionCreators.fetchAdditionalFeed()),
+    onScrollBottom: (ev) => {
+      ev.preventDefault();
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) dispatch(actionCreators.fetchAdditionalFeed());
+    },
     dispatch: action => dispatch(action)
   };
 };

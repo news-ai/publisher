@@ -9,9 +9,9 @@ function ArticleList({articles}) {
         <div className='seven columns'>Summary</div>
         </div>
         <div>
-        {articles.map((article) => {
+        {articles.map((article, i) => {
       return (<ArticleListItem
-        key={article.id}
+        key={i}
         {...article}
         />);
     })}
