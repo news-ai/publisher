@@ -1,7 +1,8 @@
-import { REQUEST_FEED, RECEIVE_FEED, RECEIVE_ENTITY, REQUEST_ENTITIES, RECEIVE_ENTITIES, REQUEST_AUTHOR, RECEIVE_AUTHOR, REQUEST_PUBLISHER, RECEIVE_PUBLISHER, RECEIVE_ENTITY_ARTICLES, REQUEST_ARTICLES, RECEIVE_ARTICLES, RECEIVE_ADDITIONAL_FEED } from '../constants/AppConstants';
+import { REQUEST_FEED, RECEIVE_FEED, RECEIVE_ENTITY, REQUEST_ENTITIES, RECEIVE_ENTITIES, REQUEST_AUTHOR, RECEIVE_AUTHOR, REQUEST_PUBLISHER, RECEIVE_PUBLISHER, RECEIVE_ENTITY_ARTICLES, REQUEST_ARTICLES, RECEIVE_ARTICLES, REQUEST_ADDITIONAL_FEED, RECEIVE_ADDITIONAL_FEED } from '../constants/AppConstants';
 import fetch from 'isomorphic-fetch';
 
 const CONTEXT_API_BASE = `https://context.newsai.org/api`;
+const FEED_LIMIT = 20;
 
 function removeCache() {
   return '?' + Date.now();
@@ -105,13 +106,13 @@ export function receiveFeed(json, next) {
   };
 }
 
-export function requestAdditionalFeed() {
+function requestAdditionalFeed() {
   return {
-    type: REQUEST_FEED
+    type: REQUEST_ADDITIONAL_FEED
   };
 }
 
-export function receiveAdditionFeed(json, next) {
+function receiveAdditionalFeed(json, next) {
   return {
     type: RECEIVE_ADDITIONAL_FEED,
     json,
@@ -128,21 +129,21 @@ export function fetchAdditionalFeed() {
       .catch((e) => console.log(e))
       .then((body) => {
         const json = JSON.parse(body);
-        Promise.all([dispatch(receiveAdditionalFeed(json.results, json.next)), dispatch(receiveArticles(json.results))]);
+        Promise.all([dispatch(receiveArticles(json.results)), dispatch(receiveAdditionalFeed(json.results, json.next))]);
       });
-  }
+  };
 }
 
 export function fetchFeed() {
   return (dispatch) => {
     dispatch(requestFeed());
     dispatch(requestArticles());
-    return fetch(CONTEXT_API_BASE + '/feeds' + removeCache())
+    return fetch(CONTEXT_API_BASE + '/feeds/?limit=' + FEED_LIMIT.toString)
       .then((response) => response.text())
       .catch((e) => console.log(e))
       .then((body) => {
         const json = JSON.parse(body);
-        Promise.all([dispatch(receiveFeed(json.results, json.next)), dispatch(receiveArticles(json.results))]);
+        Promise.all([dispatch(receiveArticles(json.results)), dispatch(receiveFeed(json.results, json.next))]);
       });
   };
 }

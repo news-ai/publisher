@@ -4,7 +4,7 @@
  * To add a new action, add it to the switch statement in the feedReducer function
  */
 
-import { REQUEST_FEED, RECEIVE_FEED } from '../constants/AppConstants';
+import { REQUEST_FEED, RECEIVE_FEED, REQUEST_ADDTIONAL_FEED, RECEIVE_ADDITIONAL_FEED } from '../constants/AppConstants';
 import assignToEmpty from '../utils/assign';
 import { initialState } from './initialState';
 
@@ -22,6 +22,15 @@ function feedReducer(state = initialState.feedReducer, action) {
   case RECEIVE_FEED:
     obj.isReceiving = false;
     obj.feedArticleIds = action.json.map((article) => article.id);
+    obj.next = action.next;
+    return obj;
+  case REQUEST_ADDTIONAL_FEED:
+    obj.isReceiving = true;
+    return obj;
+  case RECEIVE_ADDITIONAL_FEED:
+    obj.isReceiving = false;
+    obj.feedArticleIds = [...state.feedArticleIds, ...action.json.map((article) => article.id)];
+    obj.next = action.next;
     return obj;
   default:
     return state;
