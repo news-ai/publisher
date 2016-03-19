@@ -18,7 +18,7 @@ function entityReducer(state = initialState.entityReducer, action) {
     return obj;
   case RECEIVE_ENTITY_ARTICLES:
     obj[parseInt(action.entityId)].entity_articles = action.json.map((article) => article.id);
-    obj[parseInt(action.entityId)].next = action.next;
+    obj[parseInt(action.entityId)].next = (action.next === null) ? 0 : action.next;
     return obj;
   case REQUEST_ADDITIONAL_ENTITY_ARTICLES:
     obj.isReceiving = true;

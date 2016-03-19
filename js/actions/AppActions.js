@@ -8,6 +8,15 @@ function removeCache() {
   return '?' + Date.now();
 }
 
+function isJsonString(str) {
+  try {
+    JSON.parse(str);
+  } catch ( e ) {
+    return false;
+  }
+  return true;
+}
+
 export function requestArticles() {
   return {
     type: REQUEST_ARTICLES
@@ -83,6 +92,7 @@ export function fetchAdditionalEntityArticles(entityId) {
       .then((response) => response.text())
       .catch((e) => console.log(e))
       .then((body) => {
+        if (!isJsonString(body)) return;
         const json = JSON.parse(body);
         Promise.all([dispatch(receiveArticles(json.results)), dispatch(receiveAdditionalEntityArticles(entityId, json.results, json.next))]);
       });
@@ -96,6 +106,7 @@ export function fetchEntityArticles(entityId) {
       .then((response) => response.text())
       .catch((e) => console.log(e))
       .then((body) => {
+        if (!isJsonString(body)) return;
         let json = JSON.parse(body);
         Promise.all([
           dispatch(receiveEntityArticles(json.results, entityId, json.next)),
@@ -159,6 +170,7 @@ export function fetchAdditionalFeed() {
       .then((response) => response.text())
       .catch((e) => console.log(e))
       .then((body) => {
+        if (!isJsonString(body)) return;
         const json = JSON.parse(body);
         Promise.all([dispatch(receiveArticles(json.results)), dispatch(receiveAdditionalFeed(json.results, json.next))]);
       });
@@ -173,6 +185,7 @@ export function fetchFeed() {
       .then((response) => response.text())
       .catch((e) => console.log(e))
       .then((body) => {
+        if (!isJsonString(body)) return;
         const json = JSON.parse(body);
         Promise.all([dispatch(receiveArticles(json.results)), dispatch(receiveFeed(json.results, json.next))]);
       });
