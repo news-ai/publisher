@@ -1,4 +1,4 @@
-import { REQUEST_FEED, RECEIVE_FEED, RECEIVE_ENTITY, REQUEST_ENTITIES, RECEIVE_ENTITIES, REQUEST_AUTHOR, RECEIVE_AUTHOR, REQUEST_PUBLISHER, RECEIVE_PUBLISHER, RECEIVE_ENTITY_ARTICLES, REQUEST_ARTICLES, RECEIVE_ARTICLES, REQUEST_ADDITIONAL_FEED, RECEIVE_ADDITIONAL_FEED, REQUEST_ADDITIONAL_ENTITY_ARTICLES, RECEIVE_ADDITIONAL_ENTITY_ARTICLES } from '../constants/AppConstants';
+import { REQUEST_FEED, RECEIVE_FEED, RECEIVE_ENTITY, REQUEST_ENTITIES, RECEIVE_ENTITIES, REQUEST_AUTHOR, RECEIVE_AUTHOR, REQUEST_PUBLISHER, RECEIVE_PUBLISHER, RECEIVE_ENTITY_ARTICLES, REQUEST_ARTICLES, RECEIVE_ARTICLES, REQUEST_ADDITIONAL_FEED, RECEIVE_ADDITIONAL_FEED, REQUEST_ADDITIONAL_ENTITY_ARTICLES, RECEIVE_ADDITIONAL_ENTITY_ARTICLES, REQUEST_ADDITIONAL_PUBLISHER_ARTICLES, RECEIVE_ADDITIONAL_PUBLISHER_ARTICLES, RECEIVE_PUBLISHER_ARTICLES } from '../constants/AppConstants';
 import fetch from 'isomorphic-fetch';
 
 const CONTEXT_API_BASE = `https://context.newsai.org/api`;
@@ -193,7 +193,6 @@ export function fetchFeed() {
   };
 }
 
-
 export function requestAuthor() {
   return {
     type: REQUEST_AUTHOR
@@ -213,6 +212,62 @@ export function fetchAuthor(authorId) {
     fetch(CONTEXT_API_BASE + '/authors/' + authorId)
       .then((response) => response.text())
       .then((body) => dispatch(receiveAuthor(JSON.parse(body))));
+  };
+}
+export function receivePublisherArticles(json, publisherId, next) {
+  return {
+    type: RECEIVE_PUBLISHER_ARTICLES,
+    json,
+    publisherId,
+    next
+  };
+}
+
+export function requestAdditionalPublisherArticles() {
+  return {
+    type: REQUEST_ADDITIONAL_PUBLISHER_ARTICLES
+  };
+}
+
+export function receiveAdditionalPublisherArticles(publisherId, json, next) {
+  return {
+    type: RECEIVE_ADDITIONAL_PUBLISHER_ARTICLES,
+    publisherId,
+    json,
+    next
+  };
+}
+
+export function fetchAdditionalPublisherArticles(publisherId) {
+  return (dispatch, getState) => {
+    if (getState().publisherReducer[publisherId] === undefined) return;
+    dispatch(requestAdditionalPublisherArticles());
+    dispatch(requestArticles());
+    return fetch(getState().publisherReducer[publisherId].next)
+      .then((response) => response.text())
+      .catch((e) => console.log(e))
+      .then((body) => {
+        if (!isJsonString(body)) return;
+        const json = JSON.parse(body);
+        Promise.all([dispatch(receiveArticles(json.results)), dispatch(receiveAdditionalPublisherArticles(publisherId, json.results, json.next))]);
+      });
+  };
+}
+
+export function fetchPublisherArticles(publisherId) {
+  return (dispatch) => {
+    dispatch(requestArticles());
+    fetch(CONTEXT_API_BASE + '/publishers/' + publisherId + '/articles' + removeCache())
+      .then((response) => response.text())
+      .catch((e) => console.log(e))
+      .then((body) => {
+        if (!isJsonString(body)) return;
+        let json = JSON.parse(body);
+        Promise.all([
+          dispatch(receivePublisherArticles(json.results, publisherId, json.next)),
+          dispatch(receiveArticles(json.results))
+        ]);
+      });
   };
 }
 
