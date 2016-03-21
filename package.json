@@ -1,6 +1,6 @@
 {
   "name": "newsai-publisher",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Publisher platform for NewsAI data",
   "dependencies": {
     "axios": "^0.9.1",
