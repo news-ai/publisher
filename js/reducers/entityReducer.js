@@ -1,4 +1,5 @@
 import {
+  REQUEST_ENTITY,
   RECEIVE_ENTITY,
   REQUEST_ENTITIES,
   RECEIVE_ENTITIES,
@@ -17,6 +18,9 @@ function entityReducer(state = initialState.entityReducer, action) {
       return obj;
     case RECEIVE_ENTITIES:
       obj.isReceiving = false;
+      return obj;
+    case REQUEST_ENTITY:
+      obj.isReceiving = true;
       return obj;
     case RECEIVE_ENTITY:
       obj[parseInt(action.json.id, 10)] = action.json;

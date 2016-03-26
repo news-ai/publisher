@@ -8,11 +8,7 @@ import AdditionalLoading from '../pieces/AdditionalLoading.react';
 class Entity extends Component {
   componentDidMount() {
     let {dispatch, entityId, entity, entityArticles, onScrollBottom} = this.props;
-    if (entity === undefined) {
-      Promise.all([
-        dispatch(actionCreators.fetchEntity(entityId))])
-        .then(() => dispatch(actionCreators.fetchEntityArticles(entityId)));
-    }
+    if (entity === undefined) dispatch(actionCreators.fetchEntityAndArticles(entityId));
     if (entity !== undefined && entityArticles === undefined) dispatch(actionCreators.fetchEntityArticles(entityId));
     window.addEventListener('scroll', onScrollBottom);
   }

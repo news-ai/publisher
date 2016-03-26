@@ -1,6 +1,7 @@
 import {
   REQUEST_FEED,
   RECEIVE_FEED,
+  REQUEST_ENTITY,
   RECEIVE_ENTITY,
   REQUEST_ENTITIES,
   RECEIVE_ENTITIES,
@@ -9,8 +10,6 @@ import {
   RECEIVE_AUTHOR,
   REQUEST_PUBLISHER,
   RECEIVE_PUBLISHER,
-  REQUEST_ADDITIONAL_PUBLISHER_ARTICLES,
-  RECEIVE_ADDITIONAL_PUBLISHER_ARTICLES,
   REQUEST_PUBLISHER_ARTICLES,
   RECEIVE_PUBLISHER_ARTICLES,
   RECEIVE_ENTITY_ARTICLES,
@@ -75,6 +74,13 @@ export function requestArticleEntities(articleId) {
   };
 }
 
+export function requestEntity(entityId) {
+  return {
+    type: REQUEST_ENTITY,
+    entityId
+  };
+}
+
 export function receiveEntity(json) {
   return {
     type: RECEIVE_ENTITY,
@@ -118,9 +124,20 @@ export function fetchEntityArticles(entityId) {
 
 export function fetchEntity(entityId) {
   return (dispatch) => {
+    dispatch(requestEntity(entityId));
     return fetch(CONTEXT_API_BASE + '/entities/' + entityId)
       .then((response) => response.text())
       .then((body) => dispatch(receiveEntity(JSON.parse(body))));
+  };
+}
+
+export function fetchEntityAndArticles(entityId) {
+  return (dispatch) => {
+    dispatch(requestEntity(entityId));
+    return fetch(CONTEXT_API_BASE + '/entities/' + entityId)
+      .then((response) => response.text())
+      .then((body) => dispatch(receiveEntity(JSON.parse(body))))
+      .then(() => dispatch(fetchEntityArticles(entityId)));
   };
 }
 

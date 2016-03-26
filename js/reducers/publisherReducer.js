@@ -3,8 +3,6 @@ import {
   REQUEST_PUBLISHER,
   REQUEST_PUBLISHER_ARTICLES,
   RECEIVE_PUBLISHER_ARTICLES,
-  REQUEST_ADDITIONAL_PUBLISHER_ARTICLES,
-  RECEIVE_ADDITIONAL_PUBLISHER_ARTICLES
 } from '../constants/AppConstants';
 import assignToEmpty from '../utils/assign';
 import { initialState } from './initialState';
