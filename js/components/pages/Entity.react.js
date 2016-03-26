@@ -77,15 +77,11 @@ const mapDispatchToProps = (dispatch, props) => {
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
   let {next, entityId} = stateProps;
   let {dispatch} = dispatchProps;
-  // console.log(stateProps);
-  // console.log(dispatchProps);
-  // console.log(ownProps);
-  // console.log(next);
   return {
     ...stateProps,
     onScrollBottom: (ev) => {
       ev.preventDefault();
-      if ( ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) ) dispatch(actionCreators.fetchAdditionalEntityArticles(entityId));
+      if ( ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) ) dispatch(actionCreators.fetchEntityArticles(entityId));
     },
     dispatch: action => dispatch(action)
   };

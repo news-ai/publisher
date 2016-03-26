@@ -4,8 +4,6 @@ import {
   RECEIVE_ENTITIES,
   REQUEST_ENTITY_ARTICLES,
   RECEIVE_ENTITY_ARTICLES,
-  REQUEST_ADDITIONAL_ENTITY_ARTICLES,
-  RECEIVE_ADDITIONAL_ENTITY_ARTICLES
 } from '../constants/AppConstants';
 import assignToEmpty from '../utils/assign';
 import { initialState } from './initialState';
@@ -22,20 +20,12 @@ function entityReducer(state = initialState.entityReducer, action) {
       return obj;
     case RECEIVE_ENTITY:
       obj[parseInt(action.json.id, 10)] = action.json;
-      obj[parseInt(action.json.id, 10)].entity_articles = undefined;
+      obj[parseInt(action.json.id, 10)].entity_articles = [];
       return obj;
     case REQUEST_ENTITY_ARTICLES:
       obj.isReceiving = true;
       return obj;
     case RECEIVE_ENTITY_ARTICLES:
-      obj[parseInt(action.entityId, 10)].entity_articles = action.json.map((article) => article.id);
-      obj[parseInt(action.entityId, 10)].next = (action.next === null) ? 0 : action.next;
-      obj.isReceiving = false;
-      return obj;
-    case REQUEST_ADDITIONAL_ENTITY_ARTICLES:
-      obj.isReceiving = true;
-      return obj;
-    case RECEIVE_ADDITIONAL_ENTITY_ARTICLES:
       obj[parseInt(action.entityId, 10)].entity_articles = [...state[parseInt(action.entityId, 10)].entity_articles, ...action.json.map((article) => article.id)];
       obj[parseInt(action.entityId, 10)].next = (action.next === null) ? 0 : action.next;
       obj.isReceiving = false;

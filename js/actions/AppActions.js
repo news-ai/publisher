@@ -14,8 +14,6 @@ import {
   RECEIVE_ARTICLES,
   REQUEST_ADDITIONAL_FEED,
   RECEIVE_ADDITIONAL_FEED,
-  REQUEST_ADDITIONAL_ENTITY_ARTICLES,
-  RECEIVE_ADDITIONAL_ENTITY_ARTICLES,
   REQUEST_ADDITIONAL_PUBLISHER_ARTICLES,
   RECEIVE_ADDITIONAL_PUBLISHER_ARTICLES,
   RECEIVE_PUBLISHER_ARTICLES
@@ -96,49 +94,20 @@ export function receiveEntityArticles(json, entityId, next) {
   };
 }
 
-export function requestAdditionalEntityArticles() {
-  return {
-    type: REQUEST_ADDITIONAL_ENTITY_ARTICLES
-  };
-}
-
-export function receiveAdditionalEntityArticles(entityId, json, next) {
-  return {
-    type: RECEIVE_ADDITIONAL_ENTITY_ARTICLES,
-    entityId,
-    json,
-    next
-  };
-}
-
-export function fetchAdditionalEntityArticles(entityId) {
+export function fetchEntityArticles(entityId) {
   return (dispatch, getState) => {
     if (getState().entityReducer[entityId] === undefined) return;
-    dispatch(requestAdditionalEntityArticles());
     dispatch(requestArticles());
-    return fetch(getState().entityReducer[entityId].next)
-      .then((response) => response.text())
-      .catch((e) => console.log(e))
-      .then((body) => {
-        if (!isJsonString(body)) return;
-        const json = JSON.parse(body);
-        Promise.all([dispatch(receiveArticles(json.results)), dispatch(receiveAdditionalEntityArticles(entityId, json.results, json.next))]);
-      });
-  };
-}
-
-export function fetchEntityArticles(entityId) {
-  return (dispatch) => {
-    dispatch(requestArticles());
-    fetch(CONTEXT_API_BASE + '/entities/' + entityId + '/articles' + removeCache())
+    const fetchLink = (getState().entityReducer[entityId].next === undefined) ? CONTEXT_API_BASE + '/entities/' + entityId + '/articles' + removeCache(): getState().entityReducer[entityId].next;
+    fetch(fetchLink)
       .then((response) => response.text())
       .catch((e) => console.log(e))
       .then((body) => {
         if (!isJsonString(body)) return;
         let json = JSON.parse(body);
         Promise.all([
-          dispatch(receiveEntityArticles(json.results, entityId, json.next)),
-          dispatch(receiveArticles(json.results))
+          dispatch(receiveArticles(json.results)),
+          dispatch(receiveEntityArticles(json.results, entityId, json.next))
         ]);
       });
   };
@@ -200,7 +169,10 @@ export function fetchAdditionalFeed() {
       .then((body) => {
         if (!isJsonString(body)) return;
         const json = JSON.parse(body);
-        Promise.all([dispatch(receiveArticles(json.results)), dispatch(receiveAdditionalFeed(json.results, json.next))]);
+        Promise.all([
+          dispatch(receiveArticles(json.results)),
+          dispatch(receiveAdditionalFeed(json.results, json.next))
+          ]);
       });
   };
 }
@@ -215,7 +187,10 @@ export function fetchFeed() {
       .then((body) => {
         if (!isJsonString(body)) return;
         const json = JSON.parse(body);
-        Promise.all([dispatch(receiveArticles(json.results)), dispatch(receiveFeed(json.results, json.next))]);
+        Promise.all([
+          dispatch(receiveArticles(json.results)),
+          dispatch(receiveFeed(json.results, json.next))
+          ]);
       });
   };
 }
@@ -276,7 +251,10 @@ export function fetchAdditionalPublisherArticles(publisherId) {
       .then((body) => {
         if (!isJsonString(body)) return;
         const json = JSON.parse(body);
-        Promise.all([dispatch(receiveArticles(json.results)), dispatch(receiveAdditionalPublisherArticles(publisherId, json.results, json.next))]);
+        Promise.all([
+          dispatch(receiveArticles(json.results)),
+          dispatch(receiveAdditionalPublisherArticles(publisherId, json.results, json.next))
+          ]);
       });
   };
 }
