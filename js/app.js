@@ -54,7 +54,7 @@ import rootReducer from './reducers/rootReducer';
 const loggerMiddleware = createLogger();
 const createStoreWithMiddleware = applyMiddleware(
   thunk,
-  loggerMiddleware
+  // loggerMiddleware
 )(createStore);
 const store = createStoreWithMiddleware(rootReducer);
 
@@ -68,7 +68,7 @@ const store = createStoreWithMiddleware(rootReducer);
 
 ReactDOM.render(
   <Provider store={store}>
-      <Router history={createHistory()}>
+      <Router onUpdate={() => window.scrollTo(0, 0)} history={createHistory()}>
         <Route path='/' component={App}>
           <IndexRoute component={HomePage} />
           <Route path='/articles/:articleId' component={Article} />

@@ -30,7 +30,7 @@ class Article extends Component {
                         <p><span style={{
           fontWeight: 'bold'
         }}>Summary: </span>{article.summary}</p>
-                        <p>Link: <a>{article.url}</a></p>
+                        <p>Link: <a href={article.url}>{article.url}</a></p>
                         <p>Authors: {article.authors.map((author, i) => <span key={i}><Link to={'/authors/' + author.id}>{author.name} </Link></span>)}</p>
                     </div>
         )}

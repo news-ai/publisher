@@ -2,7 +2,6 @@ import { REQUEST_FEED, RECEIVE_FEED, RECEIVE_ENTITY, REQUEST_ENTITIES, RECEIVE_E
 import fetch from 'isomorphic-fetch';
 
 const CONTEXT_API_BASE = `https://context.newsai.org/api`;
-const FEED_LIMIT = 20;
 
 function removeCache() {
   return '?' + Date.now();
@@ -182,7 +181,7 @@ export function fetchFeed() {
   return (dispatch) => {
     dispatch(requestFeed());
     dispatch(requestArticles());
-    return fetch(CONTEXT_API_BASE + '/feeds/?limit=' + FEED_LIMIT.toString)
+    return fetch(CONTEXT_API_BASE + '/feeds' + removeCache())
       .then((response) => response.text())
       .catch((e) => console.log(e))
       .then((body) => {
