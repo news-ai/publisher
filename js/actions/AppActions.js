@@ -9,15 +9,18 @@ import {
   RECEIVE_AUTHOR,
   REQUEST_PUBLISHER,
   RECEIVE_PUBLISHER,
+  REQUEST_ADDITIONAL_PUBLISHER_ARTICLES,
+  RECEIVE_ADDITIONAL_PUBLISHER_ARTICLES,
+  REQUEST_PUBLISHER_ARTICLES,
+  RECEIVE_PUBLISHER_ARTICLES,
   RECEIVE_ENTITY_ARTICLES,
   REQUEST_ARTICLES,
   RECEIVE_ARTICLES,
   REQUEST_ADDITIONAL_FEED,
   RECEIVE_ADDITIONAL_FEED,
-  REQUEST_ADDITIONAL_PUBLISHER_ARTICLES,
-  RECEIVE_ADDITIONAL_PUBLISHER_ARTICLES,
-  RECEIVE_PUBLISHER_ARTICLES
 } from '../constants/AppConstants';
+
+import fetch from 'isomorphic-fetch';
 
 const CONTEXT_API_BASE = `https://context.newsai.org/api`;
 const isDev = false;
@@ -216,63 +219,10 @@ export function fetchAuthor(authorId) {
       .then((body) => dispatch(receiveAuthor(JSON.parse(body))));
   };
 }
-export function receivePublisherArticles(json, publisherId, next) {
+
+export function requestPublisherArticles() {
   return {
-    type: RECEIVE_PUBLISHER_ARTICLES,
-    json,
-    publisherId,
-    next
-  };
-}
-
-export function requestAdditionalPublisherArticles() {
-  return {
-    type: REQUEST_ADDITIONAL_PUBLISHER_ARTICLES
-  };
-}
-
-export function receiveAdditionalPublisherArticles(publisherId, json, next) {
-  return {
-    type: RECEIVE_ADDITIONAL_PUBLISHER_ARTICLES,
-    publisherId,
-    json,
-    next
-  };
-}
-
-export function fetchAdditionalPublisherArticles(publisherId) {
-  return (dispatch, getState) => {
-    if (getState().publisherReducer[publisherId] === undefined) return;
-    dispatch(requestAdditionalPublisherArticles());
-    dispatch(requestArticles());
-    return fetch(getState().publisherReducer[publisherId].next)
-      .then((response) => response.text())
-      .catch((e) => console.log(e))
-      .then((body) => {
-        if (!isJsonString(body)) return;
-        const json = JSON.parse(body);
-        Promise.all([
-          dispatch(receiveArticles(json.results)),
-          dispatch(receiveAdditionalPublisherArticles(publisherId, json.results, json.next))
-          ]);
-      });
-  };
-}
-
-export function fetchPublisherArticles(publisherId) {
-  return (dispatch) => {
-    dispatch(requestArticles());
-    fetch(CONTEXT_API_BASE + '/publishers/' + publisherId + '/articles' + removeCache())
-      .then((response) => response.text())
-      .catch((e) => console.log(e))
-      .then((body) => {
-        if (!isJsonString(body)) return;
-        let json = JSON.parse(body);
-        Promise.all([
-          dispatch(receivePublisherArticles(json.results, publisherId, json.next)),
-          dispatch(receiveArticles(json.results))
-        ]);
-      });
+    type: REQUEST_PUBLISHER_ARTICLES
   };
 }
 
@@ -294,8 +244,47 @@ export function fetchPublisher(publisherId) {
     dispatch(requestPublisher());
     fetch(CONTEXT_API_BASE + '/publishers/' + publisherId)
       .then((response) => response.text())
-      .then((body) => dispatch(receivePublisher(JSON.parse(body))));
+      .then((body) => {
+        dispatch(receivePublisher(JSON.parse(body)));
+        console.log('FETCHING');
+      });
   };
 }
 
+export function receivePublisherArticles(json, publisherId, next) {
+  return {
+    type: RECEIVE_PUBLISHER_ARTICLES,
+    json,
+    publisherId,
+    next
+  };
+}
 
+export function fetchPublisherArticles(publisherId) {
+  return (dispatch, getState) => {
+    if (getState().publisherReducer[publisherId] === undefined) return;
+    dispatch(requestArticles());
+    const fetchLink = (getState().publisherReducer[publisherId].next === undefined) ? CONTEXT_API_BASE + '/publishers/' + publisherId + '/articles' + removeCache(): getState().publisherReducer[publisherId].next;
+    fetch(fetchLink)
+      .then((response) => response.text())
+      .catch((e) => console.log(e))
+      .then((body) => {
+        if (!isJsonString(body)) return;
+        let json = JSON.parse(body);
+        Promise.all([
+          dispatch(receiveArticles(json.results)),
+          dispatch(receivePublisherArticles(json.results, publisherId, json.next)),
+        ]);
+      });
+  };
+}
+
+export function fetchPublisherAndArticles(publisherId) {
+  return (dispatch) => {
+    dispatch(requestPublisher());
+    fetch(CONTEXT_API_BASE + '/publishers/' + publisherId)
+      .then((response) => response.text())
+      .then((body) => dispatch(receivePublisher(JSON.parse(body))))
+      .then(() => dispatch(fetchPublisherArticles(publisherId)));
+  };
+}

@@ -8,11 +8,7 @@ import AdditionalLoading from '../pieces/AdditionalLoading.react';
 class Publisher extends Component {
   componentDidMount() {
     let {dispatch, publisherId, publisher, publisherArticles, onScrollBottom} = this.props;
-    if (publisher === undefined) {
-      Promise.all([
-        dispatch(actionCreators.fetchPublisher(publisherId))])
-        .then(() => dispatch(actionCreators.fetchPublisherArticles(publisherId)));
-    }
+    if (publisher === undefined) dispatch(actionCreators.fetchPublisherAndArticles(publisherId));
     if (publisher !== undefined && publisherArticles === undefined) dispatch(actionCreators.fetchPublisherArticles(publisherId));
     window.addEventListener('scroll', onScrollBottom);
   }
@@ -82,7 +78,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     ...stateProps,
     onScrollBottom: (ev) => {
       ev.preventDefault();
-      if ( ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) ) dispatch(actionCreators.fetchAdditionalPublisherArticles(publisherId));
+      if ( ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) ) dispatch(actionCreators.fetchPublisherArticles(publisherId));
     },
     dispatch: action => dispatch(action)
   };
