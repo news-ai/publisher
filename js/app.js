@@ -45,7 +45,7 @@ import App from './components/App.react';
 // Import the CSS file, which HtmlWebpackPlugin transfers to the build folder
 import '../css/main.css';
 
-window.isDev = true;
+window.isDev = false;
 
 // Create the store with the redux-thunk middleware, which allows us
 // to do asynchronous things in the actions
