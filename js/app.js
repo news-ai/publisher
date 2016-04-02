@@ -12,8 +12,6 @@ import 'file?name=[name].[ext]!../serviceworker.js';
 import 'file?name=[name].[ext]!../manifest.json';
 import 'file?name=[name].[ext]!../.htaccess';
 
-import { asyncGetFeed } from './actions/AppActions';
-
 // Check for ServiceWorker support before trying to install it
 // if ('serviceWorker' in navigator) {
 //   navigator.serviceWorker.register('/serviceworker.js').then(() => {
@@ -33,7 +31,6 @@ import { Router, Route, IndexRoute } from 'react-router';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
-
 import createHistory from 'history/lib/createBrowserHistory';
 
 // Import the pages
@@ -48,14 +45,15 @@ import App from './components/App.react';
 // Import the CSS file, which HtmlWebpackPlugin transfers to the build folder
 import '../css/main.css';
 
+window.isDev = false;
+
 // Create the store with the redux-thunk middleware, which allows us
 // to do asynchronous things in the actions
 import rootReducer from './reducers/rootReducer';
 const loggerMiddleware = createLogger();
-const createStoreWithMiddleware = applyMiddleware(
-  thunk,
-  loggerMiddleware
-)(createStore);
+const createStoreWithMiddleware = (window.isDev) ?
+  applyMiddleware(thunk, loggerMiddleware)(createStore):
+  applyMiddleware(thunk)(createStore);
 const store = createStoreWithMiddleware(rootReducer);
 
 // Make reducers hot reloadable, see http://stackoverflow.com/questions/34243684/make-redux-reducers-and-other-non-components-hot-loadable

@@ -22,7 +22,7 @@ import {
 import fetch from 'isomorphic-fetch';
 
 const CONTEXT_API_BASE = `https://context.newsai.org/api`;
-const isDev = false;
+const isDev = window.isDev;
 
 function removeCache() {
   if (isDev) return '?' + Date.now();
