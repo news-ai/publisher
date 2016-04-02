@@ -1,7 +1,7 @@
 import {
   REQUEST_FEED,
   RECEIVE_FEED,
-  REQUEST_ADDTIONAL_FEED,
+  REQUEST_ADDITIONAL_FEED,
   RECEIVE_ADDITIONAL_FEED
 } from '../constants/AppConstants';
 import assignToEmpty from '../utils/assign';
@@ -19,7 +19,7 @@ function feedReducer(state = initialState.feedReducer, action) {
       obj.feedArticleIds = action.json.map((article) => article.id);
       obj.next = action.next;
       return obj;
-    case REQUEST_ADDTIONAL_FEED:
+    case REQUEST_ADDITIONAL_FEED:
       obj.isReceiving = true;
       return obj;
     case RECEIVE_ADDITIONAL_FEED:

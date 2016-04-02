@@ -28,7 +28,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute } from 'react-router';
-import { createStore, applyMiddleware, combineReducers } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 import createHistory from 'history/lib/createBrowserHistory';
@@ -45,7 +45,7 @@ import App from './components/App.react';
 // Import the CSS file, which HtmlWebpackPlugin transfers to the build folder
 import '../css/main.css';
 
-window.isDev = false;
+window.isDev = true;
 
 // Create the store with the redux-thunk middleware, which allows us
 // to do asynchronous things in the actions

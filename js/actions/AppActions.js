@@ -181,6 +181,7 @@ function receiveAdditionalFeed(json, next) {
 
 export function fetchAdditionalFeed() {
   return (dispatch, getState) => {
+    if (getState().feedReducer.isReceiving) return;
     dispatch(requestAdditionalFeed());
     dispatch(requestArticles());
     return fetch(getState().feedReducer.next)
@@ -192,7 +193,7 @@ export function fetchAdditionalFeed() {
         Promise.all([
           dispatch(receiveArticles(json.results)),
           dispatch(receiveAdditionalFeed(json.results, json.next))
-          ]);
+        ]);
       });
   };
 }
