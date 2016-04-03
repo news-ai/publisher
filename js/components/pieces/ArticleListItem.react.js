@@ -10,8 +10,8 @@ function formatTime(datestring) {
     date: date.toDateString(),
     timestring: timestring,
     hour: hour,
-    minute: date.getMinutes(),
-  }
+    minute: date.toTimeString().substring(6, 8),
+  };
 }
 
 function ArticleListItem({id, name, url, summary, added_at, authors, publisher}) {
@@ -20,7 +20,7 @@ function ArticleListItem({id, name, url, summary, added_at, authors, publisher})
     <div className='row article-body' key={id}>
       <div className='twelve columns'>
           <div className='article-name'>
-            <span><Link to={'/articles/' + id}>{name}</Link></span>
+            <Link style={{color: 'black', fontWeight: 500}} to={'/articles/' + id}><span>{name}</span></Link>
           </div>
           <div className='article-publisher'>
             <Link to={'/publishers/' + publisher.id}><span>{publisher.name}</span></Link>
