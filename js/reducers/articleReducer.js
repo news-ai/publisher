@@ -21,7 +21,8 @@ function articleReducer(state = initialState.articleReducer, action) {
         });
       } else {
         obj[action.json.id] = action.json;
-        obj[action.json.id].basic_summary = extractSummary(action.json.summary);
+        // obj[action.json.id].basic_summary = extractSummary(action.json.summary);
+        obj[action.json.id].basic_summary = action.json.summary;
       }
       return obj;
     default:
