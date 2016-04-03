@@ -5,8 +5,6 @@ function ArticleList({articles}) {
   return (
     <div>
         <div className='row article-list-categories'>
-        <div className='five columns'>Name</div>
-        <div className='seven columns'>Summary</div>
         </div>
         <div>
         {articles.map((article, i) => {
