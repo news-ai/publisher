@@ -10,18 +10,18 @@ import AdditionalLoading from '../pieces/AdditionalLoading.react';
 
 class HomePage extends Component {
   componentDidMount() {
-    let {dispatch, articleIds, onScrollBottom} = this.props;
+    const {dispatch, articleIds, onScrollBottom} = this.props;
     window.addEventListener('scroll', onScrollBottom);
     if (articleIds === undefined) dispatch(actionCreators.fetchFeed());
   }
 
   componentWillUnmount() {
-    let {onScrollBottom} = this.props;
+    const {onScrollBottom} = this.props;
     window.removeEventListener('scroll', onScrollBottom);
   }
 
   render() {
-    let {projectName, articles, feedIsReceving, articleIsReceiving, onScrollBottom, next} = this.props;
+    const { articles, articleIsReceiving, next} = this.props;
     const loading = (<span>The feed is loading</span>);
 
     return (

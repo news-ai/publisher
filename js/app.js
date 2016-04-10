@@ -28,11 +28,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute } from 'react-router';
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import createLogger from 'redux-logger';
 import createHistory from 'history/lib/createBrowserHistory';
-import * as actionCreators from '../../actions/AppActions';
+import * as actionCreators from './actions/AppActions';
+import { configureStore } from './configureStore';
 
 // Import the pages
 import HomePage from './components/pages/HomePage.react';
@@ -47,16 +45,7 @@ import App from './components/App.react';
 // Import the CSS file, which HtmlWebpackPlugin transfers to the build folder
 import '../css/main.css';
 
-window.isDev = true;
-
-// Create the store with the redux-thunk middleware, which allows us
-// to do asynchronous things in the actions
-import rootReducer from './reducers/rootReducer';
-const loggerMiddleware = createLogger();
-const createStoreWithMiddleware = (window.isDev) ?
-  applyMiddleware(thunk, loggerMiddleware)(createStore) :
-  applyMiddleware(thunk)(createStore);
-const store = createStoreWithMiddleware(rootReducer);
+const store = configureStore();
 
 // Make reducers hot reloadable, see http://stackoverflow.com/questions/34243684/make-redux-reducers-and-other-non-components-hot-loadable
 if (module.hot) {
