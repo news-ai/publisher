@@ -26,7 +26,8 @@ class HomePage extends Component {
 
     return (
       <div className='container article-list-container'>
-          {(articles === undefined || next === undefined) ? loading :
+          {
+            (articles === undefined || next === undefined) ? loading :
         <ArticleList articles={articles} />
       }
       {(articles !== undefined && next !== undefined && next !== 0 && articleIsReceiving) ? <AdditionalLoading name='feed is' /> : null}

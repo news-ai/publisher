@@ -25,10 +25,9 @@ import {
 import fetch from 'isomorphic-fetch';
 
 const CONTEXT_API_BASE = `https://context.newsai.org/api`;
-const isDev = window.isDev;
 
 function removeCache() {
-  if (isDev) return '?' + Date.now();
+  if (window.isDev) return '?' + Date.now();
   return '';
 }
 
@@ -54,24 +53,27 @@ function receiveLogin(person) {
   };
 }
 
-export function loginWithGoogle() {
-  window.location.href = `https://context.newsai.org/login/google-oauth2` + `?success=` + window.location;
-}
-
-export function fetchPerson() {
-  return dispatch => {
-    dispatch(requestLogin());
-    return fetch(`https://context.newsai.org/api/users/me/`)
-      .then( response => response.text())
-      .then( body => dispatch(receiveLogin(JSON.parse(body))));
-  };
-}
-
 function loginFail() {
   return {
     type: LOGIN_FAIL
   };
 }
+
+export function loginWithGoogle() {
+  window.location.href = `https://context.newsai.org/login/google-oauth2`;
+}
+
+export function fetchPerson() {
+  return dispatch => {
+    dispatch(requestLogin());
+    return fetch(`https://context.newsai.org/api/users/me`)
+      .then( response => {
+        if (response.status !== 200) dispatch(loginFail());
+        else dispatch(receiveLogin(JSON.parse(response.text())));
+      });
+  };
+}
+
 
 export function requestArticles() {
   return {
@@ -142,13 +144,15 @@ export function fetchEntityArticles(entityId) {
   return (dispatch, getState) => {
     if (getState().entityReducer[entityId] === undefined) return;
     dispatch(requestArticles());
-    const fetchLink = (getState().entityReducer[entityId].next === undefined) ? CONTEXT_API_BASE + '/entities/' + entityId + '/articles' + removeCache(): getState().entityReducer[entityId].next;
+    const fetchLink = (getState().entityReducer[entityId].next === undefined) ?
+    CONTEXT_API_BASE + `/entities/` + entityId + `/articles` + removeCache()
+    : getState().entityReducer[entityId].next;
     fetch(fetchLink)
-      .then((response) => response.text())
-      .catch((e) => console.log(e))
-      .then((body) => {
+      .then( response => response.text())
+      .catch( e => console.log(e))
+      .then( body => {
         if (!isJsonString(body)) return;
-        let json = JSON.parse(body);
+        const json = JSON.parse(body);
         Promise.all([
           dispatch(receiveArticles(json.results)),
           dispatch(receiveEntityArticles(json.results, entityId, json.next))
@@ -158,31 +162,31 @@ export function fetchEntityArticles(entityId) {
 }
 
 export function fetchEntity(entityId) {
-  return (dispatch) => {
+  return dispatch => {
     dispatch(requestEntity(entityId));
-    return fetch(CONTEXT_API_BASE + '/entities/' + entityId)
-      .then((response) => response.text())
-      .then((body) => dispatch(receiveEntity(JSON.parse(body))));
+    return fetch(CONTEXT_API_BASE + `/entities/` + entityId)
+      .then( response => response.text())
+      .then( body => dispatch(receiveEntity(JSON.parse(body))));
   };
 }
 
 export function fetchEntityAndArticles(entityId) {
-  return (dispatch) => {
+  return dispatch => {
     dispatch(requestEntity(entityId));
-    return fetch(CONTEXT_API_BASE + '/entities/' + entityId)
-      .then((response) => response.text())
-      .then((body) => dispatch(receiveEntity(JSON.parse(body))))
-      .then(() => dispatch(fetchEntityArticles(entityId)));
+    return fetch(CONTEXT_API_BASE + `/entities/` + entityId)
+      .then( response => response.text())
+      .then( body => dispatch(receiveEntity(JSON.parse(body))))
+      .then( _ => dispatch(fetchEntityArticles(entityId)));
   };
 }
 
 export function fetchArticleEntities(articleId) {
   return (dispatch, getState) => {
     const article = getState().articleReducer[articleId];
-    const entityIds = article.entity_scores.map((entity) => entity.entity_id);
+    const entityIds = article.entity_scores.map( entity => entity.entity_id);
     dispatch(requestArticleEntities(articleId));
-    Promise.all(entityIds.map((id) => dispatch(fetchEntity(id))))
-      .then(() => dispatch(doneFetchingArticleEntities()));
+    Promise.all(entityIds.map( id => dispatch(fetchEntity(id))))
+      .then( _ => dispatch(doneFetchingArticleEntities()));
   };
 }
 
@@ -237,7 +241,7 @@ export function fetchFeed() {
   return (dispatch) => {
     dispatch(requestFeed());
     dispatch(requestArticles());
-    return fetch(CONTEXT_API_BASE + '/feeds' + removeCache())
+    return fetch(CONTEXT_API_BASE + `/feeds` + removeCache())
       .then((response) => response.text())
       .catch((e) => console.log(e))
       .then((body) => {
@@ -265,11 +269,11 @@ export function receiveAuthor(json) {
 }
 
 export function fetchAuthor(authorId) {
-  return (dispatch) => {
+  return dispatch => {
     dispatch(requestAuthor);
-    fetch(CONTEXT_API_BASE + '/authors/' + authorId)
-      .then((response) => response.text())
-      .then((body) => dispatch(receiveAuthor(JSON.parse(body))));
+    fetch(CONTEXT_API_BASE + `/authors/` + authorId)
+      .then( response => response.text())
+      .then( body => dispatch(receiveAuthor(JSON.parse(body))));
   };
 }
 
@@ -293,14 +297,11 @@ export function receivePublisher(json) {
 }
 
 export function fetchPublisher(publisherId) {
-  return (dispatch) => {
+  return dispatch => {
     dispatch(requestPublisher());
-    fetch(CONTEXT_API_BASE + '/publishers/' + publisherId)
-      .then((response) => response.text())
-      .then((body) => {
-        dispatch(receivePublisher(JSON.parse(body)));
-        console.log('FETCHING');
-      });
+    fetch(CONTEXT_API_BASE + `/publishers/` + publisherId)
+      .then( response => response.text())
+      .then( body => dispatch(receivePublisher(JSON.parse(body))));
   };
 }
 
@@ -317,13 +318,15 @@ export function fetchPublisherArticles(publisherId) {
   return (dispatch, getState) => {
     if (getState().publisherReducer[publisherId] === undefined) return;
     dispatch(requestArticles());
-    const fetchLink = (getState().publisherReducer[publisherId].next === undefined) ? CONTEXT_API_BASE + '/publishers/' + publisherId + '/articles' + removeCache(): getState().publisherReducer[publisherId].next;
+    const fetchLink = getState().publisherReducer[publisherId].next === undefined ?
+    CONTEXT_API_BASE + `/publishers/` + publisherId + `/articles` + removeCache()
+    : getState().publisherReducer[publisherId].next;
     fetch(fetchLink)
-      .then((response) => response.text())
-      .catch((e) => console.log(e))
-      .then((body) => {
+      .then( response => response.text())
+      .catch( e => console.log(e))
+      .then( body => {
         if (!isJsonString(body)) return;
-        let json = JSON.parse(body);
+        const json = JSON.parse(body);
         Promise.all([
           dispatch(receiveArticles(json.results)),
           dispatch(receivePublisherArticles(json.results, publisherId, json.next)),
@@ -333,11 +336,11 @@ export function fetchPublisherArticles(publisherId) {
 }
 
 export function fetchPublisherAndArticles(publisherId) {
-  return (dispatch) => {
+  return dispatch => {
     dispatch(requestPublisher());
-    fetch(CONTEXT_API_BASE + '/publishers/' + publisherId)
-      .then((response) => response.text())
-      .then((body) => dispatch(receivePublisher(JSON.parse(body))))
-      .then(() => dispatch(fetchPublisherArticles(publisherId)));
+    fetch(CONTEXT_API_BASE + `/publishers/` + publisherId)
+      .then( response => response.text())
+      .then( body => dispatch(receivePublisher(JSON.parse(body))))
+      .then( _ => dispatch(fetchPublisherArticles(publisherId)));
   };
 }

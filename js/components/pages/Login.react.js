@@ -4,10 +4,9 @@ import * as actionCreators from '../../actions/AppActions';
 
 class Login extends Component {
 	render() {
-		const { loginWithGoogle } = this.props;
 		return (
 			<div className='container'>
-			<button onClick={loginWithGoogle()}>Login with Google</button>
+				<button onClick={this.props.loginClick}>Login with Google</button>
 			</div>
 			);
 	}
@@ -22,7 +21,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		loginWithGoogle: dispatch(actionCreators.loginWithGoogle())
+		loginClick: _ => dispatch(actionCreators.loginWithGoogle())
 	};
 };
 

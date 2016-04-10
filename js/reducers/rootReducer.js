@@ -9,13 +9,15 @@ import entityReducer from './entityReducer';
 import authorReducer from './authorReducer';
 import publisherReducer from './publisherReducer';
 import articleReducer from './articleReducer';
+import personReducer from './personReducer';
 
 const rootReducer = combineReducers({
   feedReducer,
   entityReducer,
   authorReducer,
   publisherReducer,
-  articleReducer
+  articleReducer,
+  personReducer,
 });
 
 export default rootReducer;

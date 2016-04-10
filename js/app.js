@@ -30,7 +30,7 @@ import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute } from 'react-router';
 import createHistory from 'history/lib/createBrowserHistory';
 import * as actionCreators from './actions/AppActions';
-import { configureStore } from './configureStore';
+import configureStore from './configureStore';
 
 // Import the pages
 import HomePage from './components/pages/HomePage.react';
@@ -56,19 +56,39 @@ if (module.hot) {
 }
 
 // FETCH PERSON
-store.dispatch(actionCreators.fetchPerson());
+let routes = (
+      <Route path='/' component={App}>
+        <IndexRoute component={Login} />
+      </Route>
+  );
+if (store.getState().personReducer.person === undefined) store.dispatch(actionCreators.fetchPerson());
 
-ReactDOM.render(
-  <Provider store={store}>
-      <Router onUpdate={() => window.scrollTo(0, 0)} history={createHistory()}>
+if (store.getState().personReducer.person) {
+  routes = (
         <Route path='/' component={App}>
           <IndexRoute component={HomePage} />
           <Route path='/articles/:articleId' component={Article} />
           <Route path='/entities/:entityId' component={Entity} />
           <Route path='/authors/:authorId' component={Author} />
           <Route path='/publishers/:publisherId' component={Publisher} />
-          <Route path='/login' component={Login} />
         </Route>
+    );
+}
+
+routes = (
+      <Route path='/' component={App}>
+        <IndexRoute component={HomePage} />
+        <Route path='/articles/:articleId' component={Article} />
+        <Route path='/entities/:entityId' component={Entity} />
+        <Route path='/authors/:authorId' component={Author} />
+        <Route path='/publishers/:publisherId' component={Publisher} />
+      </Route>
+  );
+
+ReactDOM.render(
+  <Provider store={store}>
+      <Router onUpdate={() => window.scrollTo(0, 0)} history={createHistory()}>
+      {routes}
         <Route path='*' component={NotFoundPage} />
       </Router>
     </Provider>,

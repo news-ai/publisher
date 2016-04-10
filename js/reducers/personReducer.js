@@ -17,6 +17,10 @@ function personReducer(state = initialState.personReducer, action) {
       obj.isReceiving = false;
       obj.person = action.person;
       return obj;
+    case LOGIN_FAIL:
+      obj.isReceiving = false;
+      obj.didInvalidate = true;
+      return obj;
     default:
       return state;
   }
