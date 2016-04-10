@@ -66,11 +66,13 @@ export function loginWithGoogle() {
 export function fetchPerson() {
   return dispatch => {
     dispatch(requestLogin());
-    return fetch(`https://context.newsai.org/api/users/me`)
-      .then( response => {
+    return fetch(`https://context.newsai.org/api/users/me`, {
+      credentials: 'include',
+    }).then( response => {
         if (response.status !== 200) dispatch(loginFail());
-        else dispatch(receiveLogin(JSON.parse(response.text())));
-      });
+        else return response.text();
+      })
+      .then( body => receiveLogin(body));
   };
 }
 

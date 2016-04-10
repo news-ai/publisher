@@ -61,6 +61,7 @@ let routes = (
         <IndexRoute component={Login} />
       </Route>
   );
+
 if (store.getState().personReducer.person === undefined) store.dispatch(actionCreators.fetchPerson());
 
 if (store.getState().personReducer.person) {
@@ -74,16 +75,6 @@ if (store.getState().personReducer.person) {
         </Route>
     );
 }
-
-routes = (
-      <Route path='/' component={App}>
-        <IndexRoute component={HomePage} />
-        <Route path='/articles/:articleId' component={Article} />
-        <Route path='/entities/:entityId' component={Entity} />
-        <Route path='/authors/:authorId' component={Author} />
-        <Route path='/publishers/:publisherId' component={Publisher} />
-      </Route>
-  );
 
 ReactDOM.render(
   <Provider store={store}>

@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/AppActions';
 import ArticleList from '../pieces/ArticleList.react';
 import AdditionalLoading from '../pieces/AdditionalLoading.react';
+import ArticleInputBar from '../pieces/ArticleInputBar.react';
 
 class HomePage extends Component {
   componentDidMount() {
@@ -24,11 +25,12 @@ class HomePage extends Component {
     const { articles, articleIsReceiving, next} = this.props;
     const loading = (<span>The feed is loading</span>);
 
+        //<ArticleList articles={articles} />
     return (
       <div className='container article-list-container'>
+        <ArticleInputBar />
           {
             (articles === undefined || next === undefined) ? loading :
-        <ArticleList articles={articles} />
       }
       {(articles !== undefined && next !== undefined && next !== 0 && articleIsReceiving) ? <AdditionalLoading name='feed is' /> : null}
         </div>

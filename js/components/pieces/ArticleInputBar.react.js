@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
-function ArticleInputBar() {
+function ArticleInputBar({}) {
   return (
-  	BAR
+  	<div className='row'>
+  	<span>Add Article</span>
+  	<input className='u-max-full-width' type='text'></input>
+  	</div>
   	);
 }
 
