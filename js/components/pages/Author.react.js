@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 class Author extends Component {
   componentDidMount() {
-    let {dispatch, authorId, author} = this.props;
+    const {dispatch, authorId, author} = this.props;
     let action = actionCreators.fetchAuthor(authorId);
     if (author === undefined) dispatch(action);
   }

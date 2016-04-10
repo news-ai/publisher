@@ -1,4 +1,7 @@
 import {
+  LOGIN_FAIL,
+  REQUEST_LOGIN,
+  RECEIVE_LOGIN,
   REQUEST_FEED,
   RECEIVE_FEED,
   REQUEST_ENTITY,
@@ -38,6 +41,38 @@ function isJsonString(str) {
   return true;
 }
 
+function requestLogin() {
+  return {
+    type: REQUEST_LOGIN
+  };
+}
+
+function receiveLogin(person) {
+  return {
+    type: RECEIVE_LOGIN,
+    person
+  };
+}
+
+export function loginWithGoogle() {
+  window.location.href = `https://context.newsai.org/login/google-oauth2` + `?success=` + window.location;
+}
+
+export function fetchPerson() {
+  return dispatch => {
+    dispatch(requestLogin());
+    return fetch(`https://context.newsai.org/api/users/me/`)
+      .then( response => response.text())
+      .then( body => dispatch(receiveLogin(JSON.parse(body))));
+  };
+}
+
+function loginFail() {
+  return {
+    type: LOGIN_FAIL
+  };
+}
+
 export function requestArticles() {
   return {
     type: REQUEST_ARTICLES
@@ -52,11 +87,11 @@ export function receiveArticles(json) {
 }
 
 export function fetchArticle(articleId) {
-  return (dispatch) => {
+  return dispatch => {
     dispatch(requestArticles());
-    return fetch(CONTEXT_API_BASE + '/articles/' + articleId)
-      .then((response) => response.text())
-      .then((body) => dispatch(receiveArticles(JSON.parse(body))));
+    return fetch(CONTEXT_API_BASE + `/articles/` + articleId)
+      .then( response => response.text())
+      .then( body => dispatch(receiveArticles(JSON.parse(body))));
   };
 }
 

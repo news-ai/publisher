@@ -16,7 +16,7 @@ function feedReducer(state = initialState.feedReducer, action) {
       return obj;
     case RECEIVE_FEED:
       obj.isReceiving = false;
-      obj.feedArticleIds = action.json.map((article) => article.id);
+      obj.feedArticleIds = action.json.map( article => article.id);
       obj.next = action.next;
       return obj;
     case REQUEST_ADDITIONAL_FEED:
@@ -24,8 +24,11 @@ function feedReducer(state = initialState.feedReducer, action) {
       return obj;
     case RECEIVE_ADDITIONAL_FEED:
       obj.isReceiving = false;
-      obj.feedArticleIds = [...state.feedArticleIds, ...action.json.map((article) => article.id)];
-      obj.next = (action.next === null) ? 0 : action.next;
+      obj.feedArticleIds = [
+        ...state.feedArticleIds,
+        ...action.json.map( article => article.id)
+      ];
+      obj.next = action.next === null ? 0 : action.next;
       return obj;
     default:
       return state;

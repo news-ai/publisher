@@ -32,6 +32,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 import createHistory from 'history/lib/createBrowserHistory';
+import * as actionCreators from '../../actions/AppActions';
 
 // Import the pages
 import HomePage from './components/pages/HomePage.react';
@@ -40,6 +41,7 @@ import Article from './components/pages/Article.react';
 import Entity from './components/pages/Entity.react';
 import Author from './components/pages/Author.react';
 import Publisher from './components/pages/Publisher.react';
+import Login from './components/pages/Login.react';
 import App from './components/App.react';
 
 // Import the CSS file, which HtmlWebpackPlugin transfers to the build folder
@@ -52,7 +54,7 @@ window.isDev = true;
 import rootReducer from './reducers/rootReducer';
 const loggerMiddleware = createLogger();
 const createStoreWithMiddleware = (window.isDev) ?
-  applyMiddleware(thunk, loggerMiddleware)(createStore):
+  applyMiddleware(thunk, loggerMiddleware)(createStore) :
   applyMiddleware(thunk)(createStore);
 const store = createStoreWithMiddleware(rootReducer);
 
@@ -64,6 +66,9 @@ if (module.hot) {
   });
 }
 
+// FETCH PERSON
+store.dispatch(actionCreators.fetchPerson());
+
 ReactDOM.render(
   <Provider store={store}>
       <Router onUpdate={() => window.scrollTo(0, 0)} history={createHistory()}>
@@ -73,6 +78,7 @@ ReactDOM.render(
           <Route path='/entities/:entityId' component={Entity} />
           <Route path='/authors/:authorId' component={Author} />
           <Route path='/publishers/:publisherId' component={Publisher} />
+          <Route path='/login' component={Login} />
         </Route>
         <Route path='*' component={NotFoundPage} />
       </Router>

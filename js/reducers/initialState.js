@@ -14,5 +14,8 @@ export const initialState = {
   },
   articleReducer: {
     isReceiving: false
+  },
+  personReducer: {
+    isReceiving: false
   }
 };
