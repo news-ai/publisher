@@ -66,13 +66,9 @@ export function loginWithGoogle() {
 export function fetchPerson() {
   return dispatch => {
     dispatch(requestLogin());
-    return fetch(`https://context.newsai.org/api/users/me`, {
-      credentials: 'include',
-    }).then( response => {
-        if (response.status !== 200) dispatch(loginFail());
-        else return response.text();
-      })
-      .then( body => receiveLogin(body));
+    return fetch(`https://context.newsai.org/api/users/me`, { credentials: 'include'})
+      .then( response => response.status !== 200 ? false : response.text())
+      .then( body => body ? dispatch(receiveLogin(JSON.parse(body))) : dispatch(loginFail()));
   };
 }
 
@@ -93,7 +89,7 @@ export function receiveArticles(json) {
 export function fetchArticle(articleId) {
   return dispatch => {
     dispatch(requestArticles());
-    return fetch(CONTEXT_API_BASE + `/articles/` + articleId)
+    return fetch(CONTEXT_API_BASE + `/articles/` + articleId, { credentials: 'include'})
       .then( response => response.text())
       .then( body => dispatch(receiveArticles(JSON.parse(body))));
   };
@@ -149,7 +145,7 @@ export function fetchEntityArticles(entityId) {
     const fetchLink = (getState().entityReducer[entityId].next === undefined) ?
     CONTEXT_API_BASE + `/entities/` + entityId + `/articles` + removeCache()
     : getState().entityReducer[entityId].next;
-    fetch(fetchLink)
+    fetch(fetchLink, { credentials: 'include'})
       .then( response => response.text())
       .catch( e => console.log(e))
       .then( body => {
@@ -166,7 +162,7 @@ export function fetchEntityArticles(entityId) {
 export function fetchEntity(entityId) {
   return dispatch => {
     dispatch(requestEntity(entityId));
-    return fetch(CONTEXT_API_BASE + `/entities/` + entityId)
+    return fetch(CONTEXT_API_BASE + `/entities/` + entityId, { credentials: 'include'})
       .then( response => response.text())
       .then( body => dispatch(receiveEntity(JSON.parse(body))));
   };
@@ -175,7 +171,7 @@ export function fetchEntity(entityId) {
 export function fetchEntityAndArticles(entityId) {
   return dispatch => {
     dispatch(requestEntity(entityId));
-    return fetch(CONTEXT_API_BASE + `/entities/` + entityId)
+    return fetch(CONTEXT_API_BASE + `/entities/` + entityId, { credentials: 'include'})
       .then( response => response.text())
       .then( body => dispatch(receiveEntity(JSON.parse(body))))
       .then( _ => dispatch(fetchEntityArticles(entityId)));
@@ -225,7 +221,7 @@ export function fetchAdditionalFeed() {
     if (getState().feedReducer.isReceiving) return;
     dispatch(requestAdditionalFeed());
     dispatch(requestArticles());
-    return fetch(getState().feedReducer.next)
+    return fetch(getState().feedReducer.next, { credentials: 'include'})
       .then((response) => response.text())
       .catch((e) => console.log(e))
       .then((body) => {
@@ -240,13 +236,13 @@ export function fetchAdditionalFeed() {
 }
 
 export function fetchFeed() {
-  return (dispatch) => {
+  return dispatch => {
     dispatch(requestFeed());
     dispatch(requestArticles());
-    return fetch(CONTEXT_API_BASE + `/feeds` + removeCache())
-      .then((response) => response.text())
-      .catch((e) => console.log(e))
-      .then((body) => {
+    return fetch(CONTEXT_API_BASE + `/feeds` + removeCache(), { credentials: 'include'})
+      .then( response => response.text())
+      .catch( e => console.log(e))
+      .then( body => {
         if (!isJsonString(body)) return;
         const json = JSON.parse(body);
         Promise.all([
@@ -273,7 +269,7 @@ export function receiveAuthor(json) {
 export function fetchAuthor(authorId) {
   return dispatch => {
     dispatch(requestAuthor);
-    fetch(CONTEXT_API_BASE + `/authors/` + authorId)
+    fetch(CONTEXT_API_BASE + `/authors/` + authorId, {credentials: 'include'})
       .then( response => response.text())
       .then( body => dispatch(receiveAuthor(JSON.parse(body))));
   };
@@ -301,7 +297,7 @@ export function receivePublisher(json) {
 export function fetchPublisher(publisherId) {
   return dispatch => {
     dispatch(requestPublisher());
-    fetch(CONTEXT_API_BASE + `/publishers/` + publisherId)
+    fetch(CONTEXT_API_BASE + `/publishers/` + publisherId, {credentials: 'include'})
       .then( response => response.text())
       .then( body => dispatch(receivePublisher(JSON.parse(body))));
   };
@@ -323,7 +319,7 @@ export function fetchPublisherArticles(publisherId) {
     const fetchLink = getState().publisherReducer[publisherId].next === undefined ?
     CONTEXT_API_BASE + `/publishers/` + publisherId + `/articles` + removeCache()
     : getState().publisherReducer[publisherId].next;
-    fetch(fetchLink)
+    fetch(fetchLink, {credentials: 'include'})
       .then( response => response.text())
       .catch( e => console.log(e))
       .then( body => {
@@ -340,7 +336,7 @@ export function fetchPublisherArticles(publisherId) {
 export function fetchPublisherAndArticles(publisherId) {
   return dispatch => {
     dispatch(requestPublisher());
-    fetch(CONTEXT_API_BASE + `/publishers/` + publisherId)
+    fetch(CONTEXT_API_BASE + `/publishers/` + publisherId, {credentials: 'include'})
       .then( response => response.text())
       .then( body => dispatch(receivePublisher(JSON.parse(body))))
       .then( _ => dispatch(fetchPublisherArticles(publisherId)));

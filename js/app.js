@@ -39,7 +39,6 @@ import Article from './components/pages/Article.react';
 import Entity from './components/pages/Entity.react';
 import Author from './components/pages/Author.react';
 import Publisher from './components/pages/Publisher.react';
-import Login from './components/pages/Login.react';
 import App from './components/App.react';
 
 // Import the CSS file, which HtmlWebpackPlugin transfers to the build folder
@@ -55,17 +54,9 @@ if (module.hot) {
   });
 }
 
-// FETCH PERSON
-let routes = (
-      <Route path='/' component={App}>
-        <IndexRoute component={Login} />
-      </Route>
-  );
-
-if (store.getState().personReducer.person === undefined) store.dispatch(actionCreators.fetchPerson());
-
-if (store.getState().personReducer.person) {
-  routes = (
+ReactDOM.render(
+  <Provider store={store}>
+      <Router onUpdate={() => window.scrollTo(0, 0)} history={createHistory()}>
         <Route path='/' component={App}>
           <IndexRoute component={HomePage} />
           <Route path='/articles/:articleId' component={Article} />
@@ -73,13 +64,6 @@ if (store.getState().personReducer.person) {
           <Route path='/authors/:authorId' component={Author} />
           <Route path='/publishers/:publisherId' component={Publisher} />
         </Route>
-    );
-}
-
-ReactDOM.render(
-  <Provider store={store}>
-      <Router onUpdate={() => window.scrollTo(0, 0)} history={createHistory()}>
-      {routes}
         <Route path='*' component={NotFoundPage} />
       </Router>
     </Provider>,
