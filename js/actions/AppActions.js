@@ -27,8 +27,7 @@ import fetch from 'isomorphic-fetch';
 const CONTEXT_API_BASE = `https://context.newsai.org/api`;
 
 function removeCache() {
-  if (window.isDev) return '?' + Date.now();
-  return '';
+  return window.isDev ? `?${Date.now()}` : ``;
 }
 
 function isJsonString(str) {
@@ -89,7 +88,7 @@ export function receiveArticles(json) {
 export function fetchArticle(articleId) {
   return dispatch => {
     dispatch(requestArticles());
-    return fetch(CONTEXT_API_BASE + `/articles/` + articleId, { credentials: 'include'})
+    return fetch(`${CONTEXT_API_BASE}/articles/${articleId}`, { credentials: 'include'})
       .then( response => response.text())
       .then( body => dispatch(receiveArticles(JSON.parse(body))));
   };
@@ -143,7 +142,7 @@ export function fetchEntityArticles(entityId) {
     if (getState().entityReducer[entityId] === undefined) return;
     dispatch(requestArticles());
     const fetchLink = (getState().entityReducer[entityId].next === undefined) ?
-    CONTEXT_API_BASE + `/entities/` + entityId + `/articles` + removeCache()
+    `${CONTEXT_API_BASE}/entities/${entityId}/articles${removeCache()}`
     : getState().entityReducer[entityId].next;
     fetch(fetchLink, { credentials: 'include'})
       .then( response => response.text())
@@ -171,7 +170,7 @@ export function fetchEntity(entityId) {
 export function fetchEntityAndArticles(entityId) {
   return dispatch => {
     dispatch(requestEntity(entityId));
-    return fetch(CONTEXT_API_BASE + `/entities/` + entityId, { credentials: 'include'})
+    return fetch(`$CONTEXT_API_BASE}/entities/${entityId}`, { credentials: 'include'})
       .then( response => response.text())
       .then( body => dispatch(receiveEntity(JSON.parse(body))))
       .then( _ => dispatch(fetchEntityArticles(entityId)));
@@ -222,9 +221,9 @@ export function fetchAdditionalFeed() {
     dispatch(requestAdditionalFeed());
     dispatch(requestArticles());
     return fetch(getState().feedReducer.next, { credentials: 'include'})
-      .then((response) => response.text())
-      .catch((e) => console.log(e))
-      .then((body) => {
+      .then( response => response.text())
+      .catch( e => console.log(e))
+      .then( body => {
         if (!isJsonString(body)) return;
         const json = JSON.parse(body);
         Promise.all([
@@ -239,7 +238,7 @@ export function fetchFeed() {
   return dispatch => {
     dispatch(requestFeed());
     dispatch(requestArticles());
-    return fetch(CONTEXT_API_BASE + `/feeds` + removeCache(), { credentials: 'include'})
+    return fetch(`${CONTEXT_API_BASE}/feeds${removeCache()}`, { credentials: 'include'})
       .then( response => response.text())
       .catch( e => console.log(e))
       .then( body => {
@@ -297,7 +296,7 @@ export function receivePublisher(json) {
 export function fetchPublisher(publisherId) {
   return dispatch => {
     dispatch(requestPublisher());
-    fetch(CONTEXT_API_BASE + `/publishers/` + publisherId, {credentials: 'include'})
+    fetch(`${CONTEXT_API_BASE}/publishers/${publisherId}`, {credentials: 'include'})
       .then( response => response.text())
       .then( body => dispatch(receivePublisher(JSON.parse(body))));
   };
@@ -317,7 +316,7 @@ export function fetchPublisherArticles(publisherId) {
     if (getState().publisherReducer[publisherId] === undefined) return;
     dispatch(requestArticles());
     const fetchLink = getState().publisherReducer[publisherId].next === undefined ?
-    CONTEXT_API_BASE + `/publishers/` + publisherId + `/articles` + removeCache()
+    `${CONTEXT_API_BASE}/publishers/${publisherId}/articles${removeCache()}`
     : getState().publisherReducer[publisherId].next;
     fetch(fetchLink, {credentials: 'include'})
       .then( response => response.text())
@@ -336,7 +335,7 @@ export function fetchPublisherArticles(publisherId) {
 export function fetchPublisherAndArticles(publisherId) {
   return dispatch => {
     dispatch(requestPublisher());
-    fetch(CONTEXT_API_BASE + `/publishers/` + publisherId, {credentials: 'include'})
+    fetch(`${CONTEXT_API_BASE}/publishers/${publisherId}`, {credentials: 'include'})
       .then( response => response.text())
       .then( body => dispatch(receivePublisher(JSON.parse(body))))
       .then( _ => dispatch(fetchPublisherArticles(publisherId)));
