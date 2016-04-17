@@ -1,7 +1,8 @@
 export const initialState = {
   feedReducer: {
     projectName: 'NewsAI Publisher',
-    isReceiving: false
+    isReceiving: false,
+    feedArticleIds: [],
   },
   entityReducer: {
     isReceiving: false

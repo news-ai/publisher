@@ -18,29 +18,33 @@ class Article extends Component {
       <div className='container'>
             <div className='row'>
                 <div className='twelve columns'>
-                {(article === undefined) ? articleLoading : (
-        <div>
+                { article ? (<div>
                     <h5>Article Details</h5>
                         <img className='u-max-full-width' src={article.header_image} />
                         <div style={{
-          fontSize: '2em',
-          fontWeight: 500
-        }}>{article.name}</div>
-        <Link to={'/publishers/' + article.publisher.id}><div>{article.publisher.name}</div></Link>
-                        <p><span style={{
-          fontWeight: 'bold'
-        }}>Summary: </span>{article.summary}</p>
+                          fontSize: '2em',
+                          fontWeight: 500
+                        }}>{article.name}</div>
+                        <Link to={'/publishers/' + article.publisher.id}>
+                          <div>{article.publisher.name}</div>
+                        </Link>
+                        <p>
+                        <span style={{fontWeight: 'bold'}}>Summary: </span>
+                        {article.summary}
+                        </p>
                         <p>Link: <a href={article.url}>{article.url}</a></p>
-                        <p>Authors: {article.authors.map((author, i) => <span key={i}><Link to={'/authors/' + author.id}>{author.name} </Link></span>)}</p>
-                    </div>
-        )}
+                        <p>Authors: {article.authors.map((author, i) =>
+                          <span key={i}><Link to={'/authors/' + author.id}>{author.name} </Link></span>)
+                      }</p>
+                    </div>) : articleLoading
+                }
                 </div>
             </div>
             <div className='row'>
             <div className='twelve columns'>
                 <h5>Entities</h5>
-                { (entities === undefined) ? entitiesLoading :
-        <EntityList entities={entities} entityScores={entityScores} />}
+                { entities ?
+        <EntityList entities={entities} entityScores={entityScores} />: entitiesLoading}
                 </div>
             </div>
         </div>
@@ -53,8 +57,8 @@ const mapStateToProps = (state, props) => {
   return {
     article: article,
     articleId: props.params.articleId,
-    entities: (article === undefined) ? undefined : article.entity_scores.map((score) => score.entity),
-    entityScores: (article === undefined) ? undefined : article.entity_scores.map((obj) => obj.score)
+    entities: (article) ? article.entity_scores.map((score) => score.entity) : undefined,
+    entityScores: (article) ? article.entity_scores.map((obj) => obj.score) : undefined,
   };
 };
 
