@@ -34,4 +34,4 @@ export function fetchPerson() {
       .then( response => response.status !== 200 ? false : response.text())
       .then( body => body ? dispatch(receiveLogin(JSON.parse(body))) : dispatch(loginFail()));
   };
-};
+}

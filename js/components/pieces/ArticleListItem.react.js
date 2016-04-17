@@ -25,11 +25,13 @@ function ArticleListItem({id, name, url, summary, added_at, authors, publisher, 
           <div className='article-publisher'>
             <Link to={'/publishers/' + publisher.id}><span>{publisher.name}</span></Link>
           </div>
-          <div className='article-top3-entities'>
-            <Link to={'/entities/' + entity_scores[0].entity.id}><div>{entity_scores[0].entity.name}</div></Link>
-            <Link to={'/entities/' + entity_scores[1].entity.id}><div>{entity_scores[1].entity.name}</div></Link>
-            <Link to={'/entities/' + entity_scores[2].entity.id}><div>{entity_scores[2].entity.name}</div></Link>
-          </div>
+            {entity_scores.length >= 3 ? (
+            <div className='article-top3-entities'>
+              {entity_scores.map((entity, i) => (i <= 3) ?
+              <Link to={'/entities/' + entity_scores[i].entity.id}><div>{entity_scores[i].entity.name}</div></Link>
+              : null)}
+            </div>
+              ) : null}
           <div className='article-authors'>
           {authors.map((author, i) => <span key={i}><Link to={'/authors/' + author.id}>{author.name} </Link></span>)}
           </div>

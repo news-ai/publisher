@@ -19,8 +19,6 @@ import * as loginActions from './loginActions';
 import * as publisherActions from './publisherActions';
 import * as articleActions from './articleActions';
 
-import fetch from 'isomorphic-fetch';
-
 const CONTEXT_API_BASE = `https://context.newsai.org/api`;
 window.CONTEXT_API_BASE = CONTEXT_API_BASE;
 
@@ -105,7 +103,9 @@ export function receiveEntityArticles(json, entityId, next) {
 export function fetchEntityArticles(entityId) {
   return (dispatch, getState) => {
     if (getState().entityReducer[entityId] === undefined) return;
+
     dispatch(requestArticles());
+
     const fetchLink = getState().entityReducer[entityId].next ?
     getState().entityReducer[entityId].next :
     `${CONTEXT_API_BASE}/entities/${entityId}/articles${removeCache()}`;
@@ -115,10 +115,12 @@ export function fetchEntityArticles(entityId) {
       .then( body => {
         if (!isJsonString(body)) return;
         const json = JSON.parse(body);
+
         Promise.all([
           dispatch(receiveArticles(json.results)),
           dispatch(receiveEntityArticles(json.results, entityId, json.next))
         ]);
+
       });
   };
 }
