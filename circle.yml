@@ -1,0 +1,14 @@
+machine:
+  timezone:
+    America/Los_Angeles
+
+test:
+  override:
+    - echo "No tests are needed"
+
+deployment:
+  production:
+    branch: master
+    commands:
+      - ssh $SSH "cd $DIRECTORY && git pull -u origin master && npm run build"
+
