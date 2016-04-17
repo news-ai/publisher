@@ -14,9 +14,8 @@ function formatTime(datestring) {
   };
 }
 
-function ArticleListItem({id, name, url, summary, added_at, authors, publisher, entities}) {
+function ArticleListItem({id, name, url, summary, added_at, authors, publisher, entity_scores}) {
   const dateObj = formatTime(added_at);
-  console.log(entities);
   return (
     <div className='row article-body' key={id}>
       <div className='twelve columns'>
@@ -25,6 +24,11 @@ function ArticleListItem({id, name, url, summary, added_at, authors, publisher, 
           </div>
           <div className='article-publisher'>
             <Link to={'/publishers/' + publisher.id}><span>{publisher.name}</span></Link>
+          </div>
+          <div className='article-top3-entities'>
+            <Link to={'/entities/' + entity_scores[0].entity.id}><span>{entity_scores[0].entity.name}</span></Link>
+            <Link to={'/entities/' + entity_scores[1].entity.id}><span>{entity_scores[1].entity.name}</span></Link>
+            <Link to={'/entities/' + entity_scores[2].entity.id}><span>{entity_scores[2].entity.name}</span></Link>
           </div>
           <div className='article-authors'>
           {authors.map((author, i) => <span key={i}><Link to={'/authors/' + author.id}>{author.name} </Link></span>)}
