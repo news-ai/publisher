@@ -50,7 +50,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onScrollBottom: (ev) => {
       ev.preventDefault();
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) dispatch(actionCreators.fetchAdditionalFeed());
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) dispatch(actionCreators.fetchFeed());
     },
     dispatch: action => dispatch(action)
   };
