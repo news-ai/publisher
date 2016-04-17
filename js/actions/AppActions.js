@@ -1,7 +1,4 @@
 import {
-  LOGIN_FAIL,
-  REQUEST_LOGIN,
-  RECEIVE_LOGIN,
   REQUEST_FEED,
   RECEIVE_FEED,
   REQUEST_ENTITY,
@@ -11,20 +8,21 @@ import {
   REQUEST_ENTITY_ARTICLES,
   REQUEST_AUTHOR,
   RECEIVE_AUTHOR,
-  REQUEST_PUBLISHER,
-  RECEIVE_PUBLISHER,
   REQUEST_PUBLISHER_ARTICLES,
   RECEIVE_PUBLISHER_ARTICLES,
   RECEIVE_ENTITY_ARTICLES,
-  REQUEST_ARTICLES,
-  RECEIVE_ARTICLES,
   REQUEST_ADDITIONAL_FEED,
   RECEIVE_ADDITIONAL_FEED,
 } from '../constants/AppConstants';
 
+import * as loginActions from './loginActions';
+import * as publisherActions from './publisherActions';
+import * as articleActions from './articleActions';
+
 import fetch from 'isomorphic-fetch';
 
 const CONTEXT_API_BASE = `https://context.newsai.org/api`;
+window.CONTEXT_API_BASE = CONTEXT_API_BASE;
 
 function removeCache() {
   return window.isDev ? `?${Date.now()}` : ``;
@@ -39,59 +37,26 @@ function isJsonString(str) {
   return true;
 }
 
-function requestLogin() {
-  return {
-    type: REQUEST_LOGIN
-  };
-}
-
-function receiveLogin(person) {
-  return {
-    type: RECEIVE_LOGIN,
-    person
-  };
-}
-
-function loginFail() {
-  return {
-    type: LOGIN_FAIL
-  };
-}
-
+// loginActions
 export function loginWithGoogle() {
-  window.location.href = `https://context.newsai.org/login/google-oauth2`;
+  return loginActions.loginWithGoogle();
 }
 
 export function fetchPerson() {
-  return dispatch => {
-    dispatch(requestLogin());
-    return fetch(`https://context.newsai.org/api/users/me`, { credentials: 'include'})
-      .then( response => response.status !== 200 ? false : response.text())
-      .then( body => body ? dispatch(receiveLogin(JSON.parse(body))) : dispatch(loginFail()));
-  };
+  return loginActions.fetchPerson();
 }
 
-
+// articleActions
 export function requestArticles() {
-  return {
-    type: REQUEST_ARTICLES
-  };
+  return articleActions.requestArticles();
 }
 
 export function receiveArticles(json) {
-  return {
-    type: RECEIVE_ARTICLES,
-    json
-  };
+  return articleActions.receiveArticles(json);
 }
 
 export function fetchArticle(articleId) {
-  return dispatch => {
-    dispatch(requestArticles());
-    return fetch(`${CONTEXT_API_BASE}/articles/${articleId}`, { credentials: 'include'})
-      .then( response => response.text())
-      .then( body => dispatch(receiveArticles(JSON.parse(body))));
-  };
+  return articleActions.fetchArticle(articleId);
 }
 
 
@@ -141,9 +106,9 @@ export function fetchEntityArticles(entityId) {
   return (dispatch, getState) => {
     if (getState().entityReducer[entityId] === undefined) return;
     dispatch(requestArticles());
-    const fetchLink = (getState().entityReducer[entityId].next === undefined) ?
-    `${CONTEXT_API_BASE}/entities/${entityId}/articles${removeCache()}`
-    : getState().entityReducer[entityId].next;
+    const fetchLink = getState().entityReducer[entityId].next ?
+    getState().entityReducer[entityId].next :
+    `${CONTEXT_API_BASE}/entities/${entityId}/articles${removeCache()}`;
     fetch(fetchLink, { credentials: 'include'})
       .then( response => response.text())
       .catch( e => console.log(e))
@@ -280,26 +245,17 @@ export function requestPublisherArticles() {
   };
 }
 
-export function requestPublisher() {
-  return {
-    type: REQUEST_PUBLISHER
-  };
+// publisherActions
+function requestPublisher() {
+  return publisherActions.requestPublisher();
 }
 
-export function receivePublisher(json) {
-  return {
-    type: RECEIVE_PUBLISHER,
-    json
-  };
+function receivePublisher(json) {
+  return publisherActions.receivePublisher(json);
 }
 
 export function fetchPublisher(publisherId) {
-  return dispatch => {
-    dispatch(requestPublisher());
-    fetch(`${CONTEXT_API_BASE}/publishers/${publisherId}`, {credentials: 'include'})
-      .then( response => response.text())
-      .then( body => dispatch(receivePublisher(JSON.parse(body))));
-  };
+  return publisherActions.fetchPublisher(publisherId);
 }
 
 export function receivePublisherArticles(json, publisherId, next) {
@@ -314,10 +270,13 @@ export function receivePublisherArticles(json, publisherId, next) {
 export function fetchPublisherArticles(publisherId) {
   return (dispatch, getState) => {
     if (getState().publisherReducer[publisherId] === undefined) return;
+
     dispatch(requestArticles());
+
     const fetchLink = getState().publisherReducer[publisherId].next === undefined ?
     `${CONTEXT_API_BASE}/publishers/${publisherId}/articles${removeCache()}`
     : getState().publisherReducer[publisherId].next;
+
     fetch(fetchLink, {credentials: 'include'})
       .then( response => response.text())
       .catch( e => console.log(e))

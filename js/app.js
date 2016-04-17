@@ -29,7 +29,6 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute } from 'react-router';
 import createHistory from 'history/lib/createBrowserHistory';
-import * as actionCreators from './actions/AppActions';
 import configureStore from './configureStore';
 
 // Import the pages
