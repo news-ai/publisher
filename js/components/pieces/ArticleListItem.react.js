@@ -26,7 +26,6 @@ function ArticleListItem({id, name, url, summary, added_at, authors, publisher, 
             <Link to={'/publishers/' + publisher.id}><span>{publisher.name}</span></Link>
           </div>
           <div className='article-top3-entities'>
-            <span>Top 3 entities:</span>
             <Link to={'/entities/' + entity_scores[0].entity.id}><div>{entity_scores[0].entity.name}</div></Link>
             <Link to={'/entities/' + entity_scores[1].entity.id}><div>{entity_scores[1].entity.name}</div></Link>
             <Link to={'/entities/' + entity_scores[2].entity.id}><div>{entity_scores[2].entity.name}</div></Link>
