@@ -1,6 +1,4 @@
 import {
-  REQUEST_FEED,
-  RECEIVE_FEED,
   REQUEST_ENTITY,
   RECEIVE_ENTITY,
   REQUEST_ENTITIES,
@@ -11,13 +9,12 @@ import {
   REQUEST_PUBLISHER_ARTICLES,
   RECEIVE_PUBLISHER_ARTICLES,
   RECEIVE_ENTITY_ARTICLES,
-  REQUEST_ADDITIONAL_FEED,
-  RECEIVE_ADDITIONAL_FEED,
 } from '../constants/AppConstants';
 
 import * as loginActions from './loginActions';
 import * as publisherActions from './publisherActions';
 import * as articleActions from './articleActions';
+import * as feedActions from './feedActions';
 
 const CONTEXT_API_BASE = `https://context.newsai.org/api`;
 window.CONTEXT_API_BASE = CONTEXT_API_BASE;
@@ -120,7 +117,6 @@ export function fetchEntityArticles(entityId) {
           dispatch(receiveArticles(json.results)),
           dispatch(receiveEntityArticles(json.results, entityId, json.next))
         ]);
-
       });
   };
 }
@@ -128,7 +124,7 @@ export function fetchEntityArticles(entityId) {
 export function fetchEntity(entityId) {
   return dispatch => {
     dispatch(requestEntity(entityId));
-    return fetch(CONTEXT_API_BASE + `/entities/` + entityId, { credentials: 'include'})
+    return fetch(`${CONTEXT_API_BASE}/entities/${entityId}/`, { credentials: 'include'})
       .then( response => response.text())
       .then( body => dispatch(receiveEntity(JSON.parse(body))));
   };
@@ -155,68 +151,16 @@ export function fetchArticleEntities(articleId) {
 }
 
 export function requestFeed() {
-  return {
-    type: REQUEST_FEED
-  };
+  return feedActions.requestFeed();
 }
 
 export function receiveFeed(json, next) {
-  return {
-    type: RECEIVE_FEED,
-    json,
-    next
-  };
+  return feedActions.receiveFeed(json, next);
 }
 
-function requestAdditionalFeed() {
-  return {
-    type: REQUEST_ADDITIONAL_FEED
-  };
-}
-
-function receiveAdditionalFeed(json, next) {
-  return {
-    type: RECEIVE_ADDITIONAL_FEED,
-    json,
-    next
-  };
-}
-
-export function fetchAdditionalFeed() {
-  return (dispatch, getState) => {
-    if (getState().feedReducer.isReceiving) return;
-    dispatch(requestAdditionalFeed());
-    dispatch(requestArticles());
-    return fetch(getState().feedReducer.next, { credentials: 'include'})
-      .then( response => response.text())
-      .catch( e => console.log(e))
-      .then( body => {
-        if (!isJsonString(body)) return;
-        const json = JSON.parse(body);
-        Promise.all([
-          dispatch(receiveArticles(json.results)),
-          dispatch(receiveAdditionalFeed(json.results, json.next))
-        ]);
-      });
-  };
-}
 
 export function fetchFeed() {
-  return dispatch => {
-    dispatch(requestFeed());
-    dispatch(requestArticles());
-    return fetch(`${CONTEXT_API_BASE}/feeds${removeCache()}`, { credentials: 'include'})
-      .then( response => response.text())
-      .catch( e => console.log(e))
-      .then( body => {
-        if (!isJsonString(body)) return;
-        const json = JSON.parse(body);
-        Promise.all([
-          dispatch(receiveArticles(json.results)),
-          dispatch(receiveFeed(json.results, json.next))
-          ]);
-      });
-  };
+  return feedActions.fetchFeed();
 }
 
 export function requestAuthor() {

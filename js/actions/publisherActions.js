@@ -3,7 +3,7 @@ import {
   RECEIVE_PUBLISHER,
 } from '../constants/AppConstants';
 
-const CONTEXT_API_BASE = window.CONTEXT_API_BASE;
+const CONTEXT_API_BASE = `https://context.newsai.org/api`;
 
 export function requestPublisher() {
   return {
@@ -21,7 +21,7 @@ export function receivePublisher(json) {
 export function fetchPublisher(publisherId) {
   return dispatch => {
     dispatch(requestPublisher());
-    fetch(`${CONTEXT_API_BASE}/publishers/${publisherId}`, {credentials: 'include'})
+    fetch(`${CONTEXT_API_BASE}/publishers/${publisherId}/`, {credentials: 'include'})
       .then( response => response.text())
       .then( body => dispatch(receivePublisher(JSON.parse(body))));
   };

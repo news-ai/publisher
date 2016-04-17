@@ -6,12 +6,12 @@ import { Link } from 'react-router';
 
 class Article extends Component {
   componentDidMount() {
-    let {dispatch, article, articleId} = this.props;
+    const {dispatch, article, articleId} = this.props;
     if (article === undefined) dispatch(actionCreators.fetchArticle(articleId));
   }
 
   render() {
-    let {article, articleId, entities, entityScores} = this.props;
+    const {article, articleId, entities, entityScores} = this.props;
     const entitiesLoading = (<span>The entities are loading</span>);
     const articleLoading = (<span>The article is loading</span>);
     return (
