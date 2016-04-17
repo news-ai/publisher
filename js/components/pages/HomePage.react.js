@@ -1,13 +1,9 @@
-/*
- * HomePage
- * This is the first thing users see of our App
- */
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/AppActions';
 import ArticleList from '../pieces/ArticleList.react';
 import AdditionalLoading from '../pieces/AdditionalLoading.react';
-import ArticleInputBar from '../pieces/ArticleInputBar.react';
+// import ArticleInputBar from '../pieces/ArticleInputBar.react';
 
 class HomePage extends Component {
   componentDidMount() {
@@ -24,10 +20,10 @@ class HomePage extends Component {
   render() {
     const { articles, articleIsReceiving, next} = this.props;
     const loading = (<span>The feed is loading</span>);
+//        <ArticleInputBar />
 
     return (
       <div className='container article-list-container'>
-        <ArticleInputBar />
           {
             (articles === undefined || next === undefined) ? loading :
         <ArticleList articles={articles} />
