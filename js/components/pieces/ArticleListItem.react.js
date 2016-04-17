@@ -14,8 +14,9 @@ function formatTime(datestring) {
   };
 }
 
-function ArticleListItem({id, name, url, summary, added_at, authors, publisher}) {
+function ArticleListItem({id, name, url, summary, added_at, authors, publisher, entities}) {
   const dateObj = formatTime(added_at);
+  console.log(entities);
   return (
     <div className='row article-body' key={id}>
       <div className='twelve columns'>

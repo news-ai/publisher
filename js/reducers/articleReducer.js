@@ -17,7 +17,10 @@ function articleReducer(state = initialState.articleReducer, action) {
       if (Array.isArray(action.json)) {
         action.json.map((article) => {
           article.basic_summary = extractSummary(article.summary);
-          obj[article.id] = article;
+          // sort scores
+          obj[article.id] = assignToEmpty(article, {
+            entity_scores: article.entity_scores.sort( (a, b) => (a.score - b.score) * -1 )
+          });
         });
       } else {
         obj[action.json.id] = action.json;
