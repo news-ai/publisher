@@ -10,5 +10,5 @@ deployment:
   production:
     branch: master
     commands:
-      - ssh $SSH "cd $DIRECTORY && git pull -u origin master && /home/api/.nvm/v5.10.1/bin/npm run build"
+      - ssh $SSH "cd $DIRECTORY && git pull -u origin master && /home/api/.nvm/v5.10.1/bin/npm install && /home/api/.nvm/v5.10.1/bin/npm run build"
 
