@@ -105,12 +105,14 @@ a {
 	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: flex-start;
+	margin-top: 5px;
+	margin-bottom: 5px;
 }
 
 .article-top3-entities div {
 	display: inline;
 	padding: 2px 7px 2px 7px;
-	margin: 0 3px 0 3px;
+	margin: 0 6px 0 0;
 	border: 1px solid lightgray;
 	color: gray;
 	font-size: .9em;
