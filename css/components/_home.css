@@ -113,15 +113,19 @@ a {
 
 .article-top3-entities div {
 	display: inline;
-	padding: 0 7px 0 7px;
+	padding: 2px 7px 2px 7px;
 	margin: 0 3px 0 3px;
-	border: 1px solid gray;
-	color: black;
-	border-radius: 10px;
+	border: 1px solid lightgray;
+	color: gray;
+	font-size: .9em;
+	border-radius: 8px;
 	position: relative;
-	text-align: center;
 	align-self: center;
-	border: 1px solid lightgray,
+}
+
+.article-top3-entities div:hover {
+	border: 1px solid black;
+	color: black;
 }
 
 
