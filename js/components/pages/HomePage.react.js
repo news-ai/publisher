@@ -9,7 +9,7 @@ class HomePage extends Component {
   componentDidMount() {
     const {dispatch, articleIds, onScrollBottom} = this.props;
     window.addEventListener('scroll', onScrollBottom);
-    if (articleIds === undefined) dispatch(actionCreators.fetchFeed());
+    if (articleIds.length === 0) dispatch(actionCreators.fetchFeed());
   }
 
   componentWillUnmount() {

@@ -1,8 +1,6 @@
 import {
   REQUEST_FEED,
   RECEIVE_FEED,
-  REQUEST_ADDITIONAL_FEED,
-  RECEIVE_ADDITIONAL_FEED
 } from '../constants/AppConstants';
 import assignToEmpty from '../utils/assign';
 import { initialState } from './initialState';
