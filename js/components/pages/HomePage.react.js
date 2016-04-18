@@ -18,14 +18,16 @@ class HomePage extends Component {
   }
 
   render() {
-    const { articles, articleIsReceiving, next, discoverySubmitHandler, discoveryInputHandler} = this.props;
+    const { discoveryUrl, articles, articleIsReceiving, next, discoverySubmitHandler, discoveryInputHandler, discoveryReceiving} = this.props;
     const loading = (<span>The feed is loading...</span>);
 
     return (
       <div className='container article-list-container'>
         <ArticleInputBar
+        url={discoveryUrl}
         onClickHandler={discoverySubmitHandler}
         inputHandler={discoveryInputHandler}
+        isReceiving={discoveryReceiving}
         />
           {(articles && next) ?
             <ArticleList articles={articles} /> : loading}
@@ -44,7 +46,9 @@ const mapStateToProps = state => {
     articleIds: feedArticleIds,
     feedIsReceving: state.feedReducer.isReceiving,
     articleIsReceiving: state.articleReducer.isReceiving,
-    articles: state.feedReducer.next ? feedArticleIds.map( articleId => state.articleReducer[articleId]) : undefined
+    articles: state.feedReducer.next ? feedArticleIds.map( articleId => state.articleReducer[articleId]) : undefined,
+    discoveryUrl: state.personReducer.discovery.url,
+    discoveryReceiving: state.personReducer.discovery.isReceiving,
   };
 };
 

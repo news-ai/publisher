@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ArticleInputBar({inputHandler, onClickHandler}) {
+function ArticleInputBar({url, inputHandler, onClickHandler, isReceiving}) {
   return (
     <div className='row'>
     <span>Add Article</span>
@@ -11,8 +11,11 @@ function ArticleInputBar({inputHandler, onClickHandler}) {
 			if (e.which === 13) onClickHandler();
         }}
         onChange={e => inputHandler(e.target.value)}
+        defaultValue=''
+        value={url}
         ></input>
         <button onClick={ _ => onClickHandler()}>Submit</button>
+        { isReceiving ? <i className='fa fa-spinner' ariaHidden='true'></i>: null}
     </div>
     );
 }

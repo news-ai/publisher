@@ -51,7 +51,8 @@ export function postArticle() {
   };
 }
 
-export function receivePostedArticle() {
+export function receivePostedArticle(body) {
+  console.log(body);
   return {
     type: DONE_POST_DISCOVERY_ARTICLE,
   };
@@ -65,15 +66,10 @@ export function failPostedArticle() {
 
 export function addDiscoveryArticle() {
   return (dispatch, getState) => {
-    const body = JSON.stringify({
-      'url': getState().personReducer.discovery.url,
-      'added_by': getState().personReducer.person.id,
-    });
-    dispatch(postArticle);
+    dispatch(postArticle());
     fetch(`http://news-discovery1.newsai.org/discovery`, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -84,7 +80,7 @@ export function addDiscoveryArticle() {
     .then( response => response.status === 200 ?
       response.text() : false)
     .then( body => body ?
-      dispatch(receivePostedArticle()) : dispatch(failPostedArticle()));
+      dispatch(receivePostedArticle(JSON.parse(body))) : dispatch(failPostedArticle()));
   };
 }
 
