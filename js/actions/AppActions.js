@@ -67,7 +67,7 @@ export function failPostedArticle() {
 export function addDiscoveryArticle() {
   return (dispatch, getState) => {
     dispatch(postArticle());
-    fetch(`http://news-discovery1.newsai.org/discovery`, {
+    fetch(`https://news-discovery1.newsai.org/discovery`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
