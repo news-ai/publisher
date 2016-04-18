@@ -1,26 +1,21 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-
-function formatTime(datestring) {
-  const date = new Date(datestring);
-  let hour = date.getHours();
-  const timestring = hour < 12 ? 'AM': 'PM';
-  if (hour > 12) hour -= 12;
-  return {
-    date: date.toDateString(),
-    timestring: timestring,
-    hour: hour,
-    minute: date.toTimeString().substring(6, 8),
-  };
-}
+let moment = require('moment-timezone');
 
 function ArticleListItem({id, name, url, summary, added_at, authors, publisher, entity_scores}) {
-  const dateObj = formatTime(added_at);
+  const timestring = moment(added_at).tz('America/New_York').format('MMM D, YYYY hh:mm A');
   return (
     <div className='row article-body' key={id}>
       <div className='twelve columns'>
           <div className='article-name'>
             <Link style={{color: 'black', fontWeight: 550}} to={'/articles/' + id}><span>{name}</span></Link>
+            <i
+            className='fa fa-star fa-2x pull-right'
+            style={{
+              color: 'gray'
+            }}
+            ariaHidden='true'
+            ></i>
           </div>
           <div className='article-publisher'>
             <Link to={'/publishers/' + publisher.id}><span>{publisher.name}</span></Link>
@@ -40,7 +35,7 @@ function ArticleListItem({id, name, url, summary, added_at, authors, publisher, 
           {summary}
           </span>
           <div>
-            <span className='pull-right article-list-item-date'>{dateObj.date} {dateObj.hour}:{dateObj.minute} {dateObj.timestring}</span>
+            <span className='pull-right article-list-item-date'>{timestring}</span>
           </div>
           </div>
         </div>

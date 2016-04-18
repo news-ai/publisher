@@ -76,18 +76,27 @@ return {
     publicPath: '/'
   },
   module: {
-    loaders: [{
-      test: /\.js$/, // Transform all .js files required somewhere within an entry point...
-      loader: 'babel', // ...with the specified loaders...
-      exclude: path.join(__dirname, '/node_modules/') // ...except for the node_modules folder.
-    }, {
-      test: /\.css$/, // Transform all .css files required somewhere within an entry point...
-      loader: cssLoaders // ...with PostCSS
-    }, {
-      test: /\.jpe?g$|\.gif$|\.png$/i,
-      loader: "url-loader?limit=10000"
-    }
+    loaders: [
+      {
+        test: /\.js$/, // Transform all .js files required somewhere within an entry point...
+        loader: 'babel', // ...with the specified loaders...
+        exclude: path.join(__dirname, '/node_modules/') // ...except for the node_modules folder.
+      },
+      {
+        test: /\.css$/, // Transform all .css files required somewhere within an entry point...
+        loader: cssLoaders // ...with PostCSS
+      },
+      {
+        test: /\.jpe?g$|\.gif$|\.png$/i,
+        loader: "url-loader?limit=10000"
+      },
+      {
+        include: /\.json$/, loaders: ["json-loader"]
+      }
     ]
+  },
+  resolve: {
+    extensions: ['', '.json', '.jsx', '.js']
   },
   plugins: plugins,
   postcss: function() {
