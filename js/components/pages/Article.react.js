@@ -14,6 +14,9 @@ class Article extends Component {
     const {article, articleId, entities, entityScores} = this.props;
     const entitiesLoading = (<span>The entities are loading</span>);
     const articleLoading = (<span>The article is loading</span>);
+/*                        <p>Authors: {article.authors.map((author, i) =>
+                          <span key={i}><Link to={'/authors/' + author.id}>{author.name} </Link></span>)
+                      }</p> */
     return (
       <div className='container'>
             <div className='row'>
@@ -33,9 +36,6 @@ class Article extends Component {
                         {article.summary}
                         </p>
                         <p>Link: <a href={article.url}>{article.url}</a></p>
-                        <p>Authors: {article.authors.map((author, i) =>
-                          <span key={i}><Link to={'/authors/' + author.id}>{author.name} </Link></span>)
-                      }</p>
                     </div>) : articleLoading
                 }
                 </div>
