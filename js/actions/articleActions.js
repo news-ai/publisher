@@ -4,7 +4,6 @@ import {
 } from '../constants/AppConstants';
 
 const CONTEXT_API_BASE = `https://context.newsai.org/api`;
-// const CONTEXT_API_BASE = window.CONTEXT_API_BASE;
 
 export function requestArticles() {
   return {

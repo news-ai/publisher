@@ -19,7 +19,7 @@ class HomePage extends Component {
 
   render() {
     const { articles, articleIsReceiving, next} = this.props;
-    const loading = (<span>The feed is loading</span>);
+    const loading = (<span>The feed is loading...</span>);
         //<ArticleInputBar />
 
     return (
@@ -28,7 +28,8 @@ class HomePage extends Component {
             (articles === undefined || next === undefined) ? loading :
         <ArticleList articles={articles} />
       }
-      {(articles !== undefined && next !== undefined && next !== 0 && articleIsReceiving) ? <AdditionalLoading name='feed is' /> : null}
+      {(articles !== undefined && next !== undefined && next !== 0 && articleIsReceiving) ?
+        <AdditionalLoading name='feed is' /> : null}
         </div>
       );
   }

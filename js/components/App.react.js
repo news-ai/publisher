@@ -15,7 +15,13 @@ class App extends Component {
           <div className='container'>
             <Navigation />
           </div>
-        { this.props.data.personReducer.person ? this.props.children : <Login /> }
+        { this.props.data.personReducer.person ?
+          this.props.children :
+          this.props.data.personReducer.isReceiving ?
+          (<div className='container article-list-container'>
+          <span>Loading NewsAI...</span>
+          </div>)
+          : <Login /> }
       </div>
       );
   }
