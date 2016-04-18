@@ -104,6 +104,13 @@ a {
 	text-decoration: none;
 }
 
+.article-top3-entities {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+}
+
 .article-top3-entities div {
 	display: inline;
 	padding: 0 7px 0 7px;
@@ -113,6 +120,8 @@ a {
 	border-radius: 10px;
 	position: relative;
 	text-align: center;
+	align-self: center;
+	border: 1px solid lightgray,
 }
 
 

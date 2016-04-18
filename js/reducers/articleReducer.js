@@ -1,5 +1,5 @@
 import { REQUEST_ARTICLES, RECEIVE_ARTICLES } from '../constants/AppConstants';
-import assignToEmpty from '../utils/assign';
+import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
 
 function extractSummary(summary) {

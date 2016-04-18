@@ -18,23 +18,25 @@ class HomePage extends Component {
   }
 
   render() {
-    const { articles, articleIsReceiving, next} = this.props;
+    const { articles, articleIsReceiving, next, discoverySubmitHandler, discoveryInputHandler} = this.props;
     const loading = (<span>The feed is loading...</span>);
 
     return (
       <div className='container article-list-container'>
-        <ArticleInputBar />
-          {(articles === undefined || next === undefined) ? loading :
-        <ArticleList articles={articles} />
-      }
-      {(articles !== undefined && next !== undefined && next !== 0 && articleIsReceiving) ?
+        <ArticleInputBar
+        onClickHandler={discoverySubmitHandler}
+        inputHandler={discoveryInputHandler}
+        />
+          {(articles && next) ?
+            <ArticleList articles={articles} /> : loading}
+      {(articles && next && next !== 0 && articleIsReceiving) ?
         <AdditionalLoading name='feed is' /> : null}
         </div>
       );
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const feedArticleIds = state.feedReducer.feedArticleIds;
   return {
     projectName: state.feedReducer.projectName,
@@ -42,16 +44,18 @@ const mapStateToProps = (state) => {
     articleIds: feedArticleIds,
     feedIsReceving: state.feedReducer.isReceiving,
     articleIsReceiving: state.articleReducer.isReceiving,
-    articles: (state.feedReducer.next === undefined) ? undefined : feedArticleIds.map((articleId) => state.articleReducer[articleId])
+    articles: state.feedReducer.next ? feedArticleIds.map( articleId => state.articleReducer[articleId]) : undefined
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    onScrollBottom: (ev) => {
+    onScrollBottom: ev => {
       ev.preventDefault();
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) dispatch(actionCreators.fetchFeed());
     },
+    discoveryInputHandler: url => dispatch(actionCreators.updateDiscoveryInput(url)),
+    discoverySubmitHandler: _ => dispatch(actionCreators.addDiscoveryArticle()),
     dispatch: action => dispatch(action)
   };
 };

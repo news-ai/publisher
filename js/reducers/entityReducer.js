@@ -6,7 +6,7 @@ import {
   REQUEST_ENTITY_ARTICLES,
   RECEIVE_ENTITY_ARTICLES,
 } from '../constants/AppConstants';
-import assignToEmpty from '../utils/assign';
+import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
 
 function entityReducer(state = initialState.entityReducer, action) {

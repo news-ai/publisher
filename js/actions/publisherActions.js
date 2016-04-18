@@ -10,18 +10,10 @@ import {
   receiveArticles,
 } from './articleActions';
 
-function removeCache() {
-  return window.isDev ? `?${Date.now()}` : ``;
-}
-
-function isJsonString(str) {
-  try {
-    JSON.parse(str);
-  } catch ( e ) {
-    return false;
-  }
-  return true;
-}
+import {
+  removeCache,
+  isJsonString,
+} from '../utils/assign';
 
 export function requestPublisher() {
   return {

@@ -6,31 +6,22 @@ import {
   REQUEST_ENTITY_ARTICLES,
   REQUEST_AUTHOR,
   RECEIVE_AUTHOR,
-  REQUEST_PUBLISHER_ARTICLES,
-  RECEIVE_PUBLISHER_ARTICLES,
   RECEIVE_ENTITY_ARTICLES,
+  POST_DISCOVERY_ARTICLE,
+  DONE_POST_DISCOVERY_ARTICLE,
+  UPDATE_DISCOVERY_INPUT,
+  FAIL_POST_DISCOVERY_ARTICLE,
 } from '../constants/AppConstants';
+
+import {
+  removeCache,
+  isJsonString,
+} from '../utils/assign';
 
 import * as loginActions from './loginActions';
 import * as publisherActions from './publisherActions';
 import * as articleActions from './articleActions';
 import * as feedActions from './feedActions';
-
-const CONTEXT_API_BASE = `https://context.newsai.org/api`;
-window.CONTEXT_API_BASE = CONTEXT_API_BASE;
-
-function removeCache() {
-  return window.isDev ? `?${Date.now()}` : ``;
-}
-
-function isJsonString(str) {
-  try {
-    JSON.parse(str);
-  } catch ( e ) {
-    return false;
-  }
-  return true;
-}
 
 // loginActions
 export function loginWithGoogle() {
@@ -52,6 +43,56 @@ export function receiveArticles(json) {
 
 export function fetchArticle(articleId) {
   return articleActions.fetchArticle(articleId);
+}
+
+export function postArticle() {
+  return {
+    type: POST_DISCOVERY_ARTICLE,
+  };
+}
+
+export function receivePostedArticle() {
+  return {
+    type: DONE_POST_DISCOVERY_ARTICLE,
+  };
+}
+
+export function failPostedArticle() {
+  return {
+    type: FAIL_POST_DISCOVERY_ARTICLE
+  };
+}
+
+export function addDiscoveryArticle() {
+  return (dispatch, getState) => {
+    const body = JSON.stringify({
+      'url': getState().personReducer.discovery.url,
+      'added_by': getState().personReducer.person.id,
+    });
+    dispatch(postArticle);
+    fetch(`http://news-discovery1.newsai.org/discovery`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'url': getState().personReducer.discovery.url,
+        'added_by': getState().personReducer.person.id,
+      })
+    })
+    .then( response => response.status === 200 ?
+      response.text() : false)
+    .then( body => body ?
+      dispatch(receivePostedArticle()) : dispatch(failPostedArticle()));
+  };
+}
+
+export function updateDiscoveryInput(url) {
+  return {
+    type: UPDATE_DISCOVERY_INPUT,
+    url
+  };
 }
 
 

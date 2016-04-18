@@ -4,7 +4,7 @@ import {
   REQUEST_PUBLISHER_ARTICLES,
   RECEIVE_PUBLISHER_ARTICLES,
 } from '../constants/AppConstants';
-import assignToEmpty from '../utils/assign';
+import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
 
 function publisherReducer(state = initialState.publisherReducer, action) {

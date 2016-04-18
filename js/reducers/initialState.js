@@ -17,6 +17,10 @@ export const initialState = {
     isReceiving: false
   },
   personReducer: {
-    isReceiving: false
+    isReceiving: false,
+    discovery: {
+      url: '',
+      isReceiving: false
+    }
   }
 };

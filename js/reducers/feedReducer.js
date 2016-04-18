@@ -2,7 +2,7 @@ import {
   REQUEST_FEED,
   RECEIVE_FEED,
 } from '../constants/AppConstants';
-import assignToEmpty from '../utils/assign';
+import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
 
 function feedReducer(state = initialState.feedReducer, action) {

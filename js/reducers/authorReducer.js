@@ -1,5 +1,5 @@
 import { REQUEST_AUTHOR, RECEIVE_AUTHOR } from '../constants/AppConstants';
-import assignToEmpty from '../utils/assign';
+import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
 
 function authorReducer(state = initialState.authorReducer, action) {

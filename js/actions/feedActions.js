@@ -8,20 +8,10 @@ import {
 	receiveArticles,
 } from './articleActions';
 
-const CONTEXT_API_BASE = `https://context.newsai.org/api`;
-
-function removeCache() {
-  return window.isDev ? `?${Date.now()}` : ``;
-}
-
-function isJsonString(str) {
-  try {
-    JSON.parse(str);
-  } catch ( e ) {
-    return false;
-  }
-  return true;
-}
+import {
+  removeCache,
+  isJsonString,
+} from '../utils/assign';
 
 export function requestFeed() {
   return {
@@ -44,7 +34,7 @@ export function fetchFeed() {
     dispatch(requestArticles());
     const fetchLink = getState().feedReducer.next ?
     getState().feedReducer.next :
-    `${CONTEXT_API_BASE}/feeds${removeCache()}`;
+    `${window.CONTEXT_API_BASE}/feeds${removeCache()}`;
     return fetch(fetchLink, { credentials: 'include'})
       .then( response => response.text())
       .catch( e => console.log(e))
