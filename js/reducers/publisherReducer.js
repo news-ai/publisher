@@ -23,7 +23,7 @@ function publisherReducer(state = initialState.publisherReducer, action) {
       return obj;
     case RECEIVE_PUBLISHER_ARTICLES:
       obj[parseInt(action.publisherId, 10)].publisher_articles = [...state[parseInt(action.publisherId, 10)].publisher_articles, ...action.json.map((article) => article.id)];
-      obj[parseInt(action.publisherId, 10)].next = (action.next === null) ? 0 : action.next;
+      obj[parseInt(action.publisherId, 10)].next = (action.next === null) ? undefined : action.next;
       obj.isReceiving = false;
       return obj;
     default:

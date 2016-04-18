@@ -105,7 +105,7 @@ export function fetchEntityArticles(entityId) {
 
     const fetchLink = getState().entityReducer[entityId].next ?
     getState().entityReducer[entityId].next :
-    `${CONTEXT_API_BASE}/entities/${entityId}/articles${removeCache()}`;
+    `${window.CONTEXT_API_BASE}/entities/${entityId}/articles${removeCache()}`;
     fetch(fetchLink, { credentials: 'include'})
       .then( response => response.text())
       .catch( e => console.log(e))
@@ -124,7 +124,7 @@ export function fetchEntityArticles(entityId) {
 export function fetchEntity(entityId) {
   return dispatch => {
     dispatch(requestEntity(entityId));
-    return fetch(`${CONTEXT_API_BASE}/entities/${entityId}/`, { credentials: 'include'})
+    return fetch(`${window.CONTEXT_API_BASE}/entities/${entityId}/`, { credentials: 'include'})
       .then( response => response.text())
       .then( body => dispatch(receiveEntity(JSON.parse(body))));
   };
@@ -133,7 +133,7 @@ export function fetchEntity(entityId) {
 export function fetchEntityAndArticles(entityId) {
   return dispatch => {
     dispatch(requestEntity(entityId));
-    return fetch(`${CONTEXT_API_BASE}/entities/${entityId}`, { credentials: 'include'})
+    return fetch(`${window.CONTEXT_API_BASE}/entities/${entityId}/`, { credentials: 'include'})
       .then( response => response.text())
       .then( body => dispatch(receiveEntity(JSON.parse(body))))
       .then( _ => dispatch(fetchEntityArticles(entityId)));
@@ -179,24 +179,22 @@ export function receiveAuthor(json) {
 export function fetchAuthor(authorId) {
   return dispatch => {
     dispatch(requestAuthor);
-    fetch(CONTEXT_API_BASE + `/authors/` + authorId, {credentials: 'include'})
+    fetch(`${window.CONTEXT_API_BASE}/authors/${authorId}/`, { credentials: 'include' })
       .then( response => response.text())
       .then( body => dispatch(receiveAuthor(JSON.parse(body))));
   };
 }
 
 export function requestPublisherArticles() {
-  return {
-    type: REQUEST_PUBLISHER_ARTICLES
-  };
+  return publisherActions.requestPublisherArticles();
 }
 
 // publisherActions
-function requestPublisher() {
+export function requestPublisher() {
   return publisherActions.requestPublisher();
 }
 
-function receivePublisher(json) {
+export function receivePublisher(json) {
   return publisherActions.receivePublisher(json);
 }
 
@@ -205,44 +203,13 @@ export function fetchPublisher(publisherId) {
 }
 
 export function receivePublisherArticles(json, publisherId, next) {
-  return {
-    type: RECEIVE_PUBLISHER_ARTICLES,
-    json,
-    publisherId,
-    next
-  };
+  return publisherActions.receivePublisherArticles(json, publisherId, next);
 }
 
 export function fetchPublisherArticles(publisherId) {
-  return (dispatch, getState) => {
-    if (getState().publisherReducer[publisherId] === undefined) return;
-
-    dispatch(requestArticles());
-
-    const fetchLink = getState().publisherReducer[publisherId].next === undefined ?
-    `${CONTEXT_API_BASE}/publishers/${publisherId}/articles${removeCache()}`
-    : getState().publisherReducer[publisherId].next;
-
-    fetch(fetchLink, {credentials: 'include'})
-      .then( response => response.text())
-      .catch( e => console.log(e))
-      .then( body => {
-        if (!isJsonString(body)) return;
-        const json = JSON.parse(body);
-        Promise.all([
-          dispatch(receiveArticles(json.results)),
-          dispatch(receivePublisherArticles(json.results, publisherId, json.next)),
-        ]);
-      });
-  };
+  return publisherActions.fetchPublisherArticles(publisherId);
 }
 
 export function fetchPublisherAndArticles(publisherId) {
-  return dispatch => {
-    dispatch(requestPublisher());
-    fetch(`${CONTEXT_API_BASE}/publishers/${publisherId}`, {credentials: 'include'})
-      .then( response => response.text())
-      .then( body => dispatch(receivePublisher(JSON.parse(body))))
-      .then( _ => dispatch(fetchPublisherArticles(publisherId)));
-  };
+  return publisherActions.fetchPublisherAndArticles(publisherId);
 }

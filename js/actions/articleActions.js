@@ -3,8 +3,6 @@ import {
   RECEIVE_ARTICLES,
 } from '../constants/AppConstants';
 
-const CONTEXT_API_BASE = `https://context.newsai.org/api`;
-
 export function requestArticles() {
   return {
     type: REQUEST_ARTICLES
@@ -21,7 +19,7 @@ export function receiveArticles(json) {
 export function fetchArticle(articleId) {
   return dispatch => {
     dispatch(requestArticles());
-    return fetch(`${CONTEXT_API_BASE}/articles/${articleId}/`, { credentials: 'include'})
+    return fetch(`${window.CONTEXT_API_BASE}/articles/${articleId}/`, { credentials: 'include'})
       .then( response => response.text())
       .then( body => dispatch(receiveArticles(JSON.parse(body))));
   };
