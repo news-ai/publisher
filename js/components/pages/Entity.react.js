@@ -44,7 +44,7 @@ class Entity extends Component {
         <ArticleList articles={entityArticles} />
         </div>
         )}
-      {(entityArticles !== undefined && next !== undefined && next !== 0 && articleIsReceiving) ? <AdditionalLoading name='articles are' /> : null}
+      {(entityArticles && next && next !== 0 && articleIsReceiving) ? <AdditionalLoading name='articles are' /> : null}
           </div>
       </div>
       );

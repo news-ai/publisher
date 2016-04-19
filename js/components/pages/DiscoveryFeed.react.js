@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ArticleList from '../pieces/ArticleList.react';
 import * as actionCreators from '../../actions/AppActions';
+import AdditionalLoading from '../pieces/AdditionalLoading.react';
 
 class DiscoveryFeed extends Component {
   componentDidMount() {
@@ -16,11 +17,15 @@ class DiscoveryFeed extends Component {
   }
 
   render() {
-    const { articles } = this.props;
+    const { articles, articleIsReceiving, next } = this.props;
     return (
       <div className='container article-list-container'>
       <h5>Articles You Added:</h5>
-      <ArticleList articles={articles} />
+      {
+        articleIsReceiving ? <span>The feed is loading...</span> :
+        <ArticleList articles={articles} />
+      }
+      {(articles.length > 0 && next && articleIsReceiving) ? <AdditionalLoading name='articles are' /> : null}
       </div>
     );
   }
@@ -31,6 +36,7 @@ const mapStateToProps = state => {
     articles: state.personReducer.discovery.discoveredArticleIds.map( id => state.articleReducer[id]),
     articleIds: state.personReducer.discovery.discoveredArticleIds,
     next: state.personReducer.discovery.next,
+    articleIsReceiving: state.articleReducer.isReceiving,
   };
 };
 
