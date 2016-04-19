@@ -19,8 +19,9 @@ export const initialState = {
   personReducer: {
     isReceiving: false,
     discovery: {
+      discoveredArticleIds: [],
       url: '',
       isReceiving: false
-    }
+    },
   }
 };

@@ -11,6 +11,7 @@ import {
   DONE_POST_DISCOVERY_ARTICLE,
   UPDATE_DISCOVERY_INPUT,
   FAIL_POST_DISCOVERY_ARTICLE,
+  RECEIVE_DISCOVERY_ARTICLES,
 } from '../constants/AppConstants';
 
 import {
@@ -52,9 +53,9 @@ export function postArticle() {
 }
 
 export function receivePostedArticle(body) {
-  console.log(body);
   return {
     type: DONE_POST_DISCOVERY_ARTICLE,
+    body
   };
 }
 
@@ -81,6 +82,37 @@ export function addDiscoveryArticle() {
       response.text() : false)
     .then( body => body ?
       dispatch(receivePostedArticle(JSON.parse(body))) : dispatch(failPostedArticle()));
+  };
+}
+
+
+export function receiveDiscoveryFeed(articles, next) {
+  return {
+    type: RECEIVE_DISCOVERY_ARTICLES,
+    articles,
+    next
+  };
+}
+
+export function fetchDiscoveryFeed() {
+  return (dispatch, getState) => {
+    if (getState().articleReducer.isReceiving) return;
+    dispatch(requestArticles());
+
+    const fetchLink = getState().personReducer.discovery.next ?
+    getState().personReducer.discovery.next :
+    `${window.CONTEXT_API_BASE}/articles/added_by${removeCache()}`;
+
+    fetch(fetchLink, {credentials: 'include'})
+      .then( response => response.text())
+      .then( body => {
+        if (!isJsonString(body)) return;
+        const json = JSON.parse(body);
+        Promise.all([
+          dispatch(receiveArticles(json.results)),
+          dispatch(receiveDiscoveryFeed(json.results, json.next)),
+        ]);
+      });
   };
 }
 

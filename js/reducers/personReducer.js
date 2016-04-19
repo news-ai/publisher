@@ -5,6 +5,7 @@ import {
   POST_DISCOVERY_ARTICLE,
   DONE_POST_DISCOVERY_ARTICLE,
   UPDATE_DISCOVERY_INPUT,
+  RECEIVE_DISCOVERY_ARTICLES,
 } from '../constants/AppConstants';
 
 import { assignToEmpty } from '../utils/assign';
@@ -34,6 +35,13 @@ function personReducer(state = initialState.personReducer, action) {
     case DONE_POST_DISCOVERY_ARTICLE:
       obj.discovery.isReceiving = false;
       obj.discovery.url = '';
+      return obj;
+    case RECEIVE_DISCOVERY_ARTICLES:
+      obj.discovery.discoveredArticleIds = [
+        ...state.discovery.discoveredArticleIds,
+        ...action.articles.map( article => article.id)
+      ];
+      obj.discovery.next = (action.next !== null) ? action.next : undefined;
       return obj;
     default:
       return state;

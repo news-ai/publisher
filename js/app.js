@@ -38,6 +38,7 @@ import Article from './components/pages/Article.react';
 import Entity from './components/pages/Entity.react';
 import Author from './components/pages/Author.react';
 import Publisher from './components/pages/Publisher.react';
+import DiscoveryFeed from './components/pages/DiscoveryFeed.react';
 import App from './components/App.react';
 
 // Import the CSS file, which HtmlWebpackPlugin transfers to the build folder
@@ -62,6 +63,7 @@ ReactDOM.render(
           <Route path='/entities/:entityId' component={Entity} />
           <Route path='/authors/:authorId' component={Author} />
           <Route path='/publishers/:publisherId' component={Publisher} />
+          <Route path='/discovery' component={DiscoveryFeed} />
         </Route>
         <Route path='*' component={NotFoundPage} />
       </Router>
