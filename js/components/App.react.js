@@ -13,9 +13,10 @@ class App extends Component {
     return (
       <div className='wrapper'>
           <div className='container'>
-            <Navigation />
+            <Navigation isLogin={this.props.isLogin} />
           </div>
-        { this.props.data.personReducer.person ?
+        { 
+          this.props.data.personReducer.person ?
           this.props.children :
           this.props.data.personReducer.isReceiving ?
           (<div className='container article-list-container'>
@@ -29,7 +30,8 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    data: state
+    data: state,
+    isLogin: state.personReducer.person ? true : false,
   };
 };
 

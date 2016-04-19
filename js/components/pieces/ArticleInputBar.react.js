@@ -3,7 +3,7 @@ import React from 'react';
 function ArticleInputBar({url, inputHandler, onClickHandler, isReceiving}) {
   return (
     <div className='row'>
-    <span>Add Article</span>
+    <span style={{margin: '5px'}}>Put URL here: </span>
        <input
         className='u-max-full-width'
         type='text'

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import ArticleList from '../pieces/ArticleList.react';
 import * as actionCreators from '../../actions/AppActions';
 import AdditionalLoading from '../pieces/AdditionalLoading.react';
+import ArticleInputBar from '../pieces/ArticleInputBar.react';
 
 class DiscoveryFeed extends Component {
   componentDidMount() {
@@ -20,7 +21,12 @@ class DiscoveryFeed extends Component {
     const { articles, articleIsReceiving, next } = this.props;
     return (
       <div className='container article-list-container'>
-      <h5>Articles You Added:</h5>
+        <ArticleInputBar
+        url={this.props.discoveryUrl}
+        onClickHandler={this.props.discoverySubmitHandler}
+        inputHandler={this.props.discoveryInputHandler}
+        isReceiving={this.props.discoveryReceiving}
+        />
       {
         articleIsReceiving ? <span>The feed is loading...</span> :
         <ArticleList articles={articles} />
@@ -37,6 +43,8 @@ const mapStateToProps = state => {
     articleIds: state.personReducer.discovery.discoveredArticleIds,
     next: state.personReducer.discovery.next,
     articleIsReceiving: state.articleReducer.isReceiving,
+    discoveryUrl: state.personReducer.discovery.url,
+    discoveryReceiving: state.personReducer.discovery.isReceiving,
   };
 };
 
@@ -48,6 +56,8 @@ const mapDispatchToProps = (dispatch, props) => {
         if (props.next) dispatch(actionCreators.fetchDiscoveryFeed());
       }
     },
+    discoveryInputHandler: url => dispatch(actionCreators.updateDiscoveryInput(url)),
+    discoverySubmitHandler: _ => dispatch(actionCreators.addDiscoveryArticle()),
     dispatch: action => dispatch(action),
   };
 };
