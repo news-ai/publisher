@@ -14,13 +14,16 @@ class DiscoveryFeed extends Component {
   }
 
   componentWillUnmount() {
-    const {onScrollBottom} = this.props;
+    const { onScrollBottom } = this.props;
     window.removeEventListener('scroll', onScrollBottom);
   }
 
   render() {
-    const { articles, articleIsReceiving, next } = this.props;
+    const { articles, articleIsReceiving, next, onScrollBottom } = this.props;
     const articleLoading = <CenterLoading name='articles'/>;
+    
+    if (next === undefined && articles.length > 0) window.removeEventListener('scroll', onScrollBottom);
+
     return (
       <div className='container article-list-container'>
         <ArticleInputBar
@@ -30,7 +33,7 @@ class DiscoveryFeed extends Component {
         isReceiving={this.props.discoveryReceiving}
         />
       {
-        articleIsReceiving ? articleLoading :
+        articleIsReceiving && articles.length === 0 ? articleLoading :
         <ArticleList articles={articles} />
       }
       {(articles.length > 0 && next && articleIsReceiving) ? <AdditionalLoading name='articles are' /> : null}
@@ -50,13 +53,11 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = (dispatch, props) => {
+const mapDispatchToProps = dispatch => {
   return {
     onScrollBottom: ev => {
       ev.preventDefault();
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-        if (props.next) dispatch(actionCreators.fetchDiscoveryFeed());
-      }
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) dispatch(actionCreators.fetchDiscoveryFeed());
     },
     discoveryInputHandler: url => dispatch(actionCreators.updateDiscoveryInput(url)),
     discoverySubmitHandler: _ => dispatch(actionCreators.addDiscoveryArticle()),
