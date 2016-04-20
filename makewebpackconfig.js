@@ -9,6 +9,7 @@ var entry, jsLoaders, plugins, cssLoaders;
 
 // If production is true
 if (options.prod) {
+  window.isDev = false;
   // Entry
   entry = [
     path.resolve(__dirname, 'js/app.js') // Start with js/app.js...
@@ -47,6 +48,7 @@ if (options.prod) {
 
 // If app is in development
 } else {
+  window.isDev = true;
   // Entry
   entry = [
     "webpack-dev-server/client?http://localhost:3000", // Needed for hot reloading

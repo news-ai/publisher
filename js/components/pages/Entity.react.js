@@ -30,7 +30,7 @@ class Entity extends Component {
     const articleLoading = <CenterLoading name='articles'/>;
 
     if (next === 0) this._removeScroll();
-    
+
     return (
       <div className='container entity'>
         <div className='row'>
@@ -47,7 +47,7 @@ class Entity extends Component {
         <ArticleList articles={entityArticles} />
         </div>
         )}
-      {(entityArticles && next && next !== 0 && articleIsReceiving) ? <AdditionalLoading name='articles are' /> : null}
+      {(entityArticles && next && articleIsReceiving) ? <AdditionalLoading name='articles are' /> : null}
           </div>
       </div>
       );
@@ -60,9 +60,9 @@ const mapStateToProps = (state, props) => {
   return {
     entityId: entityId,
     entity: entity,
-    next: (entity === undefined) ? undefined : entity.next,
+    next: entity ? entity.next : undefined,
     articleIsReceiving: state.articleReducer.isReceiving,
-    entityArticles: (entity === undefined || entity.entity_articles === undefined) ? undefined : (entity.entity_articles.some((id) => state.articleReducer[id] === undefined)) ? undefined : entity.entity_articles.map((id) => state.articleReducer[id])
+    entityArticles: (entity === undefined || entity.entity_articles === undefined) ? undefined : (entity.entity_articles.some( id => state.articleReducer[id])) ? entity.entity_articles.map( id => state.articleReducer[id]) : undefined
   };
 };
 
@@ -80,7 +80,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     ...stateProps,
     onScrollBottom: (ev) => {
       ev.preventDefault();
-      if ( ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) ) dispatch(actionCreators.fetchEntityArticles(entityId));
+      if ( ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && next ) dispatch(actionCreators.fetchEntityArticles(entityId));
     },
     dispatch: action => dispatch(action)
   };
