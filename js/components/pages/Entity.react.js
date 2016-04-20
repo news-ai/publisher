@@ -3,6 +3,7 @@ import * as actionCreators from '../../actions/AppActions';
 import { connect } from 'react-redux';
 import ArticleList from '../pieces/ArticleList.react';
 import AdditionalLoading from '../pieces/AdditionalLoading.react';
+import CenterLoading from '../pieces/CenterLoading.react';
 
 
 class Entity extends Component {
@@ -26,8 +27,8 @@ class Entity extends Component {
   render() {
     let {entity, entityArticles, onScrollBottom, next, articleIsReceiving} = this.props;
     const entityLoading = (<span>The entity is loading</span>);
-    const articleLoading = (<span>The articles are loading</span>);
-    if (next === 0) this._removeScroll();
+    const articleLoading = <CenterLoading name='articles'/>;
+
     return (
       <div className='container entity'>
         <div className='row'>
@@ -77,7 +78,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     ...stateProps,
     onScrollBottom: (ev) => {
       ev.preventDefault();
-      if ( ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) ) dispatch(actionCreators.fetchEntityArticles(entityId));
+      if ( ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && next !== 0 ) dispatch(actionCreators.fetchEntityArticles(entityId));
     },
     dispatch: action => dispatch(action)
   };

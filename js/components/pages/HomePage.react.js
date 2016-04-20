@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/AppActions';
 import ArticleList from '../pieces/ArticleList.react';
 import AdditionalLoading from '../pieces/AdditionalLoading.react';
+import CenterLoading from '../pieces/CenterLoading.react';
 
 class HomePage extends Component {
   componentDidMount() {
@@ -18,12 +19,15 @@ class HomePage extends Component {
 
   render() {
     const { articles, articleIsReceiving, next } = this.props;
-    const loading = (<span>The feed is loading...</span>);
+    // const loading = (<span>The feed is loading...</span>);
 
     return (
       <div className='container article-list-container'>
           {(articles && next) ?
-            <ArticleList articles={articles} /> : loading}
+            <ArticleList articles={articles} /> :
+            <CenterLoading name='feed' />
+          }
+
       {(articles && next && next !== 0 && articleIsReceiving) ?
         <AdditionalLoading name='feed is' /> : null}
         </div>

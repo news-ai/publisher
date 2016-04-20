@@ -4,6 +4,7 @@ import ArticleList from '../pieces/ArticleList.react';
 import * as actionCreators from '../../actions/AppActions';
 import AdditionalLoading from '../pieces/AdditionalLoading.react';
 import ArticleInputBar from '../pieces/ArticleInputBar.react';
+import CenterLoading from '../pieces/CenterLoading.react';
 
 class DiscoveryFeed extends Component {
   componentDidMount() {
@@ -19,6 +20,7 @@ class DiscoveryFeed extends Component {
 
   render() {
     const { articles, articleIsReceiving, next } = this.props;
+    const articleLoading = <CenterLoading name='articles'/>;
     return (
       <div className='container article-list-container'>
         <ArticleInputBar
@@ -28,7 +30,7 @@ class DiscoveryFeed extends Component {
         isReceiving={this.props.discoveryReceiving}
         />
       {
-        articleIsReceiving ? <span>The feed is loading...</span> :
+        articleIsReceiving ? articleLoading :
         <ArticleList articles={articles} />
       }
       {(articles.length > 0 && next && articleIsReceiving) ? <AdditionalLoading name='articles are' /> : null}

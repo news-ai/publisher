@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as actionCreators from '../actions/AppActions';
 import Navigation from './pieces/Navigation.react';
 import Login from './pages/Login.react';
+import CenterLoading from './pieces/CenterLoading.react';
 
 class App extends Component {
   componentDidMount() {
@@ -19,8 +20,9 @@ class App extends Component {
           this.props.data.personReducer.person ?
           this.props.children :
           this.props.data.personReducer.isReceiving ?
-          (<div className='container article-list-container'>
-          <span>Loading NewsAI...</span>
+          (
+            <div className='container article-list-container'>
+            <CenterLoading name='NewsAI' />
           </div>)
           : <Login /> }
       </div>

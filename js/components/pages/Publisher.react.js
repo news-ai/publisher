@@ -3,6 +3,7 @@ import * as actionCreators from '../../actions/AppActions';
 import { connect } from 'react-redux';
 import ArticleList from '../pieces/ArticleList.react';
 import AdditionalLoading from '../pieces/AdditionalLoading.react';
+import CenterLoading from '../pieces/CenterLoading.react';
 
 
 class Publisher extends Component {
@@ -26,7 +27,7 @@ class Publisher extends Component {
   render() {
     let {publisher, publisherArticles, onScrollBottom, next, articleIsReceiving} = this.props;
     const publisherLoading = (<span>The publisher is loading</span>);
-    const articleLoading = (<span>The articles are loading</span>);
+    const articleLoading = <CenterLoading name='articles' />;
     if (next === 0) this._removeScroll();
     return (
       <div className='container publisher'>
