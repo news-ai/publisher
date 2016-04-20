@@ -22,7 +22,7 @@ class App extends Component {
           this.props.data.personReducer.isReceiving ?
           (
             <div className='container article-list-container'>
-            <CenterLoading name='NewsAI' />
+            <CenterLoading name='feed' />
           </div>)
           : <Login /> }
       </div>
