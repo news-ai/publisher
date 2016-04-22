@@ -58,9 +58,9 @@ export function fetchPublisherArticles(publisherId) {
 
     dispatch(requestArticles());
 
-    const fetchLink = getState().publisherReducer[publisherId].next === undefined ?
+    const fetchLink = getState().publisherReducer[publisherId].next ?
     getState().publisherReducer[publisherId].next :
-    `${window.CONTEXT_API_BASE}/publishers/${publisherId}/articles${removeCache()}`;
+    `${window.CONTEXT_API_BASE}/publishers/${publisherId}/articles`;
 
     fetch(fetchLink, {credentials: 'include'})
       .then( response => response.text())
