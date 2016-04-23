@@ -1,10 +1,4 @@
 import {
-  // REQUEST_ENTITY,
-  // RECEIVE_ENTITY,
-  // REQUEST_ENTITIES,
-  // RECEIVE_ENTITIES,
-  // REQUEST_ENTITY_ARTICLES,
-  // RECEIVE_ENTITY_ARTICLES,
   REQUEST_AUTHOR,
   RECEIVE_AUTHOR,
   POST_DISCOVERY_ARTICLE,
@@ -45,6 +39,14 @@ export function receiveArticles(json) {
 
 export function fetchArticle(articleId) {
   return articleActions.fetchArticle(articleId);
+}
+
+export function flipStar(articleId) {
+  return articleActions.flipStar(articleId);
+}
+
+export function toggleStar(articleId) {
+  return articleActions.toggleStar(articleId);
 }
 
 export function postArticle() {
@@ -125,7 +127,7 @@ export function updateDiscoveryInput(url) {
 }
 
 
-function doneFetchingArticleEntities() {
+export function doneFetchingArticleEntities() {
   return entityActions.doneFetchingArticleEntities();
 }
 

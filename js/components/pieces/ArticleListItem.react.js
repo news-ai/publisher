@@ -4,22 +4,12 @@ const moment = require('moment-timezone');
 
 function ArticleListItem({id, name, url, summary, added_at, publisher, entity_scores}) {
   const timestring = moment(added_at).tz('America/New_York').format('MMM D, YYYY hh:mm A');
-            /* <i
-            className='fa fa-star fa-2x pull-right'
-            style={{
-              color: 'gray'
-            }}
-            ariaHidden='true'
-            ></i>
-          <div className='article-authors'>
-          {authors.map((author, i) => <Link to={'/authors/' + author.id}><span key={i}>{author.name}</span></Link>)}
-          </div>
-            */
   return (
     <div className='row article-body' key={id}>
       <div className='twelve columns'>
           <div className='article-name'>
             <Link style={{color: 'black', fontWeight: 550}} to={'/articles/' + id}><span>{name}</span></Link>
+            <i className='fa fa-star-o fa-2x pull-right' ariaHidden='true'></i>
           </div>
           <div className='article-publisher'>
             <Link to={'/publishers/' + publisher.id}><span>{publisher.name}</span></Link>
