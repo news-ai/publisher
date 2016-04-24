@@ -1,7 +1,8 @@
 import {
   REQUEST_ARTICLES,
   RECEIVE_ARTICLES,
-  TOGGLE_STAR
+  TOGGLE_STAR,
+  RECEIVE_STARRED_FEED
 } from '../constants/AppConstants';
 
 export function requestArticles() {
@@ -26,7 +27,7 @@ export function fetchArticle(articleId) {
   };
 }
 
-function flipStar(articleId) {
+export function flipStar(articleId) {
   return {
     type: TOGGLE_STAR,
     articleId
@@ -34,8 +35,33 @@ function flipStar(articleId) {
 }
 
 export function toggleStar(articleId) {
-  return (dispatch) => {
-    return fetch(`${window.CONTEXT_API_BASE}/articles/${articleId}/toggle_star`, { credentials: 'include'})
-    .then( response => (response.status === 200) ? dispatch(flipStar(articleId)) : null);
+  return dispatch => {
+    return fetch(`${window.CONTEXT_API_BASE}/articles/${articleId}/toggle_star`, { credentials: 'include' })
+    .then( response => response.status === 200 ? dispatch(flipStar(articleId)) : null);
   };
 }
+
+export function receiveStarredArticles(articles, next) {
+  return {
+    type: RECEIVE_STARRED_FEED,
+    articles,
+    next
+  };
+}
+
+export function fetchStarredFeed() {
+  return dispatch => {
+    dispatch(requestArticles());
+    return fetch(`${window.CONTEXT_API_BASE}/articles/starred`, { credentials: 'include' })
+    .then( response => response.text())
+    .then( body => {
+      const json = JSON.parse(body);
+      Promise.all([
+        dispatch(receiveArticles(json.results)),
+        dispatch(receiveStarredArticles(json.results, json.next)),
+      ]);
+    });
+  };
+}
+
+

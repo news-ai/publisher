@@ -25,6 +25,7 @@ class StarredFeed extends Component {
 
     return (
       <div className='container article-list-container'>
+      <h4>Starred Feed</h4>
       {
         articleIsReceiving && articles.length === 0 ? articleLoading :
         <ArticleList articles={articles} />
@@ -37,12 +38,10 @@ class StarredFeed extends Component {
 
 const mapStateToProps = state => {
   return {
-    articles: state.personReducer.discovery.discoveredArticleIds.map( id => state.articleReducer[id]),
-    articleIds: state.personReducer.discovery.discoveredArticleIds,
-    next: state.personReducer.discovery.next,
+    articles: state.articleReducer.starred.starredArticleIds.map( id => state.articleReducer[id]),
+    articleIds: state.articleReducer.starred.starredArticleIds,
+    next: state.articleReducer.starred.next,
     articleIsReceiving: state.articleReducer.isReceiving,
-    discoveryUrl: state.personReducer.discovery.url,
-    discoveryReceiving: state.personReducer.discovery.isReceiving,
   };
 };
 

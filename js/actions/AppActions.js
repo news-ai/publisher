@@ -49,6 +49,10 @@ export function toggleStar(articleId) {
   return articleActions.toggleStar(articleId);
 }
 
+export function fetchStarredFeed() {
+  return articleActions.fetchStarredFeed();
+}
+
 export function postArticle() {
   return {
     type: POST_DISCOVERY_ARTICLE,

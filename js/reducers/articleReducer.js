@@ -2,6 +2,7 @@ import {
   REQUEST_ARTICLES,
   RECEIVE_ARTICLES,
   TOGGLE_STAR,
+  RECEIVE_STARRED_FEED,
 } from '../constants/AppConstants';
 import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
@@ -34,6 +35,13 @@ function articleReducer(state = initialState.articleReducer, action) {
       return obj;
     case TOGGLE_STAR:
       obj[action.articleId].starred = obj[action.articleId].starred === null ? true : !obj[action.articleId].starred;
+      return obj;
+    case RECEIVE_STARRED_FEED:
+      obj.starred.starredArticleIds = [
+        ...state.starred.starredArticleIds,
+        ...action.articles.map( article => article.id)
+      ];
+      obj.starred.next = action.next === null ? undefined : action.next;
       return obj;
     default:
       return state;
