@@ -6,8 +6,12 @@ function Navigation({isLogin}) {
     <div>
     <Link to={'/'}><span id='projectName'>NewsAI</span></Link>
     {
-    	isLogin ?
-    	<Link to={'/discovery'}><span style={{ margin: '5px' }}>Add Article</span></Link>
+    	isLogin ? (
+            <div>
+                <Link to={'/discovery'}><span style={{ margin: '5px' }}>Add Article</span></Link>
+                <Link to={'/starred'}><span style={{ margin: '5px' }}>Starred</span></Link>
+            </div>
+            )
     	: null
     }
   	</div>

@@ -74,8 +74,8 @@ const mapDispatchToProps = (dispatch, props) => {
 };
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
-  let {next, entityId} = stateProps;
-  let {dispatch} = dispatchProps;
+  const {next, entityId} = stateProps;
+  const {dispatch} = dispatchProps;
   return {
     ...stateProps,
     onScrollBottom: (ev) => {

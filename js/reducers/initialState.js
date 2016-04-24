@@ -14,7 +14,10 @@ export const initialState = {
     isReceiving: false
   },
   articleReducer: {
-    isReceiving: false
+    isReceiving: false,
+    starred: {
+      starredArticleIds: [],
+    }
   },
   personReducer: {
     isReceiving: false,

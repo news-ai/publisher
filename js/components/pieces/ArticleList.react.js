@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import ArticleListItem from './ArticleListItem.react';
+import ArticleListItem from '../containers/ArticleListItem.react';
 
 function ArticleList({articles}) {
   return (
@@ -7,12 +7,9 @@ function ArticleList({articles}) {
         <div className='row article-list-categories'>
         </div>
         <div>
-        {articles.map((article, i) => {
-      return (<ArticleListItem
-        key={i}
-        {...article}
-        />);
-    })}
+        {
+          articles.map((article, i) => <ArticleListItem key={i} {...article} />)
+        }
         </div>
       </div>
     );
