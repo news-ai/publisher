@@ -44,7 +44,7 @@ class Article extends Component {
                         <span style={{fontWeight: 'bold'}}>Summary: </span>
                         {article.summary}
                         </p>
-                        <p>Link: <a href={article.url}>{article.url}</a></p>
+                        <p>Link: <a target='_blank' href={article.url}>{article.url}</a></p>
                     </div>) : articleLoading
                 }
                 </div>
@@ -54,7 +54,7 @@ class Article extends Component {
                 <h5>Entities</h5>
                 {
                   entities ? entities.length > 0 ?
-                  <EntityList entities={entities} entityScores={entityScores} /> : entitiesProcessing
+                    <EntityList entities={entities} entityScores={entityScores} /> : entitiesProcessing
                   : entitiesLoading
                 }
                 </div>
@@ -69,8 +69,8 @@ const mapStateToProps = (state, props) => {
   return {
     article: article,
     articleId: props.params.articleId,
-    entities: article ? article.entity_scores.map((score) => score.entity) : undefined,
-    entityScores: article ? article.entity_scores.map((obj) => obj.score) : undefined,
+    entities: article ? article.entity_scores.map( score => score.entity) : undefined,
+    entityScores: article ? article.entity_scores.map( obj => obj.score) : undefined,
   };
 };
 
