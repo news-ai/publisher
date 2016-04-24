@@ -22,8 +22,6 @@ class DiscoveryFeed extends Component {
     const { articles, articleIsReceiving, next, onScrollBottom } = this.props;
     const articleLoading = <CenterLoading name='articles'/>;
     
-    if (next === undefined && articles.length > 0) window.removeEventListener('scroll', onScrollBottom);
-
     return (
       <div className='container article-list-container'>
         <ArticleInputBar
@@ -55,17 +53,27 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onScrollBottom: ev => {
-      ev.preventDefault();
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) dispatch(actionCreators.fetchDiscoveryFeed());
-    },
     discoveryInputHandler: url => dispatch(actionCreators.updateDiscoveryInput(url)),
     discoverySubmitHandler: _ => dispatch(actionCreators.addDiscoveryArticle()),
     dispatch: action => dispatch(action),
   };
 };
 
+const mergeProps = (stateProps, dispatchProps, ownProps) => {
+  const {next} = stateProps;
+  const {dispatch} = dispatchProps;
+  return {
+    ...stateProps,
+    onScrollBottom: ev => {
+      ev.preventDefault();
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && next) dispatch(actionCreators.fetchDiscoveryFeed());
+    },
+    dispatch: action => dispatch(action)
+  };
+};
+
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(DiscoveryFeed);
