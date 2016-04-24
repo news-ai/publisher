@@ -32,6 +32,7 @@ class DiscoveryFeed extends Component {
         />
       {
         articleIsReceiving && articles.length === 0 ? articleLoading :
+        articles.length === 0 ? <span>EMPTY FEED</span> :
         <ArticleList articles={articles} />
       }
       {(articles.length > 0 && next && articleIsReceiving) ? <AdditionalLoading name='articles are' /> : null}
