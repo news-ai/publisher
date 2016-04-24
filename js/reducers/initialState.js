@@ -24,7 +24,8 @@ export const initialState = {
     discovery: {
       discoveredArticleIds: [],
       url: '',
-      isReceiving: false
+      isReceiving: false,
+      didInvalidate: false,
     },
   }
 };

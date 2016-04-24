@@ -19,13 +19,14 @@ class DiscoveryFeed extends Component {
   }
 
   render() {
-    const { articles, articleIsReceiving, next, onScrollBottom } = this.props;
+    const { articles, articleIsReceiving, next, onScrollBottom, discovery } = this.props;
     const articleLoading = <CenterLoading name='articles'/>;
     
     return (
       <div className='container article-list-container'>
         <ArticleInputBar
-        url={this.props.discoveryUrl}
+        url={this.props.discovery.url}
+        didInvalidate={this.props.discovery.didInvalidate}
         onClickHandler={this.props.discoverySubmitHandler}
         inputHandler={this.props.discoveryInputHandler}
         isReceiving={this.props.discoveryReceiving}
@@ -47,8 +48,8 @@ const mapStateToProps = state => {
     articleIds: state.personReducer.discovery.discoveredArticleIds,
     next: state.personReducer.discovery.next,
     articleIsReceiving: state.articleReducer.isReceiving,
-    discoveryUrl: state.personReducer.discovery.url,
     discoveryReceiving: state.personReducer.discovery.isReceiving,
+    discovery: state.personReducer.discovery,
   };
 };
 
@@ -65,11 +66,11 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
   const {dispatch} = dispatchProps;
   return {
     ...stateProps,
+    ...dispatchProps,
     onScrollBottom: ev => {
       ev.preventDefault();
       if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight && next) dispatch(actionCreators.fetchDiscoveryFeed());
     },
-    dispatch: action => dispatch(action)
   };
 };
 

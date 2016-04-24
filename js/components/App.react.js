@@ -16,7 +16,7 @@ class App extends Component {
           <div className='container'>
             <Navigation isLogin={this.props.isLogin} />
           </div>
-        { 
+        {
           this.props.data.personReducer.person ?
           this.props.children :
           this.props.data.personReducer.isReceiving ?

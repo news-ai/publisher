@@ -72,27 +72,6 @@ export function failPostedArticle() {
   };
 }
 
-export function addDiscoveryArticle() {
-  return (dispatch, getState) => {
-    dispatch(postArticle());
-    fetch(`https://news-discovery1.newsai.org/discovery`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        'url': getState().personReducer.discovery.url,
-        'added_by': getState().personReducer.person.id,
-      })
-    })
-    .then( response => response.status === 200 ?
-      response.text() : false)
-    .then( body => body ?
-      dispatch(receivePostedArticle(JSON.parse(body))) : dispatch(failPostedArticle()));
-  };
-}
-
-
 export function receiveDiscoveryFeed(articles, next) {
   return {
     type: RECEIVE_DISCOVERY_ARTICLES,
@@ -120,6 +99,28 @@ export function fetchDiscoveryFeed() {
           dispatch(receiveDiscoveryFeed(json.results, json.next)),
         ]);
       });
+  };
+}
+
+export function addDiscoveryArticle() {
+  return (dispatch, getState) => {
+    dispatch(postArticle());
+    fetch(`https://news-discovery1.newsai.org/discovery`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'url': getState().personReducer.discovery.url,
+        'added_by': getState().personReducer.person.id,
+      })
+    })
+    .then( response => {
+      return response.status === 200 ?
+      response.text() : false; }
+      )
+    .then( body => body ?
+      Promise.all([dispatch(receivePostedArticle(JSON.parse(body))), dispatch(fetchDiscoveryFeed())]) : dispatch(failPostedArticle()));
   };
 }
 
