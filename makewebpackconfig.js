@@ -11,6 +11,8 @@ var entry, jsLoaders, plugins, cssLoaders;
 if (options.prod) {
   // Entry
   entry = [
+    path.resolve(__dirname, 'js/config.shared.js'),
+    path.resolve(__dirname, 'js/config.prod.js'),
     path.resolve(__dirname, 'js/app.js') // Start with js/app.js...
   ];
   cssLoaders = ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader');
@@ -51,7 +53,9 @@ if (options.prod) {
   entry = [
     "webpack-dev-server/client?http://localhost:3000", // Needed for hot reloading
     "webpack/hot/only-dev-server", // See above
-    path.resolve(__dirname, 'js/app.js') // Start with js/app.js...
+    path.resolve(__dirname, 'js/config.shared.js'),
+    path.resolve(__dirname, 'js/config.dev.js'),
+    path.resolve(__dirname, 'js/app.js')
   ];
   cssLoaders = 'style-loader!css-loader!postcss-loader';
   // Only plugin is the hot module replacement plugin
