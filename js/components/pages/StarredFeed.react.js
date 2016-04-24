@@ -28,7 +28,7 @@ class StarredFeed extends Component {
     
     return (
       <div className='container article-list-container'>
-      <h4>Starred Feed</h4>
+      <span style={{fontSize: '2em'}}>Starred Feed</span>
       {
         articleIsReceiving && articles.length === 0 ? articleLoading :
         articles.length === 0 ? <span>EMPTY FEED</span> :

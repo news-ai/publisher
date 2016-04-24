@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 const moment = require('moment-timezone');
 
-function ArticleListItem({id, name, url, summary, added_at, publisher, entity_scores, starred, toggleStar, removeStar}) {
+function ArticleListItem({id, name, url, summary, added_at, publisher, entity_scores, starred, toggleStar}) {
   const timestring = moment(added_at).tz('America/New_York').format('MMM D, YYYY hh:mm A');
   const star = starred ? 'fa fa-star fa-lg starred pull-right star' : 'fa fa-star-o fa-lg pull-right star';
   return (

@@ -8,24 +8,24 @@ import CenterLoading from '../pieces/CenterLoading.react';
 
 class Publisher extends Component {
   componentDidMount() {
-    let {dispatch, publisherId, publisher, publisherArticles, onScrollBottom} = this.props;
+    const { dispatch, publisherId, publisher, publisherArticles, onScrollBottom } = this.props;
     if (!publisher) dispatch(actionCreators.fetchPublisherAndArticles(publisherId));
     if (publisher && !publisherArticles) dispatch(actionCreators.fetchPublisherArticles(publisherId));
     window.addEventListener('scroll', onScrollBottom);
   }
 
   componentWillUnmount() {
-    let {onScrollBottom} = this.props;
+    const { onScrollBottom } = this.props;
     window.removeEventListener('scroll', onScrollBottom);
   }
 
   _removeScroll() {
-    let {onScrollBottom} = this.props;
+    const {onScrollBottom} = this.props;
     window.removeEventListener('scroll', onScrollBottom);
   }
 
   render() {
-    let {publisher, publisherArticles, onScrollBottom, next, articleIsReceiving} = this.props;
+    const {publisher, publisherArticles, onScrollBottom, next, articleIsReceiving} = this.props;
     const publisherLoading = (<span>The publisher is loading</span>);
     const articleLoading = <CenterLoading name='articles' />;
     if (next === 0) this._removeScroll();
