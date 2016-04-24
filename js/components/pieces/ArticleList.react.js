@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import ArticleListItem from './ArticleListItem.react';
+import ArticleListItem from '../containers/ArticleListItem.react';
 
 function ArticleList({articles}) {
   return (

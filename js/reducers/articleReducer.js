@@ -32,9 +32,9 @@ function articleReducer(state = initialState.articleReducer, action) {
         obj[action.json.id].basic_summary = action.json.summary;
       }
       return obj;
-    // case TOGGLE_STAR:
-    //   obj[action.articleId].starred = !obj[action.articleId].starred;
-    //   return obj;
+    case TOGGLE_STAR:
+      obj[action.articleId].starred = obj[action.articleId].starred === null ? true : !obj[action.articleId].starred;
+      return obj;
     default:
       return state;
     };
