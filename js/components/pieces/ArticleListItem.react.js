@@ -27,7 +27,7 @@ function ArticleListItem({id, name, url, summary, added_at, publisher, entity_sc
           {summary}
           </span>
           <div>
-            <a style={{fontSize: '0.8em'}} href={url}>{url}</a>
+            <a target='_blank' style={{fontSize: '0.8em'}} href={url}>{url}</a>
             <span className='pull-right article-list-item-date'>{timestring}</span>
           </div>
           </div>
