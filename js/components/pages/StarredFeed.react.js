@@ -7,9 +7,9 @@ import CenterLoading from '../pieces/CenterLoading.react';
 
 class StarredFeed extends Component {
   componentDidMount() {
-    const { articles, dispatch, onScrollBottom } = this.props;
+    const { articleIds, dispatch, onScrollBottom } = this.props;
     window.addEventListener('scroll', onScrollBottom);
-    if (articles.length === 0) dispatch(actionCreators.fetchStarredFeed());
+    if (articleIds.length === 0) dispatch(actionCreators.fetchStarredFeed());
   }
 
   componentWillUnmount() {
@@ -17,12 +17,15 @@ class StarredFeed extends Component {
     window.removeEventListener('scroll', onScrollBottom);
   }
 
+  _removeScroll() {
+    const {onScrollBottom} = this.props;
+    window.removeEventListener('scroll', onScrollBottom);
+  }
+
   render() {
-    const { articles, articleIsReceiving, next, onScrollBottom } = this.props;
+    const { articles, articleIsReceiving, next } = this.props;
     const articleLoading = <CenterLoading name='articles'/>;
-
-    if (next === undefined && articles.length > 0) window.removeEventListener('scroll', onScrollBottom);
-
+    
     return (
       <div className='container article-list-container'>
       <h4>Starred Feed</h4>
@@ -47,15 +50,26 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
+    dispatch: action => dispatch(action),
+  };
+};
+
+
+const mergeProps = (stateProps, dispatchProps, ownProps) => {
+  const {next} = stateProps;
+  const {dispatch} = dispatchProps;
+  return {
+    ...stateProps,
     onScrollBottom: ev => {
       ev.preventDefault();
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) dispatch(actionCreators.fetchStarredFeed());
+      if ( ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && next ) dispatch(actionCreators.fetchStarredFeed());
     },
-    dispatch: action => dispatch(action),
+    dispatch: action => dispatch(action)
   };
 };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(StarredFeed);

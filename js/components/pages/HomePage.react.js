@@ -19,7 +19,6 @@ class HomePage extends Component {
 
   render() {
     const { articles, articleIsReceiving, next } = this.props;
-    // const loading = (<span>The feed is loading...</span>);
 
     return (
       <div className='container article-list-container'>

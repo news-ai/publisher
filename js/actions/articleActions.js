@@ -34,13 +34,6 @@ export function flipStar(articleId) {
   };
 }
 
-export function toggleStar(articleId) {
-  return dispatch => {
-    return fetch(`${window.CONTEXT_API_BASE}/articles/${articleId}/toggle_star`, { credentials: 'include' })
-    .then( response => response.status === 200 ? dispatch(flipStar(articleId)) : null);
-  };
-}
-
 export function receiveStarredArticles(articles, next) {
   return {
     type: RECEIVE_STARRED_FEED,
@@ -48,6 +41,7 @@ export function receiveStarredArticles(articles, next) {
     next
   };
 }
+
 
 export function fetchStarredFeed() {
   return dispatch => {
@@ -61,6 +55,15 @@ export function fetchStarredFeed() {
         dispatch(receiveStarredArticles(json.results, json.next)),
       ]);
     });
+  };
+}
+
+
+export function toggleStar(articleId) {
+  return dispatch => {
+    return fetch(`${window.CONTEXT_API_BASE}/articles/${articleId}/toggle_star`, { credentials: 'include' })
+    .then( response => response.status === 200 ? dispatch(flipStar(articleId)) : null)
+    .then( _ => dispatch(fetchStarredFeed()));
   };
 }
 

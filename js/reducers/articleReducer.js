@@ -35,6 +35,7 @@ function articleReducer(state = initialState.articleReducer, action) {
       return obj;
     case TOGGLE_STAR:
       obj[action.articleId].starred = obj[action.articleId].starred === null ? true : !obj[action.articleId].starred;
+      obj.starred.starredArticleIds = [];
       return obj;
     case RECEIVE_STARRED_FEED:
       obj.starred.starredArticleIds = [
