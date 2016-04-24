@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ArticleInputBar({url, inputHandler, onClickHandler, isReceiving}) {
+function ArticleInputBar({url, inputHandler, onClickHandler, isReceiving, didInvalidate}) {
   return (
     <div className='row' style={{
         marginBottom: '5px',
@@ -12,10 +12,13 @@ function ArticleInputBar({url, inputHandler, onClickHandler, isReceiving}) {
        <input
         className='u-max-full-width'
         type='text'
-        onKeyUp={ e => { (e.which === 13) ? onClickHandler() : null; }}
+        onKeyUp={ e => e.which === 13 ? onClickHandler() : null}
         onChange={ e => inputHandler(e.target.value)}
         defaultValue=''
         value={url}
+        style={{
+            border: didInvalidate ? '1px solid red' : null
+        }}
         ></input>
         <button onClick={ _ => onClickHandler()}>Submit</button>
 
