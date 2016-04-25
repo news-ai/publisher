@@ -40,6 +40,7 @@ import Author from './components/pages/Author.react';
 import Publisher from './components/pages/Publisher.react';
 import DiscoveryFeed from './components/pages/DiscoveryFeed.react';
 import StarredFeed from './components/pages/StarredFeed.react';
+import ReadLaterFeed from './components/pages/ReadLaterFeed.react';
 import App from './components/App.react';
 
 // Import the CSS file, which HtmlWebpackPlugin transfers to the build folder
@@ -66,6 +67,7 @@ ReactDOM.render(
           <Route path='/publishers/:publisherId' component={Publisher} />
           <Route path='/discovery' component={DiscoveryFeed} />
           <Route path='/starred' component={StarredFeed} />
+          <Route path='/read_later' component={ReadLaterFeed} />
         </Route>
         <Route path='*' component={NotFoundPage} />
       </Router>

@@ -17,6 +17,9 @@ export const initialState = {
     isReceiving: false,
     starred: {
       starredArticleIds: [],
+    },
+    readLater: {
+      readLaterArticleIds: [],
     }
   },
   personReducer: {

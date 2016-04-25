@@ -41,6 +41,14 @@ export function fetchArticle(articleId) {
   return articleActions.fetchArticle(articleId);
 }
 
+export function flipReadLater(articleId) {
+  return articleActions.flipReadLater(articleId);
+}
+
+export function toggleReadLater(articleId) {
+  return articleActions.toggleReadLater(articleId);
+}
+
 export function flipStar(articleId) {
   return articleActions.flipStar(articleId);
 }
@@ -51,6 +59,10 @@ export function toggleStar(articleId) {
 
 export function fetchStarredFeed() {
   return articleActions.fetchStarredFeed();
+}
+
+export function fetchReadLaterFeed() {
+  return articleActions.fetchReadLaterFeed();
 }
 
 export function postArticle() {
@@ -101,6 +113,7 @@ export function fetchDiscoveryFeed() {
       });
   };
 }
+
 
 export function addDiscoveryArticle() {
   return (dispatch, getState) => {

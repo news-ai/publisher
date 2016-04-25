@@ -2,15 +2,20 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 const moment = require('moment-timezone');
 
-function ArticleListItem({id, name, url, summary, added_at, publisher, entity_scores, starred, toggleStar}) {
+function ArticleListItem({id, name, url, summary, added_at, publisher, entity_scores, starred, toggleStar, read_later, toggleReadLater}) {
   const timestring = moment(added_at).tz('America/New_York').format('MMM D, YYYY hh:mm A');
-  const star = starred ? 'fa fa-star fa-lg starred pull-right star' : 'fa fa-star-o fa-lg pull-right star';
+  const star = starred || starred !== null ? 'fa fa-star fa-lg starred pull-right star' : 'fa fa-star-o fa-lg pull-right star';
   return (
     <div className='row article-body' key={id}>
       <div className='twelve columns'>
           <div className='article-name'>
             <Link style={{color: 'black', fontWeight: 550}} to={'/articles/' + id}><span>{name}</span></Link>
-            <i className={star} ariaHidden='true' onClick={ _ => toggleStar(id)}></i>
+            <i style={{
+              color: starred ? null : 'lightgray'
+            }} className={star} ariaHidden='true' onClick={ _ => toggleStar(id)}></i>
+            <i style={{
+              color: read_later || read_later !== null ? 'gray' : 'lightgray'
+            }} className='fa fa-book fa-lg pull-right' ariaHidden='true' onClick={ _ => toggleReadLater(id)}></i>
           </div>
           <div className='article-publisher'>
             <Link to={'/publishers/' + publisher.id}><span>{publisher.name}</span></Link>

@@ -9,10 +9,12 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		toggleStar: articleId => dispatch(actionCreators.toggleStar(articleId))
+		toggleStar: articleId => dispatch(actionCreators.toggleStar(articleId)),
+		toggleReadLater: articleId => dispatch(actionCreators.toggleReadLater(articleId))
 	};
 };
 
 export default connect(
 	mapStateToProps,
-	mapDispatchToProps)(ArticleListItem);
+	mapDispatchToProps
+	)(ArticleListItem);

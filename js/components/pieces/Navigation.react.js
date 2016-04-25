@@ -13,6 +13,7 @@ function Navigation({ isLogin }) {
             }}>
                 <Link to={'/discovery'}><span style={{ margin: '5px' }}>Add Article</span></Link>
                 <Link to={'/starred'}><span style={{ margin: '5px' }}>Starred</span></Link>
+                <Link to={'/read_later'}><span style={{ margin: '5px' }}>Read Later</span></Link>
             </div>
             )
     	: null
