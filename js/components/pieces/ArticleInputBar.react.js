@@ -5,12 +5,17 @@ function ArticleInputBar({url, inputHandler, onClickHandler, isReceiving, didInv
     <div className='row' style={{
         marginBottom: '5px',
         marginTop: '5px',
-        display: 'flex',
-        alignItems: 'center',
     }}>
-    <span style={{margin: '5px'}}>Put URL here: </span>
+    <span style={{
+        margin: '5px',
+        color: 'gray'
+    }}>Put article URL here to get summary and entities</span>
+        <div className='row' style={{
+            display: 'flex',
+            alignItems: 'center',
+        }}>
        <input
-        className='u-max-full-width'
+        className='u-full-width'
         type='text'
         onKeyUp={ e => e.which === 13 ? onClickHandler() : null}
         onChange={ e => inputHandler(e.target.value)}
@@ -18,15 +23,29 @@ function ArticleInputBar({url, inputHandler, onClickHandler, isReceiving, didInv
         value={url}
         style={{
             border: didInvalidate ? '1px solid red' : null
-        }}
-        ></input>
-        <button onClick={ _ => onClickHandler()}>Submit</button>
-
+        }}>
+        </input>
         { isReceiving ? <img style={{
             marginLeft: '5px',
+            marginRight: '5px',
             width: '30px',
             height: '30px',
-        }} src='../../img/default_loading.gif'></img> : null}
+        }} src='../../img/default_loading.gif'></img> :
+        <div style={{
+            marginLeft: '9px',
+            marginRight: '9px',
+            width: '29px',
+            height: '29px',
+        }}></div>}
+        <button style={{
+            border: didInvalidate ? '1px solid red' : null
+        }} onClick={ _ => onClickHandler()}>Submit</button>
+
+        </div>
+        { didInvalidate ? <span style={{
+            color: 'red',
+            position: 'absolute',
+        }}>Invalid.</span> : null }
     </div>
     );
 }
