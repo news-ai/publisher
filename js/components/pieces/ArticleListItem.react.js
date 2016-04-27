@@ -14,7 +14,7 @@ function ArticleListItem({id, name, url, summary, added_at, publisher, entity_sc
               color: starred ? null : 'lightgray'
             }} className={star} ariaHidden='true' onClick={ _ => toggleStar(id)}></i>
             <i style={{
-              color: read_later || read_later !== null ? 'gray' : 'lightgray'
+              color: read_later === true ? 'gray' : 'lightgray'
             }} className='fa fa-book fa-lg pull-right' ariaHidden='true' onClick={ _ => toggleReadLater(id)}></i>
           </div>
           <div className='article-publisher'>
