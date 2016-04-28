@@ -44,6 +44,7 @@ class Article extends Component {
                         <span style={{fontWeight: 'bold'}}>Summary: </span>
                         {article.summary}
                         </p>
+                        <span className='pull-right'>{article.added_at}</span>
                         <p>Link: <a target='_blank' href={article.url}>{article.url}</a></p>
                     </div>) : articleLoading
                 }
