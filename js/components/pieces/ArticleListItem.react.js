@@ -1,9 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-const moment = require('moment-timezone');
 
 function ArticleListItem({id, name, url, summary, added_at, publisher, entity_scores, starred, toggleStar, read_later, toggleReadLater}) {
-  const timestring = moment(added_at).tz('America/New_York').format('MMM D, YYYY hh:mm A');
   const star = starred || starred !== null ? 'fa fa-star fa-lg starred pull-right star' : 'fa fa-star-o fa-lg pull-right star';
   return (
     <div className='row article-body' key={id}>
@@ -33,7 +31,7 @@ function ArticleListItem({id, name, url, summary, added_at, publisher, entity_sc
           </span>
           <div>
             <a target='_blank' style={{fontSize: '0.8em'}} href={url}>{url}</a>
-            <span className='pull-right article-list-item-date'>{timestring}</span>
+            <span className='pull-right article-list-item-date'>{added_at}</span>
           </div>
           </div>
         </div>

@@ -2,16 +2,7 @@ import {
   REQUEST_AUTHOR,
   RECEIVE_AUTHOR,
   POST_DISCOVERY_ARTICLE,
-  DONE_POST_DISCOVERY_ARTICLE,
-  UPDATE_DISCOVERY_INPUT,
-  FAIL_POST_DISCOVERY_ARTICLE,
-  RECEIVE_DISCOVERY_ARTICLES,
 } from '../constants/AppConstants';
-
-import {
-  removeCache,
-  isJsonString,
-} from '../utils/assign';
 
 import * as loginActions from './loginActions';
 import * as publisherActions from './publisherActions';
@@ -19,6 +10,7 @@ import * as articleActions from './articleActions';
 import * as feedActions from './feedActions';
 import * as entityActions from './entityActions';
 import * as discoveryActions from './discoveryActions';
+import * as authorActions from './authorActions';
 
 // loginActions
 export function loginWithGoogle() {

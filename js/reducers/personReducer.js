@@ -43,7 +43,7 @@ function personReducer(state = initialState.personReducer, action) {
         ...state.discovery.discoveredArticleIds,
         ...action.articles.map( article => article.id)
       ];
-      obj.discovery.next = (action.next !== null) ? action.next : undefined;
+      obj.discovery.next = action.next !== null ? action.next : undefined;
       return obj;
     case FAIL_POST_DISCOVERY_ARTICLE:
       obj.discovery.didInvalidate = true;

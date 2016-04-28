@@ -13,10 +13,10 @@ export function requestArticles() {
   };
 }
 
-export function receiveArticles(json) {
+export function receiveArticles(articles) {
   return {
     type: RECEIVE_ARTICLES,
-    json
+    articles
   };
 }
 

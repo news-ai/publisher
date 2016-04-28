@@ -8,10 +8,12 @@ import {
 } from '../constants/AppConstants';
 import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
+const moment = require('moment-timezone');
 
 function extractSummary(summary) {
   return summary.split('.').map( sentence => sentence.concat('.'));
 }
+
 function articleReducer(state = initialState.articleReducer, action) {
   Object.freeze(state);
   let obj = assignToEmpty(state, {});
@@ -21,18 +23,21 @@ function articleReducer(state = initialState.articleReducer, action) {
       return obj;
     case RECEIVE_ARTICLES:
       obj.isReceiving = false;
-      if (Array.isArray(action.json)) {
-        action.json.map( article => {
+      const timezoneOffset = new Date().getTimezoneOffset() / 60;
+      if (Array.isArray(action.articles)) {
+        action.articles.map( article => {
           article.basic_summary = extractSummary(article.summary);
           // sort entity scores in every article
           obj[article.id] = assignToEmpty(article, {
-            entity_scores: article.entity_scores.sort( (a, b) => (a.score - b.score) * -1 )
+            entity_scores: article.entity_scores.sort( (a, b) => (a.score - b.score) * -1 ),
+            added_at: moment.utc(article.added_at).zone(timezoneOffset).format('MMM D, YYYY hh:mm A')
           });
         });
       } else {
-        obj[action.json.id] = action.json;
+        obj[action.articles.id] = action.articles;
         // obj[action.json.id].basic_summary = extractSummary(action.json.summary);
-        obj[action.json.id].basic_summary = action.json.summary;
+        obj[action.articles.id].basic_summary = action.articles.summary;
+        obj[action.articles.id].added_at = moment(action.articles.added_at).utcOffset(timezoneOffset).format('MMM D, YYYY hh:mm A');
       }
       return obj;
     case TOGGLE_STAR:
