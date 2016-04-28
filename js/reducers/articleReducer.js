@@ -43,24 +43,26 @@ function articleReducer(state = initialState.articleReducer, action) {
     case TOGGLE_STAR:
       obj[action.articleId].starred = obj[action.articleId].starred === null ? true : !obj[action.articleId].starred;
       obj.starred.starredArticleIds = [];
+      obj.starred.next = undefined;
       return obj;
     case TOGGLE_READ_LATER:
       obj[action.articleId].readLater = obj[action.articleId].readLater === null ? true : !obj[action.articleId].readLater;
       obj.readLater.readLaterArticleIds = [];
+      obj.readLater.next = undefined;
       return obj;
     case RECEIVE_STARRED_FEED:
       obj.starred.starredArticleIds = [
         ...state.starred.starredArticleIds,
         ...action.articles.map( article => article.id)
       ];
-      obj.starred.next = action.next === null ? undefined : action.next;
+      obj.starred.next = action.next;
       return obj;
     case RECEIVE_READ_LATER_FEED:
       obj.readLater.readLaterArticleIds = [
         ...state.readLater.readLaterArticleIds,
         ...action.articles.map( article => article.id)
       ];
-      obj.readLater.next = action.next === null ? undefined : action.next;
+      obj.readLater.next = action.next;
       return obj;
     default:
       return state;

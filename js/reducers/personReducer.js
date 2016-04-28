@@ -37,6 +37,7 @@ function personReducer(state = initialState.personReducer, action) {
       obj.discovery.isReceiving = false;
       obj.discovery.url = '';
       obj.discovery.discoveredArticleIds = [];
+      obj.discovery.next = undefined;
       return obj;
     case RECEIVE_DISCOVERY_ARTICLES:
       obj.discovery.discoveredArticleIds = [

@@ -53,9 +53,11 @@ export function receiveStarredArticles(articles, next) {
 
 
 export function fetchStarredFeed() {
-  return dispatch => {
+  return (dispatch, getState) => {
+    if (getState().articleReducer.starred.next === null || getState().articleReducer.isReceiving) return;
     dispatch(requestArticles());
-    return fetch(`${window.CONTEXT_API_BASE}/articles/starred/`, { credentials: 'include' })
+    const fetchLink = getState().articleReducer.starred.next || `${window.CONTEXT_API_BASE}/articles/starred/`;
+    return fetch(fetchLink, { credentials: 'include' })
     .then( response => response.text())
     .then( body => {
       const json = JSON.parse(body);
@@ -77,9 +79,11 @@ export function receiveReadLaterArticles(articles, next) {
 
 
 export function fetchReadLaterFeed() {
-  return dispatch => {
+  return (dispatch, getState) => {
+    if (getState().articleReducer.readLater.next === null || getState().articleReducer.isReceiving) return;
     dispatch(requestArticles());
-    return fetch(`${window.CONTEXT_API_BASE}/articles/read_later/`, { credentials: 'include' })
+    const fetchLink = getState().articleReducer.readLater.next || `${window.CONTEXT_API_BASE}/articles/read_later/`;
+    return fetch(fetchLink, { credentials: 'include' })
     .then( response => response.text())
     .then( body => {
       const json = JSON.parse(body);

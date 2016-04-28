@@ -57,13 +57,12 @@ const mapDispatchToProps = dispatch => {
 
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
-  const {next} = stateProps;
   const {dispatch} = dispatchProps;
   return {
     ...stateProps,
     onScrollBottom: ev => {
       ev.preventDefault();
-      if ( ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && next ) dispatch(actionCreators.fetchReadLaterFeed());
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) dispatch(actionCreators.fetchReadLaterFeed());
     },
     dispatch: action => dispatch(action)
   };

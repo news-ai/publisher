@@ -7,7 +7,7 @@ import CenterLoading from '../pieces/CenterLoading.react';
 
 class StarredFeed extends Component {
   componentDidMount() {
-    const { articleIds, dispatch, onScrollBottom } = this.props;
+    const { articleIds, dispatch, onScrollBottom, next } = this.props;
     window.addEventListener('scroll', onScrollBottom);
     if (articleIds.length === 0) dispatch(actionCreators.fetchStarredFeed());
   }
@@ -57,13 +57,12 @@ const mapDispatchToProps = dispatch => {
 
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
-  const {next} = stateProps;
-  const {dispatch} = dispatchProps;
+  const { dispatch } = dispatchProps;
   return {
     ...stateProps,
     onScrollBottom: ev => {
       ev.preventDefault();
-      if ( ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && next ) dispatch(actionCreators.fetchStarredFeed());
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) dispatch(actionCreators.fetchStarredFeed());
     },
     dispatch: action => dispatch(action)
   };
