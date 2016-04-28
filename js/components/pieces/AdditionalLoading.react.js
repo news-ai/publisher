@@ -9,7 +9,9 @@ function AdditionalLoading({name}) {
       width: '100% !important',
       position: 'absolute',
       textAlign: 'center',
-      borderRadius: '25px'
+      borderRadius: '25px',
+      marginTop: '12px',
+      marginBottom: '12px'
     }}>The {name} loading</div>
     );
 }
