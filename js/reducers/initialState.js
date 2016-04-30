@@ -11,7 +11,7 @@ export const initialState = {
     isReceiving: false
   },
   publisherReducer: {
-    isReceiving: false
+    isReceiving: false,
   },
   articleReducer: {
     isReceiving: false,

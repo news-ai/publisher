@@ -3,6 +3,7 @@ import {
   REQUEST_PUBLISHER,
   REQUEST_PUBLISHER_ARTICLES,
   RECEIVE_PUBLISHER_ARTICLES,
+  SET_NEXT,
 } from '../constants/AppConstants';
 import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
@@ -28,6 +29,9 @@ function publisherReducer(state = initialState.publisherReducer, action) {
       ];
       obj[parseInt(action.publisherId, 10)].next = (action.next === null) ? undefined : action.next;
       obj.isReceiving = false;
+      return obj;
+    case SET_NEXT:
+      obj.next = action.next;
       return obj;
     default:
       return state;
