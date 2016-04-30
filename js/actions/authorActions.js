@@ -3,11 +3,6 @@ import {
   RECEIVE_AUTHOR,
 } from '../constants/AppConstants';
 
-import {
-  removeCache,
-  isJsonString,
-} from '../utils/assign';
-
 export function requestAuthor() {
   return {
     type: REQUEST_AUTHOR

@@ -1,9 +1,3 @@
-import {
-  REQUEST_AUTHOR,
-  RECEIVE_AUTHOR,
-  POST_DISCOVERY_ARTICLE,
-} from '../constants/AppConstants';
-
 import * as loginActions from './loginActions';
 import * as publisherActions from './publisherActions';
 import * as articleActions from './articleActions';
@@ -12,184 +6,44 @@ import * as entityActions from './entityActions';
 import * as discoveryActions from './discoveryActions';
 import * as authorActions from './authorActions';
 
-// loginActions
-export function loginWithGoogle() {
-  return loginActions.loginWithGoogle();
-}
-
-export function fetchPerson() {
-  return loginActions.fetchPerson();
-}
-
-// articleActions
-export function requestArticles() {
-  return articleActions.requestArticles();
-}
-
-export function receiveArticles(json) {
-  return articleActions.receiveArticles(json);
-}
-
-export function fetchArticle(articleId) {
-  return articleActions.fetchArticle(articleId);
-}
-
-export function flipReadLater(articleId) {
-  return articleActions.flipReadLater(articleId);
-}
-
-export function toggleReadLater(articleId) {
-  return articleActions.toggleReadLater(articleId);
-}
-
-export function flipStar(articleId) {
-  return articleActions.flipStar(articleId);
-}
-
-export function toggleStar(articleId) {
-  return articleActions.toggleStar(articleId);
-}
-
-export function fetchStarredFeed() {
-  return articleActions.fetchStarredFeed();
-}
-
-export function fetchReadLaterFeed() {
-  return articleActions.fetchReadLaterFeed();
-}
-
-export function postArticle() {
-  return {
-    type: POST_DISCOVERY_ARTICLE,
-  };
-}
-
-export function receivePostedArticle(body) {
-  return discoveryActions.receivePostedArticle(body);
-}
-
-export function failPostedArticle() {
-  return discoveryActions.failPostedArticle();
-}
-
-export function receiveDiscoveryFeed(articles, next) {
-  return discoveryActions.receiveDiscoveryFeed(articles, next);
-}
-
-export function fetchDiscoveryFeed() {
-  return discoveryActions.fetchDiscoveryFeed();
-}
-
-
-export function addDiscoveryArticle() {
-  return discoveryActions.addDiscoveryArticle();
-}
-
-export function updateDiscoveryInput(url) {
-  return discoveryActions.updateDiscoveryInput(url);
-}
-
-
-export function doneFetchingArticleEntities() {
-  return entityActions.doneFetchingArticleEntities();
-}
-
-export function requestArticleEntities(articleId) {
-  return entityActions.requestArticleEntities(articleId);
-}
-
-export function requestEntity(entityId) {
-  return entityActions.requestEntity(entityId);
-}
-
-export function receiveEntity(json) {
-  return entityActions.receiveEntity(json);
-}
-
-export function requestEntityArticles() {
-  return entityActions.requestEntityArticles();
-}
-
-export function receiveEntityArticles(json, entityId, next) {
-  return entityActions.receiveEntityArticles(json, entityId, next);
-}
-
-export function fetchEntityArticles(entityId) {
-  return entityActions.fetchEntityArticles(entityId);
-}
-
-export function fetchEntity(entityId) {
-  return entityActions.fetchEntity(entityId);
-}
-
-export function fetchEntityAndArticles(entityId) {
-  return entityActions.fetchEntityAndArticles(entityId);
-}
-
-export function fetchArticleEntities(articleId) {
-  return entityActions.fetchArticleEntities(articleId);
-}
-
-export function requestFeed() {
-  return feedActions.requestFeed();
-}
-
-export function receiveFeed(json, next) {
-  return feedActions.receiveFeed(json, next);
-}
-
-
-export function fetchFeed() {
-  return feedActions.fetchFeed();
-}
-
-export function requestAuthor() {
-  return {
-    type: REQUEST_AUTHOR
-  };
-}
-
-export function receiveAuthor(json) {
-  return {
-    type: RECEIVE_AUTHOR,
-    json
-  };
-}
-
-export function fetchAuthor(authorId) {
-  return dispatch => {
-    dispatch(requestAuthor);
-    fetch(`${window.CONTEXT_API_BASE}/authors/${authorId}/`, { credentials: 'include' })
-      .then( response => response.text())
-      .then( body => dispatch(receiveAuthor(JSON.parse(body))));
-  };
-}
-
-export function requestPublisherArticles() {
-  return publisherActions.requestPublisherArticles();
-}
-
-// publisherActions
-export function requestPublisher() {
-  return publisherActions.requestPublisher();
-}
-
-export function receivePublisher(json) {
-  return publisherActions.receivePublisher(json);
-}
-
-export function fetchPublisher(publisherId) {
-  return publisherActions.fetchPublisher(publisherId);
-}
-
-export function receivePublisherArticles(json, publisherId, next) {
-  return publisherActions.receivePublisherArticles(json, publisherId, next);
-}
-
-export function fetchPublisherArticles(publisherId) {
-  return publisherActions.fetchPublisherArticles(publisherId);
-}
-
-export function fetchPublisherAndArticles(publisherId) {
-  return publisherActions.fetchPublisherAndArticles(publisherId);
-}
+export const loginWithGoogle = _ => loginActions.loginWithGoogle();
+export const fetchPerson = _ => loginActions.fetchPerson();
+export const requestArticles = _ => articleActions.requestArticles();
+export const receiveArticles = json => articleActions.receiveArticles(json);
+export const fetchArticle = articleId => articleActions.fetchArticle(articleId);
+export const flipReadLater = articleId => articleActions.flipReadLater(articleId);
+export const toggleReadLater = articleId => articleActions.toggleReadLater(articleId);
+export const flipStar = articleId => articleActions.flipStar(articleId);
+export const toggleStar = articleId => articleActions.toggleStar(articleId);
+export const fetchStarredFeed = _ => articleActions.fetchStarredFeed();
+export const fetchReadLaterFeed = _ => articleActions.fetchReadLaterFeed();
+export const postArticle = _ => discoveryActions.postArticle();
+export const receivePostedArticle = body => discoveryActions.receivePostedArticle(body);
+export const failPostedArticle = _ => discoveryActions.failPostedArticle();
+export const receiveDiscoveryFeed = (articles, next) => discoveryActions.receiveDiscoveryFeed(articles, next);
+export const fetchDiscoveryFeed = _ => discoveryActions.fetchDiscoveryFeed();
+export const addDiscoveryArticle = _ => discoveryActions.addDiscoveryArticle();
+export const updateDiscoveryInput = url => discoveryActions.updateDiscoveryInput(url);
+export const doneFetchingArticleEntities = _ => entityActions.doneFetchingArticleEntities();
+export const requestArticleEntities = articleId => entityActions.requestArticleEntities(articleId);
+export const requestEntity = entityId => entityActions.requestEntity(entityId);
+export const receiveEntity = json => entityActions.receiveEntity(json);
+export const requestEntityArticles = _ => entityActions.requestEntityArticles();
+export const receiveEntityArticles = (json, entityId, next) => entityActions.receiveEntityArticles(json, entityId, next);
+export const fetchEntityArticles = entityId => entityActions.fetchEntityArticles(entityId);
+export const fetchEntity = entityId => entityActions.fetchEntity(entityId);
+export const fetchEntityAndArticles = entityId => entityActions.fetchEntityAndArticles(entityId);
+export const fetchArticleEntities = articleId => entityActions.fetchArticleEntities(articleId);
+export const requestFeed = _ => feedActions.requestFeed();
+export const receiveFeed = (json, next) => feedActions.receiveFeed(json, next);
+export const fetchFeed = _ => feedActions.fetchFeed();
+export const requestAuthor = _ => authorActions.requestAuthor();
+export const receiveAuthor = json => authorActions.receiveAuthor(json);
+export const fetchAuthor = authorId => authorActions.fetchAuthor(authorId);
+export const requestPublisherArticles = _ => publisherActions.requestPublisherArticles();
+export const requestPublisher = _ => publisherActions.requestPublisher();
+export const receivePublisher = json => publisherActions.receivePublisher(json);
+export const fetchPublisher = publisherId => publisherActions.fetchPublisher(publisherId);
+export const receivePublisherArticles = (json, publisherId, next) => publisherActions.receivePublisherArticles(json, publisherId, next);
+export const fetchPublisherArticles = publisherId => publisherActions.fetchPublisherArticles(publisherId);
+export const fetchPublisherAndArticles = publisherId => publisherActions.fetchPublisherAndArticles(publisherId);
