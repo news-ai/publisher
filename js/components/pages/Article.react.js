@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 
 class Article extends Component {
   componentDidMount() {
+    mixpanel.people.increment("articles read");
     const {dispatch, article, articleId} = this.props;
     if (article === undefined) dispatch(actionCreators.fetchArticle(articleId));
   }
