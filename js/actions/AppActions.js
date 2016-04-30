@@ -56,4 +56,17 @@ export const fetchPublisher = publisherId => publisherActions.fetchPublisher(pub
 export const receivePublisherArticles = (json, publisherId, next) => publisherActions.receivePublisherArticles(json, publisherId, next);
 export const fetchPublisherArticles = publisherId => publisherActions.fetchPublisherArticles(publisherId);
 export const fetchPublisherAndArticles = publisherId => publisherActions.fetchPublisherAndArticles(publisherId);
+
 export const fetchAllPublishers = _ => publisherActions.fetchAllPublishers();
+export const filterPublishers = word => publisherActions.filterPublishers(word);
+
+
+
+
+
+
+
+
+
+
+

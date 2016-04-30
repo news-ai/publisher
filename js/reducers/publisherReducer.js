@@ -4,6 +4,10 @@ import {
   REQUEST_PUBLISHER_ARTICLES,
   RECEIVE_PUBLISHER_ARTICLES,
   SET_NEXT,
+  FILTER_PUBLISHERS,
+  ROLLOVER_PUBLISHERS,
+  SELECT_PUBLISHER,
+  DELETE_PUBLISHER,
 } from '../constants/AppConstants';
 import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
@@ -11,11 +15,15 @@ import { initialState } from './initialState';
 function publisherReducer(state = initialState.publisherReducer, action) {
   Object.freeze(state);
   let obj = assignToEmpty(state, {});
+  obj.searchInput = assignToEmpty(state.searchInput, {});
   switch (action.type) {
     case REQUEST_PUBLISHER:
       obj.isReceiving = true;
       return obj;
     case RECEIVE_PUBLISHER:
+      if (!obj[parseInt(action.json.id, 10)]) {
+        obj.publishers = [...state.publishers, action.json];
+      }
       obj[parseInt(action.json.id, 10)] = action.json;
       obj[parseInt(action.json.id, 10)].publisher_articles = [];
       return obj;
@@ -32,6 +40,30 @@ function publisherReducer(state = initialState.publisherReducer, action) {
       return obj;
     case SET_NEXT:
       obj.next = action.next;
+      return obj;
+    case FILTER_PUBLISHERS:
+      obj.searchInput.currentIdx = -1;
+      obj.searchInput.filtered = action.filtered.filter( fid => !state.searchInput.selected.some( selected => selected === fid));
+      obj.searchInput.value = action.value;
+      return obj;
+    case SELECT_PUBLISHER:
+      obj.searchInput.currentIdx = -1;
+      obj.searchInput.selected = [
+        ...state.searchInput.selected,
+        state.searchInput.filtered[state.searchInput.currentIdx]
+      ];
+      obj.searchInput.filtered = [];
+      obj.searchInput.value = '';
+      return obj;
+    case ROLLOVER_PUBLISHERS:
+      const futureIdx = state.searchInput.currentIdx + action.move;
+      obj.searchInput.currentIdx = futureIdx < -1 ? -1 : futureIdx;
+      return obj;
+    case DELETE_PUBLISHER:
+      obj.searchInput.currentIdx = -1;
+      obj.searchInput.selected = state.searchInput.selected.filter( (el, i) => i !== action.index);
+      obj.searchInput.filtered = [];
+      obj.searchInput.value = '';
       return obj;
     default:
       return state;

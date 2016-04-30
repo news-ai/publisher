@@ -22,21 +22,58 @@ import {
   isJsonString,
 } from '../utils/assign';
 
-export function updateFilteredPublishers(filtered) {
+export function selectTypeaheadField() {
+  return {
+    type: SELECT_PUBLISHER,
+  };
+}
+
+export function moveTypeaheadPointer(move) {
+  return {
+    type: ROLLOVER_PUBLISHERS,
+    move
+  };
+}
+
+export function deleteTypeaheadSelection(index) {
+  return {
+    type: DELETE_PUBLISHER,
+    index
+  };
+}
+export function updateActiveTypeaheadField(keyCode) {
+  // up 38, down 40, left 37, right 39, enter 13
+  return dispatch => {
+    if (keyCode === 38) dispatch(moveTypeaheadPointer(-1));
+    if (keyCode === 40) dispatch(moveTypeaheadPointer(1));
+    if (keyCode === 13) dispatch(selectTypeaheadField());
+  };
+}
+
+export function onHoverTypeahead(index) {
+  return (dispatch, getState) => {
+    dispatch(moveTypeaheadPointer(index - getState().publisherReducer.searchInput.currentIdx));
+  };
+}
+
+export function updateFilteredPublishers(filtered, value) {
   return {
     type: FILTER_PUBLISHERS,
-    filtered
+    filtered,
+    value
   };
 }
 
 /*
 Using `fuzzy` wordfilter to do fuzzy string matching on PublisherSerachBar typeahead.
-returns filtered publishers only
+returns filtered publisherIds only
 */
 export function filterPublishers(word) {
   return (dispatch, getState) => {
-
-  }
+    const options = { extract: el => el.name };
+    const results = fuzzy.filter(word, getState().publisherReducer.publishers, options).map( el => el.original.id);
+    dispatch(updateFilteredPublishers(results, word));
+  };
 }
 
 export function requestPublisher() {

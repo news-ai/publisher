@@ -12,6 +12,13 @@ export const initialState = {
   },
   publisherReducer: {
     isReceiving: false,
+    publishers: [],
+    searchInput: {
+      filtered: [],
+      selected: [],
+      currentIdx: -1,
+      value: '',
+    }
   },
   articleReducer: {
     isReceiving: false,
@@ -30,5 +37,5 @@ export const initialState = {
       isReceiving: false,
       didInvalidate: false,
     },
-  }
+  },
 };

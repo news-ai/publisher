@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 
-function Typeahead({ domId, title, value, fieldType, width, list, filtered, selected, filterHandler, keyPressHandler, onHover, currentIdx, deleteSelection }) {
+function Typeahead({ map, domId, title, value, fieldType, width, list, filtered, selected, filterHandler, keyPressHandler, onHover, currentIdx, deleteSelection }) {
 	if (list.length === filtered.length + selected.length) filtered = [];
     return (
     	<div className='container'
@@ -34,7 +34,7 @@ function Typeahead({ domId, title, value, fieldType, width, list, filtered, sele
 		    			onMouseOver={ _ => onHover(i)}
 						onClick={ _ => keyPressHandler(13)}
 		    			>
-		    			{el.attributes.name}
+		    			{map[el].name}
 		    			</div>
 		    		)}
 		    	</div>
@@ -68,7 +68,7 @@ function Typeahead({ domId, title, value, fieldType, width, list, filtered, sele
 			    		alignSelf: 'center',
 			    	}}
 			    	onClick={ _ => deleteSelection(i)}>
-			    	{el.attributes.name}
+			    	{map[el].name}
 		    	</div>
 		    	)}
 		    </div>

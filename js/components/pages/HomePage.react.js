@@ -4,13 +4,13 @@ import * as actionCreators from '../../actions/AppActions';
 import ArticleList from '../pieces/ArticleList.react';
 import AdditionalLoading from '../pieces/AdditionalLoading.react';
 import CenterLoading from '../pieces/CenterLoading.react';
-// import PublisherSearchBar from '../containers/PublisherSearchBar.react';
+import PublisherSearchBar from '../containers/PublisherSearchBar.react';
 
 class HomePage extends Component {
   componentDidMount() {
     const {dispatch, articleIds, onScrollBottom} = this.props;
     window.addEventListener('scroll', onScrollBottom);
-    // dispatch(actionCreators.fetchAllPublishers());
+    dispatch(actionCreators.fetchAllPublishers());
     if (articleIds.length === 0) dispatch(actionCreators.fetchFeed());
   }
 
@@ -27,6 +27,10 @@ class HomePage extends Component {
       <div className='container article-list-container'>
           {(articles && next) ? (
             <div>
+            <PublisherSearchBar
+              title='Filter by Publisher'
+              width='300px'
+            />
             <ArticleList articles={articles} />
             </div>
             ) :
