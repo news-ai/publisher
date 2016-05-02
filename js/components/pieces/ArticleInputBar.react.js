@@ -1,7 +1,7 @@
 import React from 'react';
 
 function ArticleInputBar({url, inputHandler, onClickHandler, isReceiving, didInvalidate}) {
-  return (
+    return (
     <div className='row' style={{
         marginBottom: '5px',
         marginTop: '5px',
@@ -45,6 +45,7 @@ function ArticleInputBar({url, inputHandler, onClickHandler, isReceiving, didInv
         { didInvalidate ? <span style={{
             color: 'red',
             position: 'absolute',
+            marginLeft: '10px'
         }}>Invalid.</span> : null }
     </div>
     );

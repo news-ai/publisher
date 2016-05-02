@@ -22,23 +22,6 @@ import {
   isJsonString,
 } from '../utils/assign';
 
-export function updateFilteredPublishers(filtered) {
-  return {
-    type: FILTER_PUBLISHERS,
-    filtered
-  };
-}
-
-/*
-Using `fuzzy` wordfilter to do fuzzy string matching on PublisherSerachBar typeahead.
-returns filtered publishers only
-*/
-export function filterPublishers(word) {
-  return (dispatch, getState) => {
-
-  }
-}
-
 export function requestPublisher() {
   return {
     type: REQUEST_PUBLISHER
@@ -61,7 +44,7 @@ export function requestPublisherArticles() {
 export function fetchPublisher(publisherId) {
   return dispatch => {
     dispatch(requestPublisher());
-    fetch(`${window.CONTEXT_API_BASE}/publishers/${publisherId}/`, {credentials: 'include'})
+    return fetch(`${window.CONTEXT_API_BASE}/publishers/${publisherId}/`, {credentials: 'include'})
       .then( response => response.text())
       .then( body => dispatch(receivePublisher(JSON.parse(body))));
   };
@@ -84,7 +67,7 @@ export function fetchAllPublishers() {
       .then( body => {
         const json = JSON.parse(body);
         dispatch(setNext(json.next));
-        Promise.all([
+        return Promise.all([
           ...json.results.map( publisher => dispatch(receivePublisher(publisher))),
           dispatch(fetchAllPublishers())
           ]);
@@ -103,7 +86,7 @@ export function receivePublisherArticles(json, publisherId, next) {
 
 export function fetchPublisherArticles(publisherId) {
   return (dispatch, getState) => {
-    if (getState().publisherReducer[publisherId] === undefined) return;
+    if (getState().publisherReducer[publisherId] === undefined) return Promise.resolve();
 
     dispatch(requestArticles());
 
@@ -111,12 +94,12 @@ export function fetchPublisherArticles(publisherId) {
     getState().publisherReducer[publisherId].next :
     `${window.CONTEXT_API_BASE}/publishers/${publisherId}/articles`;
 
-    fetch(fetchLink, {credentials: 'include'})
+    return fetch(fetchLink, {credentials: 'include'})
       .then( response => response.text())
       .then( body => {
-        if (!isJsonString(body)) return;
+        if (!isJsonString(body)) return Promise.reject();
         const json = JSON.parse(body);
-        Promise.all([
+        return Promise.all([
           dispatch(receiveArticles(json.results)),
           dispatch(receivePublisherArticles(json.results, publisherId, json.next)),
         ]);
@@ -127,10 +110,76 @@ export function fetchPublisherArticles(publisherId) {
 export function fetchPublisherAndArticles(publisherId) {
   return dispatch => {
     dispatch(requestPublisher());
-    fetch(`${window.CONTEXT_API_BASE}/publishers/${publisherId}/`, {credentials: 'include'})
-      .then( response => response.text())
-      .then( body => dispatch(receivePublisher(JSON.parse(body))))
-      .then( _ => dispatch(fetchPublisherArticles(publisherId)));
+    dispatch(requestArticles());
+    return fetch(`${window.CONTEXT_API_BASE}/publishers/${publisherId}/`, {credentials: 'include'})
+        .then( response => response.text())
+        .then( body => dispatch(receivePublisher(JSON.parse(body))))
+        .then( _ => {
+          dispatch(requestPublisher());
+          return dispatch(fetchPublisherArticles(publisherId));
+        });
+  };
+}
+
+export function selectPublisher() {
+  return {
+    type: SELECT_PUBLISHER,
+  };
+}
+
+export function selectTypeaheadField() {
+  return (dispatch, getState) => {
+    dispatch(selectPublisher());
+    const publisherId = getState().publisherReducer.searchInput.selected[0];
+    return dispatch(fetchPublisherAndArticles(publisherId));
+  };
+}
+
+export function moveTypeaheadPointer(move) {
+  return {
+    type: ROLLOVER_PUBLISHERS,
+    move
+  };
+}
+
+export function deleteTypeaheadSelection(index) {
+  return {
+    type: DELETE_PUBLISHER,
+    index
+  };
+}
+export function updateActiveTypeaheadField(keyCode) {
+  // up 38, down 40, left 37, right 39, enter 13
+  return dispatch => {
+    if (keyCode === 38) dispatch(moveTypeaheadPointer(-1));
+    if (keyCode === 40) dispatch(moveTypeaheadPointer(1));
+    if (keyCode === 13) dispatch(selectTypeaheadField());
+  };
+}
+
+export function onHoverTypeahead(index) {
+  return (dispatch, getState) => {
+    dispatch(moveTypeaheadPointer(index - getState().publisherReducer.searchInput.currentIdx));
+  };
+}
+
+export function updateFilteredPublishers(filtered, value) {
+  return {
+    type: FILTER_PUBLISHERS,
+    filtered,
+    value
+  };
+}
+
+/*
+Using `fuzzy` wordfilter to do fuzzy string matching on PublisherSerachBar typeahead.
+returns filtered publisherIds only
+*/
+export function filterPublishers(word) {
+  return (dispatch, getState) => {
+    const options = { extract: el => el.name };
+    const results = fuzzy.filter(word, getState().publisherReducer.publishers, options).map( el => el.original.id);
+    dispatch(updateFilteredPublishers(results, word));
   };
 }
 
