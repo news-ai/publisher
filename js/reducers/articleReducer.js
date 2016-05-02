@@ -30,7 +30,7 @@ function articleReducer(state = initialState.articleReducer, action) {
           // sort entity scores in every article
           obj[article.id] = assignToEmpty(article, {
             entity_scores: article.entity_scores.sort( (a, b) => (a.score - b.score) * -1 ),
-            added_at: moment(article.added_at).tz(timezoneOffset).format('MMM D, YYYY hh:mm A')
+            added_at: moment(new Date(article.added_at * 1000).toISOString()).tz(timezoneOffset).format('MMM D, YYYY hh:mm A')
           });
         });
       } else {
