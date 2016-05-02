@@ -7,6 +7,13 @@ import CenterLoading from '../pieces/CenterLoading.react';
 import PublisherSearchBar from '../containers/PublisherSearchBar.react';
 
 class HomePage extends Component {
+  constructor(props) {
+    super();
+    this.state = {
+      filterTab: false
+    }
+  }
+
   componentDidMount() {
     const {dispatch, articleIds, onScrollBottom} = this.props;
     window.addEventListener('scroll', onScrollBottom);
@@ -26,11 +33,16 @@ class HomePage extends Component {
       <div className='container article-list-container'>
           {(articles && next) ? (
             <div>
-            <PublisherSearchBar
-              title='Filter by Publisher'
-              width='300px'
-              max={1}
-            />
+              <div style={{margin: '5px'}}>
+              <small style={{marginTop: '5px', color: 'gray', fontStyle: 'italic'}} onClick={ _ => this.setState({filterTab: !this.state.filterTab})}>{ this.state.filterTab ? 'Close' : 'Filters'}</small>
+              { this.state.filterTab ? <div>
+                <PublisherSearchBar
+                  title='Filter by Publisher'
+                  width='300px'
+                  max={1}
+                />
+                </div> : null }
+              </div>
             <ArticleList articles={articles} />
             </div>
             ) :
