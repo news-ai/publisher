@@ -21,7 +21,6 @@ class HomePage extends Component {
 
   render() {
     const { articles, articleIsReceiving, next } = this.props;
-    // <PublisherSearchBar />
 
     return (
       <div className='container article-list-container'>
@@ -30,6 +29,7 @@ class HomePage extends Component {
             <PublisherSearchBar
               title='Filter by Publisher'
               width='300px'
+              max={1}
             />
             <ArticleList articles={articles} />
             </div>
@@ -46,21 +46,37 @@ class HomePage extends Component {
 
 const mapStateToProps = state => {
   const feedArticleIds = state.feedReducer.feedArticleIds;
+  const filterMode = state.publisherReducer.searchInput.selected.length > 0 && !state.publisherReducer.isReceiving && !state.articleReducer.isReceiving;
+  const pubId = filterMode ? state.publisherReducer.searchInput.selected[0] : undefined;
+  const publisher = filterMode ? state.publisherReducer[pubId] : undefined;
   return {
+    filterMode: filterMode,
+    pubId: pubId,
     projectName: state.feedReducer.projectName,
-    next: state.feedReducer.next,
-    articleIds: feedArticleIds,
-    feedIsReceving: state.feedReducer.isReceiving,
+    next: filterMode ? publisher.next : state.feedReducer.next,
+    articleIds: filterMode ? publisher.publisher_articles.map( article => article.id) : feedArticleIds,
+    feedIsReceving: filterMode ? publisher.isReceiving : state.feedReducer.isReceiving,
     articleIsReceiving: state.articleReducer.isReceiving,
-    articles: state.feedReducer.next ? feedArticleIds.map( articleId => state.articleReducer[articleId]) : undefined,
+    articles: filterMode ? publisher.publisher_articles.map( id => state.articleReducer[id] ) : feedArticleIds.map( articleId => state.articleReducer[articleId])
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
+    dispatch: action => dispatch(action)
+  };
+};
+
+const mergeProps = (stateProps, dispatchProps, ownProps) => {
+  const { dispatch } = dispatchProps;
+  return {
+    ...stateProps,
     onScrollBottom: ev => {
       ev.preventDefault();
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) dispatch(actionCreators.fetchFeed());
+      if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) {
+        if (stateProps.filterMode) dispatch(actionCreators.fetchPublisherArticles(stateProps.pubId));
+        else dispatch(actionCreators.fetchFeed());
+      }
     },
     dispatch: action => dispatch(action)
   };
@@ -68,5 +84,6 @@ const mapDispatchToProps = dispatch => {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(HomePage);

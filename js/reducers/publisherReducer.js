@@ -35,7 +35,7 @@ function publisherReducer(state = initialState.publisherReducer, action) {
         ...state[parseInt(action.publisherId, 10)].publisher_articles,
         ...action.json.map( article => article.id)
       ];
-      obj[parseInt(action.publisherId, 10)].next = (action.next === null) ? undefined : action.next;
+      obj[parseInt(action.publisherId, 10)].next = action.next;
       obj.isReceiving = false;
       return obj;
     case SET_NEXT:

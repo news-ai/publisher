@@ -22,9 +22,116 @@ import {
   isJsonString,
 } from '../utils/assign';
 
-export function selectTypeaheadField() {
+export function requestPublisher() {
+  return {
+    type: REQUEST_PUBLISHER
+  };
+}
+
+export function receivePublisher(json) {
+  return {
+    type: RECEIVE_PUBLISHER,
+    json
+  };
+}
+
+export function requestPublisherArticles() {
+  return {
+    type: REQUEST_PUBLISHER_ARTICLES
+  };
+}
+
+export function fetchPublisher(publisherId) {
+  return dispatch => {
+    dispatch(requestPublisher());
+    return fetch(`${window.CONTEXT_API_BASE}/publishers/${publisherId}/`, {credentials: 'include'})
+      .then( response => response.text())
+      .then( body => dispatch(receivePublisher(JSON.parse(body))));
+  };
+}
+
+export function setNext(next) {
+  return {
+    type: SET_NEXT,
+    next
+  };
+}
+
+export function fetchAllPublishers() {
+  return (dispatch, getState) => {
+    if (getState().publisherReducer.next === null) return;
+    requestPublisher();
+    const fetchLink = getState().publisherReducer.next || `${window.CONTEXT_API_BASE}/publishers/`;
+    fetch(fetchLink, {credentials: 'include'})
+      .then( response => response.text())
+      .then( body => {
+        const json = JSON.parse(body);
+        dispatch(setNext(json.next));
+        return Promise.all([
+          ...json.results.map( publisher => dispatch(receivePublisher(publisher))),
+          dispatch(fetchAllPublishers())
+          ]);
+      });
+  };
+}
+
+export function receivePublisherArticles(json, publisherId, next) {
+  return {
+    type: RECEIVE_PUBLISHER_ARTICLES,
+    json,
+    publisherId,
+    next
+  };
+}
+
+export function fetchPublisherArticles(publisherId) {
+  return (dispatch, getState) => {
+    if (getState().publisherReducer[publisherId] === undefined) return Promise.resolve();
+
+    dispatch(requestArticles());
+
+    const fetchLink = getState().publisherReducer[publisherId].next ?
+    getState().publisherReducer[publisherId].next :
+    `${window.CONTEXT_API_BASE}/publishers/${publisherId}/articles`;
+
+    return fetch(fetchLink, {credentials: 'include'})
+      .then( response => response.text())
+      .then( body => {
+        if (!isJsonString(body)) return Promise.reject();
+        const json = JSON.parse(body);
+        return Promise.all([
+          dispatch(receiveArticles(json.results)),
+          dispatch(receivePublisherArticles(json.results, publisherId, json.next)),
+        ]);
+      });
+  };
+}
+
+export function fetchPublisherAndArticles(publisherId) {
+  return dispatch => {
+    dispatch(requestPublisher());
+    dispatch(requestArticles());
+    return fetch(`${window.CONTEXT_API_BASE}/publishers/${publisherId}/`, {credentials: 'include'})
+        .then( response => response.text())
+        .then( body => dispatch(receivePublisher(JSON.parse(body))))
+        .then( _ => {
+          dispatch(requestPublisher());
+          return dispatch(fetchPublisherArticles(publisherId));
+        });
+  };
+}
+
+export function selectPublisher() {
   return {
     type: SELECT_PUBLISHER,
+  };
+}
+
+export function selectTypeaheadField() {
+  return (dispatch, getState) => {
+    dispatch(selectPublisher());
+    const publisherId = getState().publisherReducer.searchInput.selected[0];
+    return dispatch(fetchPublisherAndArticles(publisherId));
   };
 }
 
@@ -73,101 +180,6 @@ export function filterPublishers(word) {
     const options = { extract: el => el.name };
     const results = fuzzy.filter(word, getState().publisherReducer.publishers, options).map( el => el.original.id);
     dispatch(updateFilteredPublishers(results, word));
-  };
-}
-
-export function requestPublisher() {
-  return {
-    type: REQUEST_PUBLISHER
-  };
-}
-
-export function receivePublisher(json) {
-  return {
-    type: RECEIVE_PUBLISHER,
-    json
-  };
-}
-
-export function requestPublisherArticles() {
-  return {
-    type: REQUEST_PUBLISHER_ARTICLES
-  };
-}
-
-export function fetchPublisher(publisherId) {
-  return dispatch => {
-    dispatch(requestPublisher());
-    fetch(`${window.CONTEXT_API_BASE}/publishers/${publisherId}/`, {credentials: 'include'})
-      .then( response => response.text())
-      .then( body => dispatch(receivePublisher(JSON.parse(body))));
-  };
-}
-
-export function setNext(next) {
-  return {
-    type: SET_NEXT,
-    next
-  };
-}
-
-export function fetchAllPublishers() {
-  return (dispatch, getState) => {
-    if (getState().publisherReducer.next === null) return;
-    requestPublisher();
-    const fetchLink = getState().publisherReducer.next || `${window.CONTEXT_API_BASE}/publishers/`;
-    fetch(fetchLink, {credentials: 'include'})
-      .then( response => response.text())
-      .then( body => {
-        const json = JSON.parse(body);
-        dispatch(setNext(json.next));
-        Promise.all([
-          ...json.results.map( publisher => dispatch(receivePublisher(publisher))),
-          dispatch(fetchAllPublishers())
-          ]);
-      });
-  };
-}
-
-export function receivePublisherArticles(json, publisherId, next) {
-  return {
-    type: RECEIVE_PUBLISHER_ARTICLES,
-    json,
-    publisherId,
-    next
-  };
-}
-
-export function fetchPublisherArticles(publisherId) {
-  return (dispatch, getState) => {
-    if (getState().publisherReducer[publisherId] === undefined) return;
-
-    dispatch(requestArticles());
-
-    const fetchLink = getState().publisherReducer[publisherId].next ?
-    getState().publisherReducer[publisherId].next :
-    `${window.CONTEXT_API_BASE}/publishers/${publisherId}/articles`;
-
-    fetch(fetchLink, {credentials: 'include'})
-      .then( response => response.text())
-      .then( body => {
-        if (!isJsonString(body)) return;
-        const json = JSON.parse(body);
-        Promise.all([
-          dispatch(receiveArticles(json.results)),
-          dispatch(receivePublisherArticles(json.results, publisherId, json.next)),
-        ]);
-      });
-  };
-}
-
-export function fetchPublisherAndArticles(publisherId) {
-  return dispatch => {
-    dispatch(requestPublisher());
-    fetch(`${window.CONTEXT_API_BASE}/publishers/${publisherId}/`, {credentials: 'include'})
-      .then( response => response.text())
-      .then( body => dispatch(receivePublisher(JSON.parse(body))))
-      .then( _ => dispatch(fetchPublisherArticles(publisherId)));
   };
 }
 
