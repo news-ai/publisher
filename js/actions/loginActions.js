@@ -34,6 +34,14 @@ export function fetchPerson() {
     dispatch(requestLogin());
     return fetch(`${CONTEXT_API_BASE}/users/me`, { credentials: 'include'})
       .then( response => response.status !== 200 ? false : response.text())
-      .then( body => body ? dispatch(receiveLogin(JSON.parse(body))) : dispatch(loginFail()));
+      .then( body => {
+        if (body) {
+          let person = JSON.parse(body);
+          mixpanel.identify(String(person.id));
+          dispatch(receiveLogin(person));
+        } else {
+          dispatch(loginFail());
+        }
+    });
   };
 }
