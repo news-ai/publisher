@@ -15,7 +15,7 @@ function extractSummary(summary) {
 }
 
 function articleReducer(state = initialState.articleReducer, action) {
-  Object.freeze(state);
+  if (window.isDev) Object.freeze(state);
   let obj = assignToEmpty(state, {});
   switch (action.type) {
     case REQUEST_ARTICLES:
@@ -35,7 +35,6 @@ function articleReducer(state = initialState.articleReducer, action) {
         });
       } else {
         obj[action.articles.id] = action.articles;
-        // obj[action.json.id].basic_summary = extractSummary(action.json.summary);
         obj[action.articles.id].basic_summary = action.articles.summary;
         obj[action.articles.id].added_at = moment(action.articles.added_at).tz(timezoneOffset).format('MMM D, YYYY hh:mm A');
       }

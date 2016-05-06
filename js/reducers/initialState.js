@@ -38,4 +38,8 @@ export const initialState = {
       didInvalidate: false,
     },
   },
+  filterReducer: {
+    isReceiving : false,
+    publishers: []
+  }
 };

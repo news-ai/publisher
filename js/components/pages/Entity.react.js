@@ -80,7 +80,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     ...stateProps,
     onScrollBottom: (ev) => {
       ev.preventDefault();
-      if ( ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && next ) dispatch(actionCreators.fetchEntityArticles(entityId));
+      if ( ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) && next ) dispatch(actionCreators.fetchEntityArticles(entityId));
     },
     dispatch: action => dispatch(action)
   };
