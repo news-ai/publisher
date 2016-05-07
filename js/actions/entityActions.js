@@ -13,6 +13,11 @@ import {
 } from './articleActions';
 
 import {
+  setNext,
+  setFilterArticleIds,
+} from './filterActions';
+
+import {
   removeCache,
   isJsonString,
 } from '../utils/assign';
@@ -59,23 +64,42 @@ export function receiveEntityArticles(json, entityId, next) {
   };
 }
 
+
+export function fetchEntitiesArticles() {
+  return (dispatch, getState) => {
+    dispatch(requestArticles());
+    const fetchLink = getState().filterReducer.entityInput.next ||
+    `${window.CONTEXT_API_BASE}/entities/${getState().filterReducer.entityInput.selected.join(',')}/articles${removeCache()}`;
+    return fetch(fetchLink, { credentials: 'include'})
+      .then( response => response.text())
+      .catch( e => console.log(e))
+      .then( body => {
+        if (!isJsonString(body)) return;
+        const json = JSON.parse(body);
+        return Promise.all([
+          dispatch(receiveArticles(json.results)),
+          dispatch(setNext(json.next, 'entityInput')),
+          dispatch(setFilterArticleIds(json.results.map( article => article.id ), 'entityInput'))
+          ]);
+      });
+  };
+}
+
 export function fetchEntityArticles(entityId) {
   return (dispatch, getState) => {
     if (getState().entityReducer[entityId] === undefined) return;
 
     dispatch(requestArticles());
 
-    const fetchLink = getState().entityReducer[entityId].next ?
-    getState().entityReducer[entityId].next :
-    `${window.CONTEXT_API_BASE}/entities/${entityId}/articles${removeCache()}`;
-    fetch(fetchLink, { credentials: 'include'})
+    const fetchLink = getState().entityReducer[entityId].next || `${window.CONTEXT_API_BASE}/entities/${entityId}/articles${removeCache()}`;
+    return fetch(fetchLink, { credentials: 'include'})
       .then( response => response.text())
       .catch( e => console.log(e))
       .then( body => {
         if (!isJsonString(body)) return;
         const json = JSON.parse(body);
 
-        Promise.all([
+        return Promise.all([
           dispatch(receiveArticles(json.results)),
           dispatch(receiveEntityArticles(json.results, entityId, json.next))
         ]);

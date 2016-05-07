@@ -29,12 +29,13 @@ class HomePage extends Component {
   }
 
   render() {
-    const { articles, articleIsReceiving, next } = this.props;
+    const { articles, articleIsReceiving, next, dispatch } = this.props;
 
+    console.log(next);
     return (
       <div className='container article-list-container'>
           <EntitySearchBar />
-          {(articles && next) ? (
+          { (articles && (next === null || next)) ? (
             <div>
               <div style={{margin: '5px'}}>
               <small style={{marginTop: '5px', color: 'gray', fontStyle: 'italic'}} onClick={ _ => this.setState({filterTab: !this.state.filterTab})}>{ this.state.filterTab ? 'Close' : 'Filters'}</small>
@@ -56,19 +57,17 @@ class HomePage extends Component {
 }
 
 const mapStateToProps = state => {
-  const feedArticleIds = state.feedReducer.feedArticleIds;
-  const filterMode = state.publisherReducer.searchInput.selected.length > 0 && !state.publisherReducer.isReceiving && !state.articleReducer.isReceiving;
-  const pubId = filterMode ? state.publisherReducer.searchInput.selected[0] : undefined;
-  const publisher = filterMode ? state.publisherReducer[pubId] : undefined;
+  const filterMode = state.filterReducer.current !== undefined;
+  const current = state.filterReducer.current;
+  const articleIds = filterMode ? state.filterReducer[current].articles : state.feedReducer.feedArticleIds;
   return {
     filterMode: filterMode,
-    pubId: pubId,
     projectName: state.feedReducer.projectName,
-    next: filterMode ? publisher.next : state.feedReducer.next,
-    articleIds: filterMode ? publisher.publisher_articles.map( article => article.id) : feedArticleIds,
-    feedIsReceving: filterMode ? publisher.isReceiving : state.feedReducer.isReceiving,
+    next: filterMode ? state.filterReducer[current].next : state.feedReducer.next,
+    articleIds: articleIds,
+    feedIsReceving: state.feedReducer.isReceiving,
     articleIsReceiving: state.articleReducer.isReceiving,
-    articles: filterMode ? publisher.publisher_articles.map( id => state.articleReducer[id] ) : feedArticleIds.map( articleId => state.articleReducer[articleId])
+    articles: articleIds.map( articleId => state.articleReducer[articleId])
   };
 };
 

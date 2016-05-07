@@ -77,8 +77,8 @@ function Typeahead({ map, domId, title, value, width, list, filtered, selected, 
 }
 
 Typeahead.propTypes = {
-  title: PropTypes.string.isRequired,
-  list: PropTypes.array.isRequired,
+  // title: PropTypes.string.isRequired,
+  // list: PropTypes.array.isRequired,
   filtered: PropTypes.array.isRequired,
   currentIdx: PropTypes.number.isRequired,
   filterHandler: PropTypes.func.isRequired,

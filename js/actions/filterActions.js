@@ -6,6 +6,8 @@ import {
   SELECT,
   DELETE,
   SET_NEXT,
+  TOGGLE_FILTER_TAB,
+  RECEIVE_ARTICLE_IDS
 } from '../constants/AppConstants';
 
 import {
@@ -15,6 +17,7 @@ import {
 
 import {
   receiveEntity,
+  fetchEntitiesArticles,
 } from './entityActions';
 
 import {
@@ -22,20 +25,33 @@ import {
   isJsonString,
 } from '../utils/assign';
 
+export function toggleFilterTab() {
+  return {
+    type: TOGGLE_FILTER_TAB
+  };
+}
+
+export function setNext(next, inputType) {
+  return {
+    type: SET_NEXT,
+    next,
+    inputType
+  };
+}
+
+export function setFilterArticleIds(articleIds, inputType) {
+  return {
+    type: RECEIVE_ARTICLE_IDS,
+    articleIds,
+    inputType
+  };
+}
+
 export function moveTypeaheadPointer(move, inputType) {
   return {
     type: ROLLOVER,
     move,
     inputType
-  };
-}
-
-export function updateActiveTypeaheadField(keyCode, inputType) {
-  // up 38, down 40, left 37, right 39, enter 13
-  return (dispatch, getState) => {
-    if (keyCode === 38) dispatch(moveTypeaheadPointer(-1, inputType));
-    if (keyCode === 40) dispatch(moveTypeaheadPointer(1, inputType));
-    if (keyCode === 13 && getState().filterReducer[inputType].value.length > 0) dispatch(selectTypeaheadField(inputType));
   };
 }
 
@@ -55,24 +71,46 @@ export function updateFiltered(results, value, inputType) {
 }
 
 export function deleteTypeaheadSelection(index, inputType) {
-  return {
-    type: DELETE,
-    index,
-    inputType
+  return dispatch => {
+    dispatch({
+      type: DELETE,
+      index,
+      inputType
+    });
+    return dispatch(fetchEntitiesArticles()).then( _ => {
+      console.log('eyyy');
+    });
   };
 }
 
-export function selectEntity() {
-  return (dispatch, getState) => {
-    // dispatch(selectPublisher());
-    // const publisherId = getState().publisherReducer.searchInput.selected[0];
-    // return dispatch(fetchPublisherAndArticles(publisherId));
+export function selectEntities() {
+  return dispatch => {
+    return dispatch(fetchEntitiesArticles()).then( _ => {
+      console.log('hey');
+    });
+  };
+}
+
+export function select(inputType) {
+  return {
+    type: SELECT,
+    inputType
   };
 }
 
 export function selectTypeaheadField(inputType) {
   return dispatch => {
-    if (inputType === 'entityInput') return dispatch(selectEntity());
+    dispatch(select(inputType));
+    if (inputType === 'entityInput') return dispatch(selectEntities());
+  };
+}
+
+export function updateActiveTypeaheadField(keyCode, inputType) {
+  // up 38, down 40, left 37, right 39, enter 13
+  return (dispatch, getState) => {
+    if (keyCode === 38) dispatch(moveTypeaheadPointer(-1, inputType));
+    if (keyCode === 40) dispatch(moveTypeaheadPointer(1, inputType));
+    if (keyCode === 13 && getState().filterReducer[inputType].value.length > 0) dispatch(selectTypeaheadField(inputType));
   };
 }
 

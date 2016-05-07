@@ -2,7 +2,10 @@ import {
 	FILTER,
 	ROLLOVER,
 	SELECT,
-	DELETE
+	DELETE,
+  TOGGLE_FILTER_TAB,
+  RECEIVE_ARTICLE_IDS,
+  SET_NEXT
 } from '../constants/AppConstants';
 import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
@@ -11,6 +14,9 @@ function filterReducer(state = initialState.filterReducer, action) {
   if (window.isDev) Object.freeze(state);
   let obj = assignToEmpty(state, {});
   switch (action.type) {
+    case TOGGLE_FILTER_TAB:
+      obj.filterTab = !state.filterTab;
+      return obj;
     case FILTER:
       obj[action.inputType] = assignToEmpty(state[action.inputType], {});
       obj[action.inputType].currentIdx = -1;
@@ -30,9 +36,29 @@ function filterReducer(state = initialState.filterReducer, action) {
         state[action.inputType].filtered[state[action.inputType].currentIdx]
       ];
       obj[action.inputType].filtered = [];
-      obj[action.index].value = '';
+      obj[action.inputType].articles = [];
+      obj[action.inputType].next = undefined;
+      obj[action.inputType].value = '';
+      obj.current = action.inputType;
       return obj;
     case DELETE:
+      obj[action.inputType].currentIdx = -1;
+      obj[action.inputType].selected = state[action.inputType].selected.filter( (el, i) => i !== action.index);
+      obj[action.inputType].filtered = [];
+      obj[action.inputType].articles = [];
+      obj[action.inputType].value = '';
+      obj[action.inputType].next = undefined;
+      return obj;
+    case RECEIVE_ARTICLE_IDS:
+      obj[action.inputType] = assignToEmpty(state[action.inputType], {});
+      obj[action.inputType].articles = [
+        ...state[action.inputType].articles,
+        ...action.articleIds
+      ];
+      return obj;
+    case SET_NEXT:
+      obj[action.inputType] = assignToEmpty(state[action.inputType], {});
+      obj[action.inputType].next = action.next;
       return obj;
     default:
       return state;
