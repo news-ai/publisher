@@ -10,6 +10,7 @@ import authorReducer from './authorReducer';
 import publisherReducer from './publisherReducer';
 import articleReducer from './articleReducer';
 import personReducer from './personReducer';
+import filterReducer from './filterReducer';
 
 const rootReducer = combineReducers({
   feedReducer,
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   publisherReducer,
   articleReducer,
   personReducer,
+  filterReducer,
 });
 
 export default rootReducer;

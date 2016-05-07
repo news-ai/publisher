@@ -39,7 +39,19 @@ export const initialState = {
     },
   },
   filterReducer: {
-    isReceiving : false,
-    publishers: []
+    isReceiving: false,
+    publishers: [],
+    publisherInput: {
+      filtered: [],
+      selected: [],
+      currentIdx: -1,
+      value: '',
+    },
+    entityInput: {
+      filtered: [],
+      selected: [],
+      currentIdx: -1,
+      value: '',
+    }
   }
 };
