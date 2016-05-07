@@ -5,7 +5,8 @@ import {
 	DELETE,
   TOGGLE_FILTER_TAB,
   RECEIVE_ARTICLE_IDS,
-  SET_NEXT
+  SET_NEXT,
+  SET_VALUE,
 } from '../constants/AppConstants';
 import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
@@ -20,7 +21,6 @@ function filterReducer(state = initialState.filterReducer, action) {
     case FILTER:
       obj[action.inputType] = assignToEmpty(state[action.inputType], {});
       obj[action.inputType].currentIdx = -1;
-      obj[action.inputType].value = action.value;
       obj[action.inputType].filtered = action.value.length > 0 ? action.results.filter( fid => !state.entityInput.selected.some( selected => selected === fid)) : [];
       return obj;
     case ROLLOVER:
@@ -60,6 +60,11 @@ function filterReducer(state = initialState.filterReducer, action) {
       obj[action.inputType] = assignToEmpty(state[action.inputType], {});
       obj[action.inputType].next = action.next;
       return obj;
+    case SET_VALUE:
+      obj[action.inputType] = assignToEmpty(state[action.inputType], {});
+      obj[action.inputType].value = action.value;
+      return obj;
+
     default:
       return state;
   }

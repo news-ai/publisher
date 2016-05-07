@@ -7,7 +7,8 @@ import {
   DELETE,
   SET_NEXT,
   TOGGLE_FILTER_TAB,
-  RECEIVE_ARTICLE_IDS
+  RECEIVE_ARTICLE_IDS,
+  SET_VALUE
 } from '../constants/AppConstants';
 
 import {
@@ -114,10 +115,17 @@ export function updateActiveTypeaheadField(keyCode, inputType) {
   };
 }
 
+export function setValue(value, inputType) {
+  return {
+    type: SET_VALUE,
+    value,
+    inputType
+  };
+}
+
 export function fetchEntitySearch(value) {
   return dispatch => {
-    // if (getState().filterReducer.entityInput.value.length === 0) return;
-    // const value = getState().filterReducer.entityInput.value;
+    dispatch(setValue(value, 'entityInput'));
     return fetch(`${window.CONTEXT_API_BASE}/entities?name=${value}`, { credentials: 'include' })
     .then( response => response.text())
     .then( body => {
@@ -129,4 +137,5 @@ export function fetchEntitySearch(value) {
     });
   };
 }
+
 
