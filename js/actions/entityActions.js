@@ -68,6 +68,7 @@ export function receiveEntityArticles(json, entityId, next) {
 export function fetchEntitiesArticles() {
   return (dispatch, getState) => {
     if (getState().filterReducer.entityInput.selected.length === 0) return;
+    if (getState().filterReducer.entityInput.next === null) return;
     const fetchLink = getState().filterReducer.entityInput.next ||
     `${window.CONTEXT_API_BASE}/entities/${getState().filterReducer.entityInput.selected.join(',')}/articles${removeCache()}`;
     if (fetchLink === null) return;

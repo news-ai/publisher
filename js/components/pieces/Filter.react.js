@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import EntitySearchBar from '../containers/EntitySearchBar.react';
 // import PublisherSearchBar from '../containers/PublisherSearchBar.react';
 
 function Filter() {
@@ -9,6 +10,10 @@ function Filter() {
       />*/
   return (
     <div>
+      <EntitySearchBar
+      max={5}
+      width='300px'
+      />
     </div>
     );
 }

@@ -6,7 +6,6 @@ import ArticleList from '../pieces/ArticleList.react';
 import AdditionalLoading from '../pieces/AdditionalLoading.react';
 import CenterLoading from '../pieces/CenterLoading.react';
 import Filter from '../pieces/Filter.react';
-import EntitySearchBar from '../containers/EntitySearchBar.react';
 
 class HomePage extends Component {
   constructor(props) {
@@ -37,7 +36,6 @@ class HomePage extends Component {
     }
     return (
       <div className='container article-list-container'>
-          <EntitySearchBar />
           { (articles && (next === null || next)) ? (
             <div>
               <div style={{margin: '5px'}}>
@@ -63,8 +61,6 @@ const mapStateToProps = state => {
   const filterMode = state.filterReducer.current !== undefined;
   const current = state.filterReducer.current;
   const articleIds = filterMode ? state.filterReducer[current].articles : state.feedReducer.feedArticleIds;
-  console.log(filterMode);
-  console.log(current);
   return {
     filterMode: filterMode,
     current: current,

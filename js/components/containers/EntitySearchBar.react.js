@@ -4,8 +4,6 @@ import Typeahead from '../pieces/Typeahead.react';
 
 const mapStateToProps = state => {
   return {
-    max: 3,
-    width: '300px',
     map: state.entityReducer,
     ...state.filterReducer.entityInput
   };
