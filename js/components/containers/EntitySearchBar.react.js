@@ -4,6 +4,7 @@ import Typeahead from '../pieces/Typeahead.react';
 
 const mapStateToProps = state => {
   return {
+    title: 'Entity Search',
     map: state.entityReducer,
     ...state.filterReducer.entityInput
   };
