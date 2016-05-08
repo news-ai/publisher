@@ -70,6 +70,7 @@ export function fetchEntitiesArticles() {
     dispatch(requestArticles());
     const fetchLink = getState().filterReducer.entityInput.next ||
     `${window.CONTEXT_API_BASE}/entities/${getState().filterReducer.entityInput.selected.join(',')}/articles${removeCache()}`;
+    if (fetchLink === null) return;
     return fetch(fetchLink, { credentials: 'include'})
       .then( response => response.text())
       .catch( e => console.log(e))

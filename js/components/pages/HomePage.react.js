@@ -90,27 +90,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-// const mergeProps = ( stateProps, dispatchProps, ownProps) => {
-//   const { dispatch } = dispatchProps;
-//   return {
-//     ...stateProps,
-//     ...dispatchProps,
-//     onScrollBottom: ev => {
-//       ev.preventDefault();
-//       if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) {
-//         if (stateProps.filterMode) {
-//           dispatch(filterActions.fetchFilterArticles());
-//         } else {
-//           dispatch(actionCreators.fetchFeed());
-//         }
-//       }
-//     },
-//     dispatch: action => dispatch(action)
-//   };
-// };
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-  // mergeProps
 )(HomePage);

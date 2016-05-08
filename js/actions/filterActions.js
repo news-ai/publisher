@@ -68,6 +68,7 @@ export function updateFiltered(results, value, inputType) {
 
 export function fetchFilterArticles() {
   return (dispatch, getState) => {
+    if (getState().articleReducer.isReceiving) return;
     if (getState().filterReducer.current === 'entityInput') {
       return dispatch(fetchEntitiesArticles());
     }
