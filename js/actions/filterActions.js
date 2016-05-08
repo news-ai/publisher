@@ -1,4 +1,4 @@
-import fuzzy from 'fuzzy';
+// import fuzzy from 'fuzzy';
 import fetch from 'isomorphic-fetch';
 import {
   FILTER,
@@ -6,7 +6,6 @@ import {
   SELECT,
   DELETE,
   SET_NEXT,
-  TOGGLE_FILTER_TAB,
   RECEIVE_ARTICLE_IDS,
   SET_VALUE
 } from '../constants/AppConstants';
@@ -82,17 +81,13 @@ export function deleteTypeaheadSelection(index, inputType) {
       index,
       inputType
     });
-    return dispatch(fetchFilterArticles()).then( _ => {
-      console.log('eyyy');
-    });
+    return dispatch(fetchFilterArticles());
   };
 }
 
 export function selectEntities() {
   return dispatch => {
-    return dispatch(fetchFilterArticles()).then( _ => {
-      console.log('hey');
-    });
+    return dispatch(fetchFilterArticles());
   };
 }
 

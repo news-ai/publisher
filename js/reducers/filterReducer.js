@@ -45,6 +45,7 @@ function filterReducer(state = initialState.filterReducer, action) {
       obj[action.inputType].articles = [];
       obj[action.inputType].value = '';
       obj[action.inputType].next = undefined;
+      if (obj[action.inputType].selected.length === 0) obj.current = undefined;
       return obj;
     case RECEIVE_ARTICLE_IDS:
       obj[action.inputType] = assignToEmpty(state[action.inputType], {});

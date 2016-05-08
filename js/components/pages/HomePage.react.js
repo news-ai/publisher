@@ -63,6 +63,8 @@ const mapStateToProps = state => {
   const filterMode = state.filterReducer.current !== undefined;
   const current = state.filterReducer.current;
   const articleIds = filterMode ? state.filterReducer[current].articles : state.feedReducer.feedArticleIds;
+  console.log(filterMode);
+  console.log(current);
   return {
     filterMode: filterMode,
     current: current,

@@ -67,10 +67,11 @@ export function receiveEntityArticles(json, entityId, next) {
 
 export function fetchEntitiesArticles() {
   return (dispatch, getState) => {
-    dispatch(requestArticles());
+    if (getState().filterReducer.entityInput.selected.length === 0) return;
     const fetchLink = getState().filterReducer.entityInput.next ||
     `${window.CONTEXT_API_BASE}/entities/${getState().filterReducer.entityInput.selected.join(',')}/articles${removeCache()}`;
     if (fetchLink === null) return;
+    dispatch(requestArticles());
     return fetch(fetchLink, { credentials: 'include'})
       .then( response => response.text())
       .catch( e => console.log(e))
