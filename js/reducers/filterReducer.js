@@ -15,9 +15,6 @@ function filterReducer(state = initialState.filterReducer, action) {
   if (window.isDev) Object.freeze(state);
   let obj = assignToEmpty(state, {});
   switch (action.type) {
-    case TOGGLE_FILTER_TAB:
-      obj.filterTab = !state.filterTab;
-      return obj;
     case FILTER:
       obj[action.inputType] = assignToEmpty(state[action.inputType], {});
       obj[action.inputType].currentIdx = -1;

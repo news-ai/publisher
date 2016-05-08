@@ -17,21 +17,24 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
-    const {dispatch, articleIds, onScrollBottom} = this.props;
-    window.addEventListener('scroll', onScrollBottom);
+    const {dispatch, articleIds, fetchFeed } = this.props;
     // dispatch(actionCreators.fetchAllPublishers());
     if (articleIds.length === 0) dispatch(actionCreators.fetchFeed());
+    window.addEventListener('scroll', fetchFeed);
   }
 
   componentWillUnmount() {
-    const {onScrollBottom} = this.props;
-    window.removeEventListener('scroll', onScrollBottom);
+    const { fetchFeed, fetchFilterFeed, filterMode } = this.props;
+    if (filterMode) window.removeEventListener('scroll', fetchFilterFeed);
+    else window.removeEventListener('scroll', fetchFeed);
   }
 
   render() {
-    const { articles, articleIsReceiving, next, dispatch } = this.props;
-
-    console.log(next);
+    const { articles, articleIsReceiving, next, dispatch, filterMode, fetchFeed, fetchFilterFeed } = this.props;
+    if (filterMode) {
+      window.removeEventListener('scroll', fetchFeed);
+      window.addEventListener('scroll', fetchFilterFeed);
+    }
     return (
       <div className='container article-list-container'>
           <EntitySearchBar />
@@ -62,38 +65,52 @@ const mapStateToProps = state => {
   const articleIds = filterMode ? state.filterReducer[current].articles : state.feedReducer.feedArticleIds;
   return {
     filterMode: filterMode,
+    current: current,
     projectName: state.feedReducer.projectName,
     next: filterMode ? state.filterReducer[current].next : state.feedReducer.next,
     articleIds: articleIds,
     feedIsReceving: state.feedReducer.isReceiving,
     articleIsReceiving: state.articleReducer.isReceiving,
-    articles: articleIds.map( articleId => state.articleReducer[articleId])
+    articles: articleIds.map( articleId => state.articleReducer[articleId]),
+
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    dispatch: action => dispatch(action)
+    dispatch: action => dispatch(action),
+    fetchFeed: e => {
+      e.preventDefault();
+      if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) dispatch(actionCreators.fetchFeed());
+    },
+    fetchFilterFeed: e => {
+      e.preventDefault();
+      if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) dispatch(filterActions.fetchFilterArticles())
+    }
   };
 };
 
-const mergeProps = (stateProps, dispatchProps, ownProps) => {
-  const { dispatch } = dispatchProps;
-  return {
-    ...stateProps,
-    onScrollBottom: ev => {
-      ev.preventDefault();
-      if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) {
-        if (stateProps.filterMode) dispatch(actionCreators.fetchPublisherArticles(stateProps.pubId));
-        else dispatch(actionCreators.fetchFeed());
-      }
-    },
-    dispatch: action => dispatch(action)
-  };
-};
+// const mergeProps = ( stateProps, dispatchProps, ownProps) => {
+//   const { dispatch } = dispatchProps;
+//   return {
+//     ...stateProps,
+//     ...dispatchProps,
+//     onScrollBottom: ev => {
+//       ev.preventDefault();
+//       if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) {
+//         if (stateProps.filterMode) {
+//           dispatch(filterActions.fetchFilterArticles());
+//         } else {
+//           dispatch(actionCreators.fetchFeed());
+//         }
+//       }
+//     },
+//     dispatch: action => dispatch(action)
+//   };
+// };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-  mergeProps
+  // mergeProps
 )(HomePage);

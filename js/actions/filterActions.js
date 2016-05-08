@@ -26,11 +26,6 @@ import {
   isJsonString,
 } from '../utils/assign';
 
-export function toggleFilterTab() {
-  return {
-    type: TOGGLE_FILTER_TAB
-  };
-}
 
 export function setNext(next, inputType) {
   return {
@@ -71,6 +66,14 @@ export function updateFiltered(results, value, inputType) {
   };
 }
 
+export function fetchFilterArticles() {
+  return (dispatch, getState) => {
+    if (getState().filterReducer.current === 'entityInput') {
+      return dispatch(fetchEntitiesArticles());
+    }
+  };
+}
+
 export function deleteTypeaheadSelection(index, inputType) {
   return dispatch => {
     dispatch({
@@ -78,7 +81,7 @@ export function deleteTypeaheadSelection(index, inputType) {
       index,
       inputType
     });
-    return dispatch(fetchEntitiesArticles()).then( _ => {
+    return dispatch(fetchFilterArticles()).then( _ => {
       console.log('eyyy');
     });
   };
@@ -86,7 +89,7 @@ export function deleteTypeaheadSelection(index, inputType) {
 
 export function selectEntities() {
   return dispatch => {
-    return dispatch(fetchEntitiesArticles()).then( _ => {
+    return dispatch(fetchFilterArticles()).then( _ => {
       console.log('hey');
     });
   };
