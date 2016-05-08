@@ -19,7 +19,7 @@ class HomePage extends Component {
     const {dispatch, articleIds, fetchFeed } = this.props;
     // dispatch(actionCreators.fetchAllPublishers());
     if (articleIds.length === 0) dispatch(actionCreators.fetchFeed());
-    window.addEventListener('scroll', fetchFeed);
+    // window.addEventListener('scroll', fetchFeed);
   }
 
   componentWillUnmount() {
@@ -33,6 +33,8 @@ class HomePage extends Component {
     if (filterMode) {
       window.removeEventListener('scroll', fetchFeed);
       window.addEventListener('scroll', fetchFilterFeed);
+    } else {
+      window.addEventListener('scroll', fetchFeed);
     }
     return (
       <div className='container article-list-container'>
