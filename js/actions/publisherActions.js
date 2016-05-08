@@ -5,11 +5,11 @@ import {
   RECEIVE_PUBLISHER,
   REQUEST_PUBLISHER_ARTICLES,
   RECEIVE_PUBLISHER_ARTICLES,
-  FILTER_PUBLISHERS,
-  ROLLOVER_PUBLISHERS,
-  SELECT_PUBLISHER,
-  DELETE_PUBLISHER,
-  SET_NEXT,
+  // FILTER_PUBLISHERS,
+  // ROLLOVER_PUBLISHERS,
+  // SELECT_PUBLISHER,
+  // DELETE_PUBLISHER,
+  // SET_NEXT,
 } from '../constants/AppConstants';
 
 import {
@@ -50,30 +50,30 @@ export function fetchPublisher(publisherId) {
   };
 }
 
-export function setNext(next) {
-  return {
-    type: SET_NEXT,
-    next
-  };
-}
+// export function setNext(next) {
+//   return {
+//     type: SET_NEXT,
+//     next
+//   };
+// }
 
-export function fetchAllPublishers() {
-  return (dispatch, getState) => {
-    if (getState().publisherReducer.next === null) return;
-    requestPublisher();
-    const fetchLink = getState().publisherReducer.next || `${window.CONTEXT_API_BASE}/publishers/`;
-    fetch(fetchLink, {credentials: 'include'})
-      .then( response => response.text())
-      .then( body => {
-        const json = JSON.parse(body);
-        dispatch(setNext(json.next));
-        return Promise.all([
-          ...json.results.map( publisher => dispatch(receivePublisher(publisher))),
-          dispatch(fetchAllPublishers())
-          ]);
-      });
-  };
-}
+// export function fetchAllPublishers() {
+//   return (dispatch, getState) => {
+//     if (getState().publisherReducer.next === null) return;
+//     requestPublisher();
+//     const fetchLink = getState().publisherReducer.next || `${window.CONTEXT_API_BASE}/publishers/`;
+//     fetch(fetchLink, {credentials: 'include'})
+//       .then( response => response.text())
+//       .then( body => {
+//         const json = JSON.parse(body);
+//         dispatch(setNext(json.next));
+//         return Promise.all([
+//           ...json.results.map( publisher => dispatch(receivePublisher(publisher))),
+//           dispatch(fetchAllPublishers())
+//           ]);
+//       });
+//   };
+// }
 
 export function receivePublisherArticles(json, publisherId, next) {
   return {
@@ -121,65 +121,65 @@ export function fetchPublisherAndArticles(publisherId) {
   };
 }
 
-export function selectPublisher() {
-  return {
-    type: SELECT_PUBLISHER,
-  };
-}
+// export function selectPublisher() {
+//   return {
+//     type: SELECT_PUBLISHER,
+//   };
+// }
 
-export function selectTypeaheadField() {
-  return (dispatch, getState) => {
-    dispatch(selectPublisher());
-    const publisherId = getState().publisherReducer.searchInput.selected[0];
-    return dispatch(fetchPublisherAndArticles(publisherId));
-  };
-}
+// export function selectTypeaheadField() {
+//   return (dispatch, getState) => {
+//     dispatch(selectPublisher());
+//     const publisherId = getState().publisherReducer.searchInput.selected[0];
+//     return dispatch(fetchPublisherAndArticles(publisherId));
+//   };
+// }
 
-export function moveTypeaheadPointer(move) {
-  return {
-    type: ROLLOVER_PUBLISHERS,
-    move
-  };
-}
+// export function moveTypeaheadPointer(move) {
+//   return {
+//     type: ROLLOVER_PUBLISHERS,
+//     move
+//   };
+// }
 
-export function deleteTypeaheadSelection(index) {
-  return {
-    type: DELETE_PUBLISHER,
-    index
-  };
-}
-export function updateActiveTypeaheadField(keyCode) {
-  // up 38, down 40, left 37, right 39, enter 13
-  return dispatch => {
-    if (keyCode === 38) dispatch(moveTypeaheadPointer(-1));
-    if (keyCode === 40) dispatch(moveTypeaheadPointer(1));
-    if (keyCode === 13) dispatch(selectTypeaheadField());
-  };
-}
+// export function deleteTypeaheadSelection(index) {
+//   return {
+//     type: DELETE_PUBLISHER,
+//     index
+//   };
+// }
+// export function updateActiveTypeaheadField(keyCode) {
+//   // up 38, down 40, left 37, right 39, enter 13
+//   return dispatch => {
+//     if (keyCode === 38) dispatch(moveTypeaheadPointer(-1));
+//     if (keyCode === 40) dispatch(moveTypeaheadPointer(1));
+//     if (keyCode === 13) dispatch(selectTypeaheadField());
+//   };
+// }
 
-export function onHoverTypeahead(index) {
-  return (dispatch, getState) => {
-    dispatch(moveTypeaheadPointer(index - getState().publisherReducer.searchInput.currentIdx));
-  };
-}
+// export function onHoverTypeahead(index) {
+//   return (dispatch, getState) => {
+//     dispatch(moveTypeaheadPointer(index - getState().publisherReducer.searchInput.currentIdx));
+//   };
+// }
 
-export function updateFilteredPublishers(filtered, value) {
-  return {
-    type: FILTER_PUBLISHERS,
-    filtered,
-    value
-  };
-}
+// export function updateFilteredPublishers(filtered, value) {
+//   return {
+//     type: FILTER_PUBLISHERS,
+//     filtered,
+//     value
+//   };
+// }
 
-/*
-Using `fuzzy` wordfilter to do fuzzy string matching on PublisherSerachBar typeahead.
-returns filtered publisherIds only
-*/
-export function filterPublishers(word) {
-  return (dispatch, getState) => {
-    const options = { extract: el => el.name };
-    const results = fuzzy.filter(word, getState().publisherReducer.publishers, options).map( el => el.original.id);
-    dispatch(updateFilteredPublishers(results, word));
-  };
-}
+// /*
+// Using `fuzzy` wordfilter to do fuzzy string matching on PublisherSerachBar typeahead.
+// returns filtered publisherIds only
+// */
+// export function filterPublishers(word) {
+//   return (dispatch, getState) => {
+//     const options = { extract: el => el.name };
+//     const results = fuzzy.filter(word, getState().publisherReducer.publishers, options).map( el => el.original.id);
+//     dispatch(updateFilteredPublishers(results, word));
+//   };
+// }
 

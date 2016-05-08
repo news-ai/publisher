@@ -1,7 +1,9 @@
 import React, { PropTypes } from 'react';
 
-function Typeahead({ map, domId, title, value, fieldType, width, list, filtered, selected, filterHandler, keyPressHandler, onHover, currentIdx, deleteSelection, max }) {
-  if (list.length === filtered.length + selected.length || selected.length === max) filtered = [];
+function Typeahead({ map, domId, title, value, width, list, filtered, selected, filterHandler, keyPressHandler, onHover, currentIdx, deleteSelection, max }) {
+  if (list) if (list.length === filtered.length + selected.length || selected.length === max) filtered = [];
+  width = width || '300px';
+  max = max || 1;
   return (
     <div id={domId}>
     <div className='row'>
@@ -32,7 +34,7 @@ function Typeahead({ map, domId, title, value, fieldType, width, list, filtered,
               zIndex: '10',
               position: 'relative',
               textAlign: 'center',
-              backgroundColor: currentIdx === i ? 'lightblue': 'white'
+              backgroundColor: currentIdx === i ? 'lightblue' : 'white'
             }}
             key={i}
             onMouseOver={ _ => onHover(i)}
@@ -75,8 +77,8 @@ function Typeahead({ map, domId, title, value, fieldType, width, list, filtered,
 }
 
 Typeahead.propTypes = {
-  title: PropTypes.string.isRequired,
-  list: PropTypes.array.isRequired,
+  // title: PropTypes.string.isRequired,
+  // list: PropTypes.array.isRequired,
   filtered: PropTypes.array.isRequired,
   currentIdx: PropTypes.number.isRequired,
   filterHandler: PropTypes.func.isRequired,

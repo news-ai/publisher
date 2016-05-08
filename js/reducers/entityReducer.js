@@ -10,7 +10,7 @@ import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
 
 function entityReducer(state = initialState.entityReducer, action) {
-  Object.freeze(state);
+  if (window.isDev) Object.freeze(state);
   let obj = assignToEmpty(state, {});
   switch (action.type) {
     case REQUEST_ENTITIES:

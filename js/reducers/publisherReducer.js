@@ -13,7 +13,7 @@ import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
 
 function publisherReducer(state = initialState.publisherReducer, action) {
-  Object.freeze(state);
+  if (window.isDev) Object.freeze(state);
   let obj = assignToEmpty(state, {});
   obj.searchInput = assignToEmpty(state.searchInput, {});
   switch (action.type) {
