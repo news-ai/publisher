@@ -41,7 +41,12 @@ class HomePage extends Component {
           { (articles && (next === null || next)) ? (
             <div>
               <div style={{margin: '5px'}}>
-              <small style={{marginTop: '5px', color: 'gray', fontStyle: 'italic'}} onClick={ _ => this.setState({filterTab: !this.state.filterTab})}>{ this.state.filterTab ? 'Close' : 'Filters'}</small>
+              <small style={{
+                marginTop: '5px',
+                color: 'gray',
+                fontStyle: 'italic',
+                cursor: 'pointer'
+              }} onClick={ _ => this.setState({filterTab: !this.state.filterTab})}>{ this.state.filterTab ? 'Close' : 'Filters'}</small>
               { this.state.filterTab ? <div>
                 <Filter />
                 </div> : null }
