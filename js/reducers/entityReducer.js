@@ -11,6 +11,17 @@ import { initialState } from './initialState';
 
 function entityReducer(state = initialState.entityReducer, action) {
   if (window.isDev) Object.freeze(state);
+  let accessing = false;
+  if (
+    action.type === REQUEST_ENTITY ||
+    action.type === RECEIVE_ENTITY ||
+    action.type === REQUEST_ENTITIES ||
+    action.type === RECEIVE_ENTITIES ||
+    action.type === REQUEST_ENTITY_ARTICLES ||
+    action.type === RECEIVE_ENTITY_ARTICLES
+    ) accessing = true;
+  else return state;
+
   let obj = assignToEmpty(state, {});
   switch (action.type) {
     case REQUEST_ENTITIES:

@@ -7,6 +7,13 @@ import { initialState } from './initialState';
 
 function feedReducer(state = initialState.feedReducer, action) {
   if (window.isDev) Object.freeze(state);
+  let accessing = false;
+  if (
+    action.type === REQUEST_FEED ||
+    action.type === RECEIVE_FEED
+    ) accessing = true;
+  else return state;
+
   let obj = assignToEmpty(state, {});
   switch (action.type) {
     case REQUEST_FEED:

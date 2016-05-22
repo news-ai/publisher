@@ -3,7 +3,6 @@ import {
 	ROLLOVER,
 	SELECT,
 	DELETE,
-  TOGGLE_FILTER_TAB,
   RECEIVE_ARTICLE_IDS,
   SET_NEXT,
   SET_VALUE,
@@ -13,6 +12,18 @@ import { initialState } from './initialState';
 
 function filterReducer(state = initialState.filterReducer, action) {
   if (window.isDev) Object.freeze(state);
+  let accessing = false;
+  if (
+    action.type === FILTER ||
+    action.type === ROLLOVER ||
+    action.type === SELECT ||
+    action.type === DELETE ||
+    action.type === RECEIVE_ARTICLE_IDS ||
+    action.type === SET_NEXT ||
+    action.type === SET_VALUE
+    ) accessing = true;
+  else return state;
+
   let obj = assignToEmpty(state, {});
   switch (action.type) {
     case FILTER:

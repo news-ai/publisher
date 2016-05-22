@@ -14,6 +14,20 @@ import { initialState } from './initialState';
 
 function publisherReducer(state = initialState.publisherReducer, action) {
   if (window.isDev) Object.freeze(state);
+  let accessing = false;
+  if (
+    action.type === RECEIVE_PUBLISHER ||
+    action.type === REQUEST_PUBLISHER ||
+    action.type === REQUEST_PUBLISHER_ARTICLES ||
+    action.type === RECEIVE_PUBLISHER_ARTICLES ||
+    action.type === SET_NEXT ||
+    action.type === FILTER_PUBLISHERS ||
+    action.type === ROLLOVER_PUBLISHERS ||
+    action.type === SELECT_PUBLISHER ||
+    action.type === DELETE_PUBLISHER
+    ) accessing = true;
+  else return state;
+
   let obj = assignToEmpty(state, {});
   obj.searchInput = assignToEmpty(state.searchInput, {});
   switch (action.type) {
