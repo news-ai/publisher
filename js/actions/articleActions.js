@@ -1,3 +1,5 @@
+import fetch from 'isomorphic-fetch';
+
 import {
   REQUEST_ARTICLES,
   RECEIVE_ARTICLES,

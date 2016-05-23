@@ -7,6 +7,8 @@
  * export const YOUR_ACTION_CONSTANT = 'YOUR_ACTION_CONSTANT';
  */
 
+ export const TOGGLE_FOLLOW = 'TOGGLE_FOLLOW';
+
 export const FILTER = 'FILTER';
 export const ROLLOVER = 'ROLLOVER';
 export const SELECT = 'SELECT';

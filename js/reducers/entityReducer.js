@@ -5,6 +5,7 @@ import {
   RECEIVE_ENTITIES,
   REQUEST_ENTITY_ARTICLES,
   RECEIVE_ENTITY_ARTICLES,
+  TOGGLE_FOLLOW
 } from '../constants/AppConstants';
 import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
@@ -18,12 +19,15 @@ function entityReducer(state = initialState.entityReducer, action) {
     action.type === REQUEST_ENTITIES ||
     action.type === RECEIVE_ENTITIES ||
     action.type === REQUEST_ENTITY_ARTICLES ||
-    action.type === RECEIVE_ENTITY_ARTICLES
+    action.type === RECEIVE_ENTITY_ARTICLES ||
+    action.type === TOGGLE_FOLLOW
     ) accessing = true;
   else return state;
 
   let obj = assignToEmpty(state, {});
   switch (action.type) {
+    case TOGGLE_FOLLOW:
+    return obj;
     case REQUEST_ENTITIES:
       obj.isReceiving = true;
       return obj;

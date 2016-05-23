@@ -1,3 +1,5 @@
+import fetch from 'isomorphic-fetch';
+
 import {
   LOGIN_FAIL,
   REQUEST_LOGIN,
