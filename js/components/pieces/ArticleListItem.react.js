@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-let moment = require('moment-timezone');
 
 function ArticleListItem({id, name, url, summary, added_at, publisher, entity_scores, starred, toggleStar, read_later, toggleReadLater}) {
   let star = 'fa fa-star-o fa-lg pull-right star';
