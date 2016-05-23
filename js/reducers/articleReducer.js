@@ -16,19 +16,30 @@ function extractSummary(summary) {
 
 function articleReducer(state = initialState.articleReducer, action) {
   if (window.isDev) Object.freeze(state);
+  let accessing = false;
+  if (
+    action.type === REQUEST_ARTICLES ||
+    action.type === RECEIVE_ARTICLES ||
+    action.type === TOGGLE_STAR ||
+    action.type === RECEIVE_STARRED_FEED ||
+    action.type === RECEIVE_READ_LATER_FEED
+    ) accessing = true;
+  else return state;
+
   let obj = assignToEmpty(state, {});
   switch (action.type) {
     case REQUEST_ARTICLES:
-      obj.isReceiving = true;
-      return obj;
+      return assignToEmpty(state, {
+        isReceiving: true
+      });
     case RECEIVE_ARTICLES:
       obj.isReceiving = false;
       const timezoneOffset = moment.tz.guess();
       if (Array.isArray(action.articles)) {
         action.articles.map( article => {
-          article.basic_summary = extractSummary(article.summary);
           // sort entity scores in every article
           obj[article.id] = assignToEmpty(article, {
+            basic_summary: article.summary,
             entity_scores: article.entity_scores.sort( (a, b) => (a.score - b.score) * -1 ),
             added_at: moment(new Date(article.added_at * 1000).toISOString()).tz(timezoneOffset).format('MMM D, YYYY hh:mm A')
           });
