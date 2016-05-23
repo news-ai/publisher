@@ -3,7 +3,9 @@ import { Link } from 'react-router';
 let moment = require('moment-timezone');
 
 function ArticleListItem({id, name, url, summary, added_at, publisher, entity_scores, starred, toggleStar, read_later, toggleReadLater}) {
-  const star = starred || starred !== null ? 'fa fa-star fa-lg starred pull-right star' : 'fa fa-star-o fa-lg pull-right star';
+  let star = 'fa fa-star-o fa-lg pull-right star';
+  if (starred === true) star = 'fa fa-star fa-lg starred pull-right star';
+
   return (
     <div className='row article-body' key={id}>
       <div className='twelve columns'>
