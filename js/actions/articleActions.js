@@ -63,7 +63,7 @@ export function fetchStarredFeed() {
     .then( response => response.text())
     .then( body => {
       const json = JSON.parse(body);
-      Promise.all([
+      return Promise.all([
         dispatch(receiveArticles(json.results)),
         dispatch(receiveStarredArticles(json.results, json.next)),
       ]);

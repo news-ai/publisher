@@ -25,23 +25,31 @@ class Entity extends Component {
   }
 
   render() {
-    let {entity, entityArticles, onScrollBottom, next, articleIsReceiving} = this.props;
+    let { dispatch, entityId, entity, entityArticles, onScrollBottom, next, articleIsReceiving} = this.props;
     const entityLoading = (<span>The entity is loading</span>);
     const articleLoading = <CenterLoading name='articles'/>;
 
     if (next === 0) this._removeScroll();
 
     return (
-      <div className='container entity'>
+      <div className='container'>
         <div className='row'>
-        {(entity === undefined) ? entityLoading : (
-        <div className='twelve columns'>
-            <h5>{entity.name}</h5>
-            <p>Type: {entity.main_type}</p>
+        {entity === undefined ? entityLoading : (
+          <div className='twelve columns'>
+            <div className='u-max-full-width' style={{
+              display: 'flex',
+              alignItems: 'center'
+            }}>
+              <span style={{fontWeight: 500, fontSize: '1.8em'}}>{entity.name}</span>
+              <i className='fa fa-plus fa-lg right' style={{
+                color: 'lightgray'
+              }} ariaHidden='true' onClick={ _ => dispatch(actionCreators.toggleFollow(entityId, 'entities'))}></i>
             </div>
+            <p>Type: {entity.main_type}</p>
+          </div>
         )}
         </div>
-        <div className='row'>
+        <div>
           { (entityArticles === undefined) ? articleLoading : (
         <div>
         <ArticleList articles={entityArticles} />

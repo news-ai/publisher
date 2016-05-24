@@ -27,7 +27,11 @@ function entityReducer(state = initialState.entityReducer, action) {
   let obj = assignToEmpty(state, {});
   switch (action.type) {
     case TOGGLE_FOLLOW:
-    return obj;
+      if (action.followType !== 'entities') return state;
+      obj.following = assignToEmpty(state.following, {
+        [action.id]: state.following[action.id] ? !state.following[action.id] : true
+      });
+      return obj;
     case REQUEST_ENTITIES:
       obj.isReceiving = true;
       return obj;

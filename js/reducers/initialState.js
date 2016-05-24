@@ -5,7 +5,8 @@ export const initialState = {
     feedArticleIds: [],
   },
   entityReducer: {
-    isReceiving: false
+    isReceiving: false,
+    following: {}
   },
   authorReducer: {
     isReceiving: false
@@ -39,7 +40,6 @@ export const initialState = {
     },
   },
   filterReducer: {
-    filterTab: false,
     isReceiving: false,
     publishers: [],
     current: undefined,

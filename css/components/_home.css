@@ -20,6 +20,10 @@
 	text-align: center;
 }
 
+.right {
+	margin-left: auto;
+}
+
 .btn {
 	display: inline-block;
 	background-color: skyblue;
@@ -27,6 +31,15 @@
 	color: #FEFEFE;
 	border-radius: 3px;
 	text-decoration: none;
+}
+
+.vertical-align {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	margin-top: 4px;
+	margin-bottom: 7px;
 }
 
 .logo {
@@ -71,10 +84,6 @@
 
 .article-list-item-date {
 	font-size: 0.9em;	
-}
-
-.article-bulletpoints {
-	font-size: 0.9em;
 }
 
 .article-header-image {

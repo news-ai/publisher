@@ -16,10 +16,6 @@ import {
   isJsonString,
 } from '../utils/assign';
 
-export function fetchReadLaterFeed() {
-  return articleActions.fetchReadLaterFeed();
-}
-
 export function postArticle() {
   return {
     type: POST_DISCOVERY_ARTICLE,

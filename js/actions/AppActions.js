@@ -6,6 +6,25 @@ import * as entityActions from './entityActions';
 import * as discoveryActions from './discoveryActions';
 import * as authorActions from './authorActions';
 
+import {
+	TOGGLE_FOLLOW
+} from '../constants/AppConstants';
+
+export const flipFollow = (id, followType) => {
+  return {
+    type: TOGGLE_FOLLOW,
+    followType,
+    id,
+  };
+};
+
+export const toggleFollow = (id, followType) => {
+  return dispatch => {
+    return fetch(`${window.CONTEXT_API_BASE}/${followType}/${id}/follow/`, { credentials: 'include' })
+    .then( response => response.status === 200 ? dispatch(flipFollow(id, followType)) : null);
+  };
+};
+
 export const loginWithGoogle = _ => loginActions.loginWithGoogle();
 export const fetchPerson = _ => loginActions.fetchPerson();
 

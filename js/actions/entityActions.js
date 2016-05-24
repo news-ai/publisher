@@ -7,7 +7,6 @@ import {
   RECEIVE_ENTITIES,
   REQUEST_ENTITY_ARTICLES,
   RECEIVE_ENTITY_ARTICLES,
-  TOGGLE_FOLLOW
 } from '../constants/AppConstants';
 
 import {
@@ -66,24 +65,6 @@ export function receiveEntityArticles(json, entityId, next) {
     next
   };
 }
-
-
-export function flipFollow(id, followType) {
-  return {
-    type: TOGGLE_FOLLOW,
-    followType,
-    id,
-  };
-}
-
-export function toggleFollow(id, followType) {
-  return dispatch => {
-    return fetch(`${window.CONTEXT_API_BASE}/${followType}/${id}/follow/`, { credentials: 'include' })
-    .then( response => response.status === 200 ? dispatch(flipFollow(articleId, followType)) : null);
-  }
-}
-
-export function toggleFollow
 
 export function fetchEntitiesArticles() {
   return (dispatch, getState) => {
