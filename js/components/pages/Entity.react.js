@@ -8,7 +8,7 @@ import CenterLoading from '../pieces/CenterLoading.react';
 
 class Entity extends Component {
   componentDidMount() {
-    let {dispatch, entityId, entity, entityArticles, onScrollBottom} = this.props;
+    let {dispatch, entityId, entity, entityArticles, onScrollBottom, followed } = this.props;
     if (entity === undefined) dispatch(actionCreators.fetchEntityAndArticles(entityId));
     if (entity !== undefined && entityArticles === undefined) dispatch(actionCreators.fetchEntityArticles(entityId));
     window.addEventListener('scroll', onScrollBottom);
@@ -25,7 +25,7 @@ class Entity extends Component {
   }
 
   render() {
-    let { dispatch, entityId, entity, entityArticles, onScrollBottom, next, articleIsReceiving} = this.props;
+    let { dispatch, entityId, entity, entityArticles, onScrollBottom, next, articleIsReceiving, followed} = this.props;
     const entityLoading = (<span>The entity is loading</span>);
     const articleLoading = <CenterLoading name='articles'/>;
 
@@ -42,7 +42,7 @@ class Entity extends Component {
             }}>
               <span style={{fontWeight: 500, fontSize: '1.8em'}}>{entity.name}</span>
               <i className='fa fa-plus fa-lg right' style={{
-                color: 'lightgray'
+                color: followed ? 'black' : 'lightgray'
               }} ariaHidden='true' onClick={ _ => dispatch(actionCreators.toggleFollow(entityId, 'entities'))}></i>
             </div>
             <p>Type: {entity.main_type}</p>
@@ -70,7 +70,8 @@ const mapStateToProps = (state, props) => {
     entity: entity,
     next: entity ? entity.next : undefined,
     articleIsReceiving: state.articleReducer.isReceiving,
-    entityArticles: (entity === undefined || entity.entity_articles === undefined) ? undefined : (entity.entity_articles.some( id => state.articleReducer[id])) ? entity.entity_articles.map( id => state.articleReducer[id]) : undefined
+    entityArticles: (entity === undefined || entity.entity_articles === undefined) ? undefined : (entity.entity_articles.some( id => state.articleReducer[id])) ? entity.entity_articles.map( id => state.articleReducer[id]) : undefined,
+    followed: state.entityReducer.following[entityId] ? true : false
   };
 };
 

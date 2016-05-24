@@ -37,11 +37,11 @@ export function fetchPerson() {
       .then( response => response.status !== 200 ? false : response.text())
       .then( body => {
         if (body) {
-          let person = JSON.parse(body);
+          const person = JSON.parse(body);
           mixpanel.identify(String(person.id));
-          dispatch(receiveLogin(person));
+          return dispatch(receiveLogin(person));
         } else {
-          dispatch(loginFail());
+          return dispatch(loginFail());
         }
     });
   };
