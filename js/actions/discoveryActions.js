@@ -16,10 +16,6 @@ import {
   isJsonString,
 } from '../utils/assign';
 
-export function fetchReadLaterFeed() {
-  return articleActions.fetchReadLaterFeed();
-}
-
 export function postArticle() {
   return {
     type: POST_DISCOVERY_ARTICLE,
@@ -73,7 +69,7 @@ export function fetchDiscoveryFeed() {
 export function addDiscoveryArticle() {
   return (dispatch, getState) => {
     dispatch(postArticle());
-    fetch(`https://news-discovery1.newsai.org/discovery`, {
+    fetch(`http://processing1.newsai.org/processing`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
