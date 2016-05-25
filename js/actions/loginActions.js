@@ -4,7 +4,6 @@ import {
   RECEIVE_LOGIN,
 } from '../constants/AppConstants';
 
-const CONTEXT_API_BASE = `https://context.newsai.org/api`;
 
 function requestLogin() {
   return {
@@ -32,7 +31,7 @@ export function loginWithGoogle() {
 export function fetchPerson() {
   return dispatch => {
     dispatch(requestLogin());
-    return fetch(`${CONTEXT_API_BASE}/users/me`, { credentials: 'include'})
+    return fetch(`${window.CONTEXT_API_BASE}/users/me`, { credentials: 'include'})
       .then( response => response.status !== 200 ? false : response.text())
       .then( body => {
         if (body) {

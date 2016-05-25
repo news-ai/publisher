@@ -13,7 +13,20 @@ import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
 
 function personReducer(state = initialState.personReducer, action) {
-  Object.freeze(state);
+  if (window.isDev) Object.freeze(state);
+  let accessing = false;
+  if (
+    action.type === REQUEST_LOGIN ||
+    action.type === RECEIVE_LOGIN ||
+    action.type === LOGIN_FAIL ||
+    action.type === POST_DISCOVERY_ARTICLE ||
+    action.type === DONE_POST_DISCOVERY_ARTICLE ||
+    action.type === UPDATE_DISCOVERY_INPUT ||
+    action.type === RECEIVE_DISCOVERY_ARTICLES ||
+    action.type === FAIL_POST_DISCOVERY_ARTICLE
+    ) accessing = true;
+  else return state;
+
   let obj = assignToEmpty(state, {});
   switch (action.type) {
     case REQUEST_LOGIN:

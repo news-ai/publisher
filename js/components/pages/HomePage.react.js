@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/AppActions';
+import * as filterActions from '../../actions/filterActions';
 import ArticleList from '../pieces/ArticleList.react';
 import AdditionalLoading from '../pieces/AdditionalLoading.react';
 import CenterLoading from '../pieces/CenterLoading.react';
-import PublisherSearchBar from '../containers/PublisherSearchBar.react';
+import Filter from '../pieces/Filter.react';
 
 class HomePage extends Component {
   constructor(props) {
@@ -15,32 +16,39 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
-    const {dispatch, articleIds, onScrollBottom} = this.props;
-    window.addEventListener('scroll', onScrollBottom);
-    dispatch(actionCreators.fetchAllPublishers());
+    const {dispatch, articleIds, fetchFeed } = this.props;
+    // dispatch(actionCreators.fetchAllPublishers());
     if (articleIds.length === 0) dispatch(actionCreators.fetchFeed());
+    // window.addEventListener('scroll', fetchFeed);
   }
 
   componentWillUnmount() {
-    const {onScrollBottom} = this.props;
-    window.removeEventListener('scroll', onScrollBottom);
+    const { fetchFeed, fetchFilterFeed, filterMode } = this.props;
+    if (filterMode) window.removeEventListener('scroll', fetchFilterFeed);
+    else window.removeEventListener('scroll', fetchFeed);
   }
 
   render() {
-    const { articles, articleIsReceiving, next } = this.props;
-
+    const { articles, articleIsReceiving, next, dispatch, filterMode, fetchFeed, fetchFilterFeed } = this.props;
+    if (filterMode) {
+      window.removeEventListener('scroll', fetchFeed);
+      window.addEventListener('scroll', fetchFilterFeed);
+    } else {
+      window.addEventListener('scroll', fetchFeed);
+    }
     return (
       <div className='container article-list-container'>
-          {(articles && next) ? (
+          { (articles && (next === null || next)) ? (
             <div>
               <div style={{margin: '5px'}}>
-              <small style={{marginTop: '5px', color: 'gray', fontStyle: 'italic'}} onClick={ _ => this.setState({filterTab: !this.state.filterTab})}>{ this.state.filterTab ? 'Close' : 'Filters'}</small>
+              <small style={{
+                marginTop: '5px',
+                color: 'gray',
+                fontStyle: 'italic',
+                cursor: 'pointer'
+              }} onClick={ _ => this.setState({filterTab: !this.state.filterTab})}>{ this.state.filterTab ? 'Close' : 'Filters'}</small>
               { this.state.filterTab ? <div>
-                <PublisherSearchBar
-                  title='Filter by Publisher'
-                  width='300px'
-                  max={1}
-                />
+                <Filter />
                 </div> : null }
               </div>
             <ArticleList articles={articles} />
@@ -57,45 +65,37 @@ class HomePage extends Component {
 }
 
 const mapStateToProps = state => {
-  const feedArticleIds = state.feedReducer.feedArticleIds;
-  const filterMode = state.publisherReducer.searchInput.selected.length > 0 && !state.publisherReducer.isReceiving && !state.articleReducer.isReceiving;
-  const pubId = filterMode ? state.publisherReducer.searchInput.selected[0] : undefined;
-  const publisher = filterMode ? state.publisherReducer[pubId] : undefined;
+  const filterMode = state.filterReducer.current !== undefined;
+  const current = state.filterReducer.current;
+  const articleIds = filterMode ? state.filterReducer[current].articles : state.feedReducer.feedArticleIds;
   return {
     filterMode: filterMode,
-    pubId: pubId,
+    current: current,
     projectName: state.feedReducer.projectName,
-    next: filterMode ? publisher.next : state.feedReducer.next,
-    articleIds: filterMode ? publisher.publisher_articles.map( article => article.id) : feedArticleIds,
-    feedIsReceving: filterMode ? publisher.isReceiving : state.feedReducer.isReceiving,
+    next: filterMode ? state.filterReducer[current].next : state.feedReducer.next,
+    articleIds: articleIds,
+    feedIsReceving: state.feedReducer.isReceiving,
     articleIsReceiving: state.articleReducer.isReceiving,
-    articles: filterMode ? publisher.publisher_articles.map( id => state.articleReducer[id] ) : feedArticleIds.map( articleId => state.articleReducer[articleId])
+    articles: articleIds.map( articleId => state.articleReducer[articleId]),
+
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    dispatch: action => dispatch(action)
-  };
-};
-
-const mergeProps = (stateProps, dispatchProps, ownProps) => {
-  const { dispatch } = dispatchProps;
-  return {
-    ...stateProps,
-    onScrollBottom: ev => {
-      ev.preventDefault();
-      if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) {
-        if (stateProps.filterMode) dispatch(actionCreators.fetchPublisherArticles(stateProps.pubId));
-        else dispatch(actionCreators.fetchFeed());
-      }
+    dispatch: action => dispatch(action),
+    fetchFeed: e => {
+      e.preventDefault();
+      if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) dispatch(actionCreators.fetchFeed());
     },
-    dispatch: action => dispatch(action)
+    fetchFilterFeed: e => {
+      e.preventDefault();
+      if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) dispatch(filterActions.fetchFilterArticles())
+    }
   };
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-  mergeProps
 )(HomePage);
