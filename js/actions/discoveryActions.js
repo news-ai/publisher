@@ -70,7 +70,7 @@ export function addDiscoveryArticle() {
   return (dispatch, getState) => {
     if (getState().personReducer.discovery.url.length === 0) return;
     dispatch(postArticle());
-    fetch(`https://news-discovery1.newsai.org/discovery`, {
+    fetch(`http://processing1.newsai.org/processing`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
