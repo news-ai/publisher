@@ -23,7 +23,7 @@ function ArticleListItem({id, name, url, summary, added_at, publisher, entity_sc
             { entity_scores.length >= 3 ? (
             <div className='article-top3-entities'>
               { entity_scores.map((entity, i) => i < 3 ?
-              <Link to={'/entities/' + entity_scores[i].entity.id}><div>{entity_scores[i].entity.name}</div></Link>
+              <Link to={'/entities/' + entity_scores[i].entity.id}><div className='round-btn'>{entity_scores[i].entity.name}</div></Link>
               : null)}
             </div>
               ) : null}

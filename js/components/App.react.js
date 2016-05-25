@@ -39,7 +39,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getAuth: _ => dispatch(actionCreators.fetchPerson()),
+    getAuth: _ => {
+      dispatch(actionCreators.fetchPerson()).then(() => dispatch(actionCreators.fetchFollow('entities')));
+    },
   };
 };
 

@@ -6,6 +6,38 @@ import * as entityActions from './entityActions';
 import * as discoveryActions from './discoveryActions';
 import * as authorActions from './authorActions';
 
+import {
+	// TOGGLE_FOLLOW,
+  FETCH_FOLLOW,
+} from '../constants/AppConstants';
+
+export const fetchFollow = (followType) => {
+  return dispatch => {
+    return fetch(`${window.CONTEXT_API_BASE}/${followType}/following/`, { credentials: 'include' })
+    .then( response => response.text())
+    .then( body => {
+      const json = JSON.parse(body);
+      dispatch({ type: FETCH_FOLLOW, body: json, followType});
+      return Promise.all(json.results.map( e => dispatch(entityActions.fetchEntity(e.entity.id))));
+    });
+  };
+};
+
+// export const flipFollow = (id, followType) => {
+//   return {
+//     type: TOGGLE_FOLLOW,
+//     followType,
+//     id,
+//   };
+// };
+
+export const toggleFollow = (id, followType) => {
+  return dispatch => {
+    return fetch(`${window.CONTEXT_API_BASE}/${followType}/${id}/follow/`, { credentials: 'include' })
+    .then( response => response.status === 200 ? dispatch(fetchFollow(followType)) : null);
+  };
+};
+
 export const loginWithGoogle = _ => loginActions.loginWithGoogle();
 export const fetchPerson = _ => loginActions.fetchPerson();
 
