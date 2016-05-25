@@ -15,14 +15,16 @@ class Following extends Component {
 			<div className='container'>
 			FOLLOWING
 			{ entities.map( entity => (
-				<Link to={`/entities/${entity.id}`}>
-					<div className='row entity-item'>
+					<div className='row'>
 						<div className='twelve columns'>
-							<span>{entity.name}</span>
-							<span className='pull-right'>{entity.main_type}</span>
+							<div className='article-top3-entities'>
+								<Link to={`/entities/${entity.id}`}>
+									<div>{entity.name}</div>
+								</Link>
+							<span className='right'>{entity.main_type}</span>
+							</div>
 						</div>	
 					</div>
-				</Link>
 				)) }
 			</div>
 		)
