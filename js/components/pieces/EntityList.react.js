@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import EntityListItem from '../containers/EntityListItem.react';
+import EntityListItem from '../pieces/EntityListItem.react';
 // import { connect } from 'react-redux';
 
 function EntityList({entities, entityScores}) {
