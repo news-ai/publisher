@@ -7,7 +7,7 @@ import * as discoveryActions from './discoveryActions';
 import * as authorActions from './authorActions';
 
 import {
-	TOGGLE_FOLLOW,
+	// TOGGLE_FOLLOW,
   FETCH_FOLLOW,
 } from '../constants/AppConstants';
 
@@ -15,11 +15,11 @@ export const fetchFollow = (followType) => {
   return dispatch => {
     return fetch(`${window.CONTEXT_API_BASE}/${followType}/following/`, { credentials: 'include' })
     .then( response => response.text())
-    .then( body => dispatch({
-      type: FETCH_FOLLOW,
-      body: JSON.parse(body),
-      followType,
-    }));
+    .then( body => {
+      const json = JSON.parse(body);
+      dispatch({ type: FETCH_FOLLOW, body: json, followType});
+      return Promise.all(json.results.map( e => dispatch(entityActions.fetchEntity(e.entity.id))));
+    });
   };
 };
 
