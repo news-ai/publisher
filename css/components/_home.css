@@ -118,11 +118,14 @@ a {
 	margin-bottom: 7px;
 }
 
-.article-top3-entities div {
-	display: inline;
-	padding: 2px 7px 2px 7px;
+/*.article-top3-entities div {
+}
+*/
+.round-btn {
 	margin: 0 6px 0 0;
+	display: inline;
 	border: 1px solid lightgray;
+	padding: 2px 7px 2px 7px;
 	color: gray;
 	font-size: .9em;
 	border-radius: 8px;
@@ -130,7 +133,7 @@ a {
 	align-self: center;
 }
 
-.article-top3-entities div:hover {
+.round-btn:hover {
 	border: 1px solid black;
 	color: black;
 }

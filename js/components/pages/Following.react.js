@@ -9,23 +9,28 @@ class Following extends Component {
   }
 
 	render() {
-		const { entities } = this.props;
+		const { entities, dispatch } = this.props;
 		console.log(entities);
 		return (
 			<div className='container'>
 			FOLLOWING
-			{ entities.map( entity => (
-					<div className='row'>
-						<div className='twelve columns'>
-							<div className='article-top3-entities'>
-								<Link to={`/entities/${entity.id}`}>
-									<div>{entity.name}</div>
-								</Link>
-							<span className='right'>{entity.main_type}</span>
-							</div>
+			{ entities.length > 0 ? entities.map( entity => (
+					<div className='row' style={{display: 'flex'}}>
+						<div className='six columns'>
+							<Link to={`/entities/${entity.id}`}>
+								<div className='round-btn'>{entity.name}</div>
+							</Link>
 						</div>	
+						<div className='four columns'>
+							<span>{entity.main_type}</span>
+						</div>
+						<div className='two columns'>
+              <i className='fa fa-plus fa-lg pull-right' style={{
+                color: 'black'
+              }} ariaHidden='true' onClick={ _ => dispatch(actionCreators.toggleFollow(entity.id, 'entities'))}></i>
+						</div>
 					</div>
-				)) }
+				)) : null }
 			</div>
 		)
 	}
