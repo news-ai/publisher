@@ -5,12 +5,21 @@ function truncate(num, decimalPoint) {
   return Math.floor(num * 100 * (10 ** decimalPoint)) / (10 ** decimalPoint);
 }
 
-function EntityListItem({name, id, entityScore}) {
+function EntityListItem({name, id, entityScore, toggleFollow, following}) {
   return (
     <Link to={'/entities/' + id}>
-      <div className='row entity-item'>
-        <span className='ten columns'>{name}</span>
-        <span className='two columns'>{truncate(entityScore, 2)}</span>
+      <div className='row' style={{display: 'flex'}}>
+        <div className='six columns'>
+          <Link to={`/entities/${id}`}>
+            <div className='round-btn'>{name}</div>
+          </Link>
+        </div>  
+        <div className='two columns'>{truncate(entityScore, 2)}</div>
+        <div className='two columns'>
+          <i className='fa fa-plus fa-lg pull-right' style={{
+            color: following[id] ? 'black' : 'lightgray'
+          }} ariaHidden='true' onClick={ _ => toggleFollow(id, 'entities')}></i>
+        </div>
       </div>
     </Link>
     );

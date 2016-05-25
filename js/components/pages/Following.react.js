@@ -21,9 +21,6 @@ class Following extends Component {
 								<div className='round-btn'>{entity.name}</div>
 							</Link>
 						</div>	
-						<div className='four columns'>
-							<span>{entity.main_type}</span>
-						</div>
 						<div className='two columns'>
               <i className='fa fa-plus fa-lg pull-right' style={{
                 color: 'black'
