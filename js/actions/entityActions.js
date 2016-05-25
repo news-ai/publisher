@@ -1,3 +1,5 @@
+import fetch from 'isomorphic-fetch';
+
 import {
   REQUEST_ENTITY,
   RECEIVE_ENTITY,
@@ -63,7 +65,6 @@ export function receiveEntityArticles(json, entityId, next) {
     next
   };
 }
-
 
 export function fetchEntitiesArticles() {
   return (dispatch, getState) => {
