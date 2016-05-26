@@ -26,24 +26,28 @@ class Following extends Component {
         <span>Entities you Followed</span>
       </div>
       <div style={{
-        margin: '10px'
+        margin: 'auto',
+        display: 'flex',
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        justifyContent: 'flex-start'
       }}>
 			{ entities.length > 0 ? entities.map( entity => (
-					<div className='row' style={{
-            display: 'flex',
-            marginTop: '3px'
-          }}>
-						<div className='four columns'>
+        <div className='following-entity' style={{
+          width: '240px',
+          display: 'inline',
+          paddingLeft: '5px',
+          paddingRight: '5px'
+        }}>
+						<div>
 							<Link to={`/entities/${entity.id}`}>
 								<div className='round-btn'>{entity.name}</div>
 							</Link>
-						</div>	
-						<div className='two columns'>
-              <i className='fa fa-plus fa-lg' style={{
-                color: following[entity.id] ? 'black' : 'lightgray'
+              <i className='fa fa-plus fa-lg pull-right' style={{
+                color: following[entity.id] ? 'black' : 'lightgray',
               }} ariaHidden='true' onClick={ _ => dispatch(actionCreators.toggleFollow(entity.id, 'entities'))}></i>
-						</div>
-					</div>
+						</div>	
+          </div>
 				)) : <span>You are not following any entities.</span> }
       </div>
 			</div>
