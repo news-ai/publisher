@@ -16,7 +16,6 @@ class Following extends Component {
 
 	render() {
 		const { entities, dispatch, following } = this.props;
-    console.log(entities);
 		return (
 			<div className='container'>
       <div style={{
