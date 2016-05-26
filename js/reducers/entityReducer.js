@@ -21,19 +21,22 @@ function entityReducer(state = initialState.entityReducer, action) {
     action.type === RECEIVE_ENTITIES ||
     action.type === REQUEST_ENTITY_ARTICLES ||
     action.type === RECEIVE_ENTITY_ARTICLES ||
-    // action.type === TOGGLE_FOLLOW ||
+    action.type === TOGGLE_FOLLOW ||
     action.type === FETCH_FOLLOW
     ) accessing = true;
   else return state;
 
   let obj = assignToEmpty(state, {});
   switch (action.type) {
-    // case TOGGLE_FOLLOW:
-    //   if (action.followType !== 'entities') return state;
-    //   obj.following = assignToEmpty(state.following, {
-    //     [action.id]: state.following[action.id] ? !state.following[action.id] : true
-    //   });
-    //   return obj;
+    case TOGGLE_FOLLOW:
+      if (action.followType !== 'entities') return state;
+      obj.following = assignToEmpty(state.following, {});
+      if (state.following[action.id]) {
+        obj.following[action.id] = !state.following[action.id];
+      } else {
+        obj.following[action.id] = true;
+      }
+      return obj;
     case FETCH_FOLLOW:
       if (action.followType !== 'entities') return state;
       obj.following = {};

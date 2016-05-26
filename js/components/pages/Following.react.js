@@ -6,40 +6,57 @@ import * as actionCreators from '../../actions/AppActions';
 class Following extends Component {
   componentDidMount() {
   	const { dispatch } = this.props;
+    dispatch(actionCreators.fetchFeed('entities'));
+  }
+
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch(actionCreators.fetchFeed('entities'));
   }
 
 	render() {
-		const { entities, dispatch } = this.props;
-		console.log(entities);
+		const { entities, dispatch, following } = this.props;
+    console.log(entities);
 		return (
 			<div className='container'>
-			FOLLOWING
+      <div style={{
+        marginTop: '8px',
+        marginBottom: '5px',
+        borderBottom: '1px solid lightgray'
+      }}>
+        <span>Entities I am Following</span>
+      </div>
+      <div style={{
+        margin: '10px'
+      }}>
 			{ entities.length > 0 ? entities.map( entity => (
-					<div className='row' style={{display: 'flex'}}>
-						<div className='six columns'>
+					<div className='row' style={{
+            display: 'flex',
+            marginTop: '3px'
+          }}>
+						<div className='four columns'>
 							<Link to={`/entities/${entity.id}`}>
 								<div className='round-btn'>{entity.name}</div>
 							</Link>
 						</div>	
-						<div className='four columns'>
-							<span>{entity.main_type}</span>
-						</div>
 						<div className='two columns'>
-              <i className='fa fa-plus fa-lg pull-right' style={{
-                color: 'black'
+              <i className='fa fa-plus fa-lg' style={{
+                color: following[entity.id] ? 'black' : 'lightgray'
               }} ariaHidden='true' onClick={ _ => dispatch(actionCreators.toggleFollow(entity.id, 'entities'))}></i>
 						</div>
 					</div>
 				)) : null }
+      </div>
 			</div>
 		)
 	}
 }
 
 const mapStateToProps = state => {
-	const entityIds = Object.keys(state.entityReducer.following).filter( id => state.entityReducer.following[id] === true);
+	const entityIds = Object.keys(state.entityReducer.following).filter( id => state.entityReducer[id]);
 	const entities = entityIds.map(id => state.entityReducer[id]);
 	return {
+    following: state.entityReducer.following,
 		entities
 	};
 }
