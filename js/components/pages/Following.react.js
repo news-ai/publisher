@@ -24,7 +24,7 @@ class Following extends Component {
         marginBottom: '5px',
         borderBottom: '1px solid lightgray'
       }}>
-        <span>Entities I am Following</span>
+        <span>Entities you Followed</span>
       </div>
       <div style={{
         margin: '10px'
@@ -45,7 +45,7 @@ class Following extends Component {
               }} ariaHidden='true' onClick={ _ => dispatch(actionCreators.toggleFollow(entity.id, 'entities'))}></i>
 						</div>
 					</div>
-				)) : null }
+				)) : <span>You are not following any entities.</span> }
       </div>
 			</div>
 		)
