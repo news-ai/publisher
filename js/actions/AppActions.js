@@ -78,15 +78,12 @@ export const fetchDiscoveryFeed = _ => discoveryActions.fetchDiscoveryFeed();
 export const addDiscoveryArticle = _ => discoveryActions.addDiscoveryArticle();
 export const updateDiscoveryInput = url => discoveryActions.updateDiscoveryInput(url);
 
-export const doneFetchingArticleEntities = _ => entityActions.doneFetchingArticleEntities();
-export const requestArticleEntities = articleId => entityActions.requestArticleEntities(articleId);
 export const requestEntity = entityId => entityActions.requestEntity(entityId);
 export const receiveEntity = json => entityActions.receiveEntity(json);
 export const requestEntityArticles = _ => entityActions.requestEntityArticles();
 export const receiveEntityArticles = (json, entityId, next) => entityActions.receiveEntityArticles(json, entityId, next);
 export const fetchEntityArticles = entityId => entityActions.fetchEntityArticles(entityId);
 export const fetchEntity = entityId => entityActions.fetchEntity(entityId);
-export const fetchArticleEntities = articleId => entityActions.fetchArticleEntities(articleId);
 
 export const requestFeed = _ => feedActions.requestFeed();
 export const receiveFeed = (json, next) => feedActions.receiveFeed(json, next);

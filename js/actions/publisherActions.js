@@ -107,19 +107,6 @@ export function fetchPublisherArticles(publisherId) {
   };
 }
 
-export function fetchPublisherAndArticles(publisherId) {
-  return dispatch => {
-    dispatch(requestPublisher());
-    dispatch(requestArticles());
-    return fetch(`${window.CONTEXT_API_BASE}/publishers/${publisherId}/`, {credentials: 'include'})
-        .then( response => response.text())
-        .then( body => dispatch(receivePublisher(JSON.parse(body))))
-        .then( _ => {
-          return dispatch(fetchPublisherArticles(publisherId));
-        });
-  };
-}
-
 // export function selectPublisher() {
 //   return {
 //     type: SELECT_PUBLISHER,

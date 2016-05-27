@@ -10,8 +10,8 @@ class Publisher extends Component {
   componentDidMount() {
     const { dispatch, publisherId, publisher, publisherArticles, onScrollBottom } = this.props;
     if (publisher === undefined) dispatch(actionCreators.fetchPublisher(publisherId)).then( _ => dispatch(actionCreators.fetchPublisherArticles(publisherId)));
-    if (publisher && !publisherArticles) dispatch(actionCreators.fetchPublisherArticles(publisherId));
-    window.addEventListener('scroll', onScrollBottom);
+    if (publisher !== undefined && publisherArticles === undefined) dispatch(actionCreators.fetchPublisherArticles(publisherId));
+    window.addEventListener('scroll', onScrollBottom, false);
   }
 
   componentWillUnmount() {
@@ -19,16 +19,11 @@ class Publisher extends Component {
     window.removeEventListener('scroll', onScrollBottom);
   }
   
-  _removeScroll() {
-    const {onScrollBottom} = this.props;
-    window.removeEventListener('scroll', onScrollBottom);
-  }
-
   render() {
     const { dispatch, publisher, publisherArticles, onScrollBottom, next, articleIsReceiving, followed} = this.props;
     const publisherLoading = (<span>The publisher is loading</span>);
     const articleLoading = <CenterLoading name='articles' />;
-    if (next === 0) this._removeScroll();
+
     return (
       <div className='container'>
         <div className='row'>
@@ -89,7 +84,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     ...stateProps,
     onScrollBottom: ev => {
       ev.preventDefault();
-      if ( ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) ) dispatch(actionCreators.fetchPublisherArticles(publisherId));
+      if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) dispatch(actionCreators.fetchPublisherArticles(publisherId));
     },
     dispatch: action => dispatch(action)
   };
