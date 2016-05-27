@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/AppActions';
-import EntityList from '../pieces/EntityList.react';
+import EntityListItem from '../pieces/EntityListItem.react';
 import { Link } from 'react-router';
 
 class Article extends Component {
@@ -12,21 +12,18 @@ class Article extends Component {
   }
 
   render() {
-    const {article, entities, entityScores} = this.props;
+    const {article, entities, entityScores, dispatch} = this.props;
     const entitiesLoading = (<span>The entities are loading</span>);
     const articleLoading = (<span>The article is loading</span>);
     const entitiesProcessing = (
       <div style={{display: 'flex', alignItems: 'center'}}>
         <span>Entities are being processed. Come back in 5-10 minutes.</span>
         <img style={{
-            marginLeft: '5px',
-            width: '30px',
-            height: '30px',
+          marginLeft: '5px',
+          width: '30px',
+          height: '30px',
         }} src='../../img/default_loading.gif'></img>
       </div>);
-/*                        <p>Authors: {article.authors.map((author, i) =>
-                          <span key={i}><Link to={'/authors/' + author.id}>{author.name} </Link></span>)
-                      }</p> */
     return (
       <div className='container'>
             <div className='row'>
@@ -56,7 +53,16 @@ class Article extends Component {
                 <h5>Entities</h5>
                 {
                   entities ? entities.length > 0 ?
-                    <EntityList entities={entities} entityScores={entityScores} /> : entitiesProcessing
+                      <div>
+                        <div className='row entity-categories'>
+                        <span className='ten columns'>Name</span>
+                        <span className='two columns'>Relevance</span>
+                        </div>
+                        <div className='entity-body'>
+                      {entities.map((entity, i) => <EntityListItem key={entity.id} entityScore={entityScores[i]} {...entity} />)}
+                        </div>
+                      </div>
+                    : entitiesProcessing
                   : entitiesLoading
                 }
                 </div>
@@ -76,6 +82,13 @@ const mapStateToProps = (state, props) => {
   };
 };
 
+const mapDispatchToProps = dispatch => {
+  return {
+    dispatch: action => dispatch(action)
+  };
+};
+
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Article);
