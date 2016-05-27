@@ -17,11 +17,6 @@ class StarredFeed extends Component {
     window.removeEventListener('scroll', onScrollBottom);
   }
 
-  _removeScroll() {
-    const {onScrollBottom} = this.props;
-    window.removeEventListener('scroll', onScrollBottom);
-  }
-
   render() {
     const { articles, articleIsReceiving, next } = this.props;
     const articleLoading = <CenterLoading name='articles'/>;

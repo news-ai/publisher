@@ -22,7 +22,7 @@ export const flushFollow = followType => {
 export const fetchFollow = followType => {
   return (dispatch, getState) => {
     let fetchLink = window.CONTEXT_API_BASE + '/' + followType + '/following/';
-    let next, prev;
+    let next;
     if (followType === 'entities') {
       next = getState().entityReducer.next;
     } else if (followType === 'publishers') {
@@ -51,7 +51,6 @@ export const toggleFollow = (id, followType) => {
   return dispatch => {
     dispatch(flipFollow(id, followType));
     return fetch(`${window.CONTEXT_API_BASE}/${followType}/${id}/follow/`, { credentials: 'include' });
-    // .then( response => response.status === 200 ? dispatch(flipFollow(id, followType)) : null);
   };
 };
 

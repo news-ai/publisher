@@ -8,7 +8,7 @@ import CenterLoading from '../pieces/CenterLoading.react';
 
 class Entity extends Component {
   componentDidMount() {
-    const {dispatch, entityId, entity, entityArticles, onScrollBottom, followed } = this.props;
+    const {dispatch, entityId, entity, entityArticles, onScrollBottom } = this.props;
     if (entity === undefined) dispatch(actionCreators.fetchEntityAndArticles(entityId));
     if (entity !== undefined && entityArticles === undefined) dispatch(actionCreators.fetchEntityArticles(entityId));
     window.addEventListener('scroll', onScrollBottom);
@@ -19,17 +19,10 @@ class Entity extends Component {
     window.removeEventListener('scroll', onScrollBottom);
   }
 
-  _removeScroll() {
-    const {onScrollBottom} = this.props;
-    window.removeEventListener('scroll', onScrollBottom);
-  }
-
   render() {
     const { dispatch, entityId, entity, entityArticles, next, articleIsReceiving, followed} = this.props;
     const entityLoading = (<span>The entity is loading</span>);
     const articleLoading = <CenterLoading name='articles'/>;
-
-    if (next === 0) this._removeScroll();
 
     return (
       <div className='container'>
@@ -81,7 +74,21 @@ const mapDispatchToProps = (dispatch, props) => {
   };
 };
 
+const mergeProps = (stateProps, dispatchProps, ownProps) => {    
+  const {entityId} = stateProps;    
+  const {dispatch} = dispatchProps;   
+  return {
+    ...stateProps,
+    onScrollBottom: (ev) => {   
+      ev.preventDefault();    
+      if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) dispatch(actionCreators.fetchEntityArticles(entityId));   
+    },
+    dispatch: action => dispatch(action)
+  };
+};
+
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps
 )(Entity);

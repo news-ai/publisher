@@ -92,13 +92,13 @@ export function fetchEntitiesArticles() {
 export function fetchEntityArticles(entityId) {
   return (dispatch, getState) => {
     if (getState().entityReducer[entityId] === undefined) return;
+    if (getState().entityReducer[entityId].next === null || getState().articleReducer.isReceiving) return;
 
     dispatch(requestArticles());
 
     const fetchLink = getState().entityReducer[entityId].next || `${window.CONTEXT_API_BASE}/entities/${entityId}/articles${removeCache()}`;
     return fetch(fetchLink, { credentials: 'include'})
       .then( response => response.text())
-      .catch( e => console.log(e))
       .then( body => {
         if (!isJsonString(body)) return;
         const json = JSON.parse(body);

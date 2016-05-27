@@ -15,10 +15,10 @@ class Publisher extends Component {
   }
 
   componentWillUnmount() {
-    const { onScrollBottom } = this.props;
+    const {onScrollBottom} = this.props;
     window.removeEventListener('scroll', onScrollBottom);
   }
-
+  
   _removeScroll() {
     const {onScrollBottom} = this.props;
     window.removeEventListener('scroll', onScrollBottom);

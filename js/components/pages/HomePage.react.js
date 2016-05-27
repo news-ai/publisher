@@ -17,9 +17,7 @@ class HomePage extends Component {
 
   componentDidMount() {
     const {dispatch, articleIds, fetchFeed } = this.props;
-    // dispatch(actionCreators.fetchAllPublishers());
     if (articleIds.length === 0) dispatch(actionCreators.fetchFeed());
-    // window.addEventListener('scroll', fetchFeed);
   }
 
   componentWillUnmount() {
