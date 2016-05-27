@@ -46,6 +46,8 @@ export function receiveDiscoveryFeed(articles, next) {
 export function fetchDiscoveryFeed() {
   return (dispatch, getState) => {
     if (getState().articleReducer.isReceiving) return;
+    if (getState().personReducer.discovery.next === null || getState().articleReducer.isReceiving) return;
+
     dispatch(requestArticles());
 
     const fetchLink = getState().personReducer.discovery.next ?

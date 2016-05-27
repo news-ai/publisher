@@ -3,8 +3,6 @@ import fetch from 'isomorphic-fetch';
 import {
   REQUEST_ENTITY,
   RECEIVE_ENTITY,
-  REQUEST_ENTITIES,
-  RECEIVE_ENTITIES,
   REQUEST_ENTITY_ARTICLES,
   RECEIVE_ENTITY_ARTICLES,
 } from '../constants/AppConstants';
@@ -24,18 +22,6 @@ import {
   isJsonString,
 } from '../utils/assign';
 
-export function doneFetchingArticleEntities() {
-  return {
-    type: RECEIVE_ENTITIES
-  };
-}
-
-export function requestArticleEntities(articleId) {
-  return {
-    type: REQUEST_ENTITIES,
-    articleId
-  };
-}
 
 export function requestEntity(entityId) {
   return {
@@ -63,29 +49,6 @@ export function receiveEntityArticles(json, entityId, next) {
     json,
     entityId,
     next
-  };
-}
-
-export function fetchEntitiesArticles() {
-  return (dispatch, getState) => {
-    if (getState().filterReducer.entityInput.selected.length === 0) return;
-    if (getState().filterReducer.entityInput.next === null) return;
-    const fetchLink = getState().filterReducer.entityInput.next ||
-    `${window.CONTEXT_API_BASE}/entities/${getState().filterReducer.entityInput.selected.join(',')}/articles${removeCache()}`;
-    if (fetchLink === null) return;
-    dispatch(requestArticles());
-    return fetch(fetchLink, { credentials: 'include'})
-      .then( response => response.text())
-      .catch( e => console.log(e))
-      .then( body => {
-        if (!isJsonString(body)) return;
-        const json = JSON.parse(body);
-        return Promise.all([
-          dispatch(receiveArticles(json.results)),
-          dispatch(setNext(json.next, 'entityInput')),
-          dispatch(setFilterArticleIds(json.results.map( article => article.id ), 'entityInput'))
-          ]);
-      });
   };
 }
 
@@ -120,13 +83,4 @@ export function fetchEntity(entityId) {
   };
 }
 
-export function fetchArticleEntities(articleId) {
-  return (dispatch, getState) => {
-    const article = getState().articleReducer[articleId];
-    const entityIds = article.entity_scores.map( entity => entity.entity_id);
-    dispatch(requestArticleEntities(articleId));
-    Promise.all(entityIds.map( id => dispatch(fetchEntity(id))))
-      .then( _ => dispatch(doneFetchingArticleEntities()));
-  };
-}
 

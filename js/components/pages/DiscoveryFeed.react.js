@@ -9,8 +9,8 @@ import CenterLoading from '../pieces/CenterLoading.react';
 class DiscoveryFeed extends Component {
   componentDidMount() {
     const { articles, dispatch, onScrollBottom } = this.props;
-    window.addEventListener('scroll', onScrollBottom);
     if (articles.length === 0) dispatch(actionCreators.fetchDiscoveryFeed());
+    window.addEventListener('scroll', onScrollBottom);
   }
 
   componentWillUnmount() {
@@ -69,7 +69,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
     ...dispatchProps,
     onScrollBottom: ev => {
       ev.preventDefault();
-      if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight && next) dispatch(actionCreators.fetchDiscoveryFeed());
+      if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) dispatch(actionCreators.fetchDiscoveryFeed());
     },
   };
 };
