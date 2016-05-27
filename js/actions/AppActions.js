@@ -86,7 +86,6 @@ export const requestEntityArticles = _ => entityActions.requestEntityArticles();
 export const receiveEntityArticles = (json, entityId, next) => entityActions.receiveEntityArticles(json, entityId, next);
 export const fetchEntityArticles = entityId => entityActions.fetchEntityArticles(entityId);
 export const fetchEntity = entityId => entityActions.fetchEntity(entityId);
-export const fetchEntityAndArticles = entityId => entityActions.fetchEntityAndArticles(entityId);
 export const fetchArticleEntities = articleId => entityActions.fetchArticleEntities(articleId);
 
 export const requestFeed = _ => feedActions.requestFeed();
@@ -103,17 +102,9 @@ export const receivePublisher = json => publisherActions.receivePublisher(json);
 export const fetchPublisher = publisherId => publisherActions.fetchPublisher(publisherId);
 export const receivePublisherArticles = (json, publisherId, next) => publisherActions.receivePublisherArticles(json, publisherId, next);
 export const fetchPublisherArticles = publisherId => publisherActions.fetchPublisherArticles(publisherId);
-export const fetchPublisherAndArticles = publisherId => publisherActions.fetchPublisherAndArticles(publisherId);
 
 export const fetchAllPublishers = _ => publisherActions.fetchAllPublishers();
 export const filterPublishers = word => publisherActions.filterPublishers(word);
-
-
-
-
-
-
-
 
 
 

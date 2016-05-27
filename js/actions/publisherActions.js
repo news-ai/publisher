@@ -87,7 +87,7 @@ export function receivePublisherArticles(json, publisherId, next) {
 export function fetchPublisherArticles(publisherId) {
   return (dispatch, getState) => {
     if (getState().publisherReducer[publisherId] === undefined) return Promise.resolve();
-
+    if (getState().publisherReducer[publisherId].next === null || getState().articleReducer.isReceiving) return;
     dispatch(requestArticles());
 
     const fetchLink = getState().publisherReducer[publisherId].next ?
@@ -115,7 +115,6 @@ export function fetchPublisherAndArticles(publisherId) {
         .then( response => response.text())
         .then( body => dispatch(receivePublisher(JSON.parse(body))))
         .then( _ => {
-          dispatch(requestPublisher());
           return dispatch(fetchPublisherArticles(publisherId));
         });
   };

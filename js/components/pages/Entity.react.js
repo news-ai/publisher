@@ -9,7 +9,7 @@ import CenterLoading from '../pieces/CenterLoading.react';
 class Entity extends Component {
   componentDidMount() {
     const {dispatch, entityId, entity, entityArticles, onScrollBottom } = this.props;
-    if (entity === undefined) dispatch(actionCreators.fetchEntityAndArticles(entityId));
+    if (entity === undefined) dispatch(actionCreators.fetchEntity(entityId)).then( _ => dispatch(actionCreators.fetchEntityArticles(entityId)));
     if (entity !== undefined && entityArticles === undefined) dispatch(actionCreators.fetchEntityArticles(entityId));
     window.addEventListener('scroll', onScrollBottom);
   }

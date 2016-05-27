@@ -9,7 +9,7 @@ import CenterLoading from '../pieces/CenterLoading.react';
 class Publisher extends Component {
   componentDidMount() {
     const { dispatch, publisherId, publisher, publisherArticles, onScrollBottom } = this.props;
-    if (!publisher) dispatch(actionCreators.fetchPublisherAndArticles(publisherId));
+    if (publisher === undefined) dispatch(actionCreators.fetchPublisher(publisherId)).then( _ => dispatch(actionCreators.fetchPublisherArticles(publisherId)));
     if (publisher && !publisherArticles) dispatch(actionCreators.fetchPublisherArticles(publisherId));
     window.addEventListener('scroll', onScrollBottom);
   }

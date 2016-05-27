@@ -120,16 +120,6 @@ export function fetchEntity(entityId) {
   };
 }
 
-export function fetchEntityAndArticles(entityId) {
-  return dispatch => {
-    dispatch(requestEntity(entityId));
-    return fetch(`${window.CONTEXT_API_BASE}/entities/${entityId}/`, { credentials: 'include'})
-      .then( response => response.text())
-      .then( body => dispatch(receiveEntity(JSON.parse(body))))
-      .then( _ => dispatch(fetchEntityArticles(entityId)));
-  };
-}
-
 export function fetchArticleEntities(articleId) {
   return (dispatch, getState) => {
     const article = getState().articleReducer[articleId];
