@@ -14,7 +14,7 @@ function FollowingList({list, followType, following, toggleFollow}) {
       { list.length > 0 ? list.map( item => (
         <div style={{
           marginTop: '8px',
-          width: '240px',
+          width: '230px',
           display: 'flex',
           alignItems: 'center',
           padding: '5px 10px 5px 10px',
