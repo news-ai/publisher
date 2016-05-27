@@ -25,21 +25,29 @@ class Publisher extends Component {
   }
 
   render() {
-    const {publisher, publisherArticles, onScrollBottom, next, articleIsReceiving} = this.props;
+    const { dispatch, publisher, publisherArticles, onScrollBottom, next, articleIsReceiving, followed} = this.props;
     const publisherLoading = (<span>The publisher is loading</span>);
     const articleLoading = <CenterLoading name='articles' />;
     if (next === 0) this._removeScroll();
     return (
-      <div className='container publisher'>
+      <div className='container'>
         <div className='row'>
         { publisher ? (
         <div className='twelve columns'>
-            <h5>{publisher.name}</h5>
-            <span>{publisher.url}</span>
-            </div>
+          <div className='u-max-full-width' style={{
+              display: 'flex',
+              alignItems: 'center'
+            }}>
+            <span style={{fontWeight: 500, fontSize: '1.8em'}}>{publisher.name}</span>
+            <i className='fa fa-plus fa-lg right' style={{
+              color: followed ? 'black' : 'lightgray',
+            }} ariaHidden='true' onClick={ _ => dispatch(actionCreators.toggleFollow(publisher.id, 'publishers'))}></i>
+          </div>
+          <p>{publisher.url}</p>
+        </div>
         ) : publisherLoading }
         </div>
-        <div className='row'>
+        <div>
           { publisherArticles ? 
             (<div>
               <ArticleList articles={publisherArticles} />
@@ -62,6 +70,7 @@ const mapStateToProps = (state, props) => {
     publisherArticles: publisher ?
       publisher.publisher_articles.some( id => state.articleReducer[id]) ?
         publisher.publisher_articles.map( id => state.articleReducer[id]) : undefined : undefined,
+    followed: state.publisherReducer.following[publisherId] ? true : false
   };
 };
 
