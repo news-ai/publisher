@@ -8,6 +8,8 @@ import {
   ROLLOVER_PUBLISHERS,
   SELECT_PUBLISHER,
   DELETE_PUBLISHER,
+  TOGGLE_FOLLOW,
+  FETCH_FOLLOW
 } from '../constants/AppConstants';
 import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
@@ -22,15 +24,35 @@ function publisherReducer(state = initialState.publisherReducer, action) {
     action.type === RECEIVE_PUBLISHER_ARTICLES ||
     action.type === SET_NEXT ||
     action.type === FILTER_PUBLISHERS ||
-    action.type === ROLLOVER_PUBLISHERS ||
+    action.type === ROLLOVER_PUBLISHERS |
     action.type === SELECT_PUBLISHER ||
-    action.type === DELETE_PUBLISHER
+    action.type === DELETE_PUBLISHER ||
+    action.type === TOGGLE_FOLLOW ||
+    action.type === FETCH_FOLLOW
     ) accessing = true;
   else return state;
 
   let obj = assignToEmpty(state, {});
   obj.searchInput = assignToEmpty(state.searchInput, {});
   switch (action.type) {
+    case TOGGLE_FOLLOW:
+      if (action.followType !== 'publishers') return state;
+      obj.following = assignToEmpty(state.following, {});
+      if (state.following[action.id]) {
+        obj.following[action.id] = !state.following[action.id];
+      } else {
+        obj.following[action.id] = true;
+      }
+      return obj;
+    case FETCH_FOLLOW:
+      console.log(action.followType);
+      if (action.followType !== 'publishers') return state;
+      obj.following = {};
+      // TODO: set up next url
+      action.body.results.map( e => {
+        obj.following[e.publisher.id] = true;
+      });
+      return obj;
     case REQUEST_PUBLISHER:
       obj.isReceiving = true;
       return obj;

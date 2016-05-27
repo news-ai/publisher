@@ -18,7 +18,8 @@ export const fetchFollow = (followType) => {
     .then( body => {
       const json = JSON.parse(body);
       dispatch({ type: FETCH_FOLLOW, body: json, followType});
-      return Promise.all(json.results.map( e => dispatch(entityActions.fetchEntity(e.entity.id))));
+      if (followType === 'entities') return Promise.all(json.results.map( e => dispatch(entityActions.fetchEntity(e.entity.id))));
+      if (followType === 'publishers') return Promise.all(json.results.map( e => dispatch(publisherActions.fetchPublisher(e.publisher.id))));
     });
   };
 };

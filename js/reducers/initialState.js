@@ -13,6 +13,7 @@ export const initialState = {
   },
   publisherReducer: {
     isReceiving: false,
+    following: {},
     publishers: [],
     searchInput: {
       filtered: [],
