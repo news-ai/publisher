@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 
-function FollowingList({list, followType, following, toggleFollow}) {
+function FollowingList({fetchFollow, list, next, followType, following, toggleFollow}) {
   return (
       <div style={{
         margin: 'auto',
@@ -31,6 +31,7 @@ function FollowingList({list, followType, following, toggleFollow}) {
             </div>  
           </div>
         )) : <span>You are not following any {followType}.</span> }
+      { next !== null && next !== undefined ? <button onClick={ _ => fetchFollow(followType)}>More</button> : null }
       </div>
     );
 }

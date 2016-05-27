@@ -6,7 +6,7 @@ export const initialState = {
   },
   entityReducer: {
     isReceiving: false,
-    following: {}
+    following: {},
   },
   authorReducer: {
     isReceiving: false

@@ -9,17 +9,32 @@ import * as authorActions from './authorActions';
 import {
 	TOGGLE_FOLLOW,
   FETCH_FOLLOW,
+  FLUSH_FOLLOW
 } from '../constants/AppConstants';
 
-export const fetchFollow = (followType) => {
-  return dispatch => {
-    return fetch(`${window.CONTEXT_API_BASE}/${followType}/following/`, { credentials: 'include' })
+export const flushFollow = followType => {
+  return {
+    type: FLUSH_FOLLOW,
+    followType
+  };
+};
+
+export const fetchFollow = followType => {
+  return (dispatch, getState) => {
+    let fetchLink = window.CONTEXT_API_BASE + '/' + followType + '/following/';
+    let next, prev;
+    if (followType === 'entities') {
+      next = getState().entityReducer.next;
+    } else if (followType === 'publishers') {
+      next = getState().publisherReducer.next;
+    }
+    if (next === null) return;
+    if (next !== undefined) fetchLink = next;
+    return fetch(fetchLink, { credentials: 'include' })
     .then( response => response.text())
     .then( body => {
       const json = JSON.parse(body);
       dispatch({ type: FETCH_FOLLOW, body: json, followType});
-      if (followType === 'entities') return Promise.all(json.results.map( e => dispatch(entityActions.fetchEntity(e.entity.id))));
-      if (followType === 'publishers') return Promise.all(json.results.map( e => dispatch(publisherActions.fetchPublisher(e.publisher.id))));
     });
   };
 };

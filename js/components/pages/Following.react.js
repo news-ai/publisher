@@ -18,7 +18,7 @@ class Following extends Component {
   }
 
 	render() {
-		const { entities, entityFollowing, toggleEntityFollow, publishers, publisherFollowing, togglePublisherFollow } = this.props;
+		const { fetchFollow, entities, entityFollowing, toggleEntityFollow, entityNext, publishers, publisherFollowing, togglePublisherFollow, pubNext } = this.props;
 		return (
 			<div className='container'>
       <div style={{
@@ -28,7 +28,7 @@ class Following extends Component {
       }}>
         <span>Entities you Followed</span>
       </div>
-      <FollowingList list={entities} following={entityFollowing} toggleFollow={toggleEntityFollow} followType='entities' />
+      <FollowingList fetchFollow={fetchFollow} list={entities} next={entityNext} following={entityFollowing} toggleFollow={toggleEntityFollow} followType='entities' />
       <div style={{
         marginTop: '20px',
         marginBottom: '5px',
@@ -36,7 +36,7 @@ class Following extends Component {
       }}>
         <span>Publishers you Followed</span>
       </div>
-      <FollowingList list={publishers} following={publisherFollowing} toggleFollow={togglePublisherFollow} followType='publishers' />
+      <FollowingList fetchFollow={fetchFollow} list={publishers} next={pubNext} following={publisherFollowing} toggleFollow={togglePublisherFollow} followType='publishers' />
       </div>
 		)
 	}
@@ -51,9 +51,11 @@ const mapStateToProps = state => {
     entityFollowing: state.entityReducer.following,
 		entities,
     entityIds,
+    entityNext: state.entityReducer.next,
     publisherFollowing: state.publisherReducer.following,
     publishers,
-    pubIds
+    pubIds,
+    pubNext: state.publisherReducer.next
 	};
 }
 
@@ -61,7 +63,8 @@ const mapDispatchToProps = dispatch => {
 	return {
 		dispatch: action => dispatch(action),
     toggleEntityFollow: id => dispatch(actionCreators.toggleFollow(id, 'entities')),
-    togglePublisherFollow: id => dispatch(actionCreators.toggleFollow(id, 'publishers'))
+    togglePublisherFollow: id => dispatch(actionCreators.toggleFollow(id, 'publishers')),
+    fetchFollow: followType => dispatch(actionCreators.fetchFollow(followType))
 	};
 };
 

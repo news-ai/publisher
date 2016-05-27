@@ -9,6 +9,7 @@
 
 export const TOGGLE_FOLLOW = 'TOGGLE_FOLLOW';
 export const FETCH_FOLLOW = 'FETCH_FOLLOW';
+export const FLUSH_FOLLOW = 'FLUSH_FOLLOW';
 
 export const FILTER = 'FILTER';
 export const ROLLOVER = 'ROLLOVER';

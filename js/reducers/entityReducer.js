@@ -6,7 +6,8 @@ import {
   REQUEST_ENTITY_ARTICLES,
   RECEIVE_ENTITY_ARTICLES,
   TOGGLE_FOLLOW,
-  FETCH_FOLLOW
+  FETCH_FOLLOW,
+  FLUSH_FOLLOW
 } from '../constants/AppConstants';
 import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
@@ -22,7 +23,8 @@ function entityReducer(state = initialState.entityReducer, action) {
     action.type === REQUEST_ENTITY_ARTICLES ||
     action.type === RECEIVE_ENTITY_ARTICLES ||
     action.type === TOGGLE_FOLLOW ||
-    action.type === FETCH_FOLLOW
+    action.type === FETCH_FOLLOW ||
+    action.type === FLUSH_FOLLOW
     ) accessing = true;
   else return state;
 
@@ -39,11 +41,18 @@ function entityReducer(state = initialState.entityReducer, action) {
       return obj;
     case FETCH_FOLLOW:
       if (action.followType !== 'entities') return state;
-      obj.following = {};
-      // TODO: set up next url
+      obj.following = assignToEmpty(state.following, {});
       action.body.results.map( e => {
         obj.following[e.entity.id] = true;
+        obj[e.entity.id] = assignToEmpty(e.entity, {
+          entity_articles: []
+        });
       });
+      obj.next = action.body.next;
+      return obj;
+    case FLUSH_FOLLOW:
+      if (action.followType !== 'entities') return state;
+      obj.following = {};
       return obj;
     case REQUEST_ENTITIES:
       obj.isReceiving = true;

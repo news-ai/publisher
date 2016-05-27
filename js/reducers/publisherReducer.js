@@ -11,6 +11,7 @@ import {
   TOGGLE_FOLLOW,
   FETCH_FOLLOW
 } from '../constants/AppConstants';
+
 import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
 
@@ -45,13 +46,15 @@ function publisherReducer(state = initialState.publisherReducer, action) {
       }
       return obj;
     case FETCH_FOLLOW:
-      console.log(action.followType);
       if (action.followType !== 'publishers') return state;
       obj.following = {};
-      // TODO: set up next url
       action.body.results.map( e => {
         obj.following[e.publisher.id] = true;
+        obj[e.publisher.id] = assignToEmpty(e.publisher, {
+          publisher_articles: []
+        });
       });
+      obj.next = action.body.next;
       return obj;
     case REQUEST_PUBLISHER:
       obj.isReceiving = true;
