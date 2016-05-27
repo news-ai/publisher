@@ -8,24 +8,24 @@ import CenterLoading from '../pieces/CenterLoading.react';
 
 class Entity extends Component {
   componentDidMount() {
-    let {dispatch, entityId, entity, entityArticles, onScrollBottom, followed } = this.props;
+    const {dispatch, entityId, entity, entityArticles, onScrollBottom, followed } = this.props;
     if (entity === undefined) dispatch(actionCreators.fetchEntityAndArticles(entityId));
     if (entity !== undefined && entityArticles === undefined) dispatch(actionCreators.fetchEntityArticles(entityId));
     window.addEventListener('scroll', onScrollBottom);
   }
 
   componentWillUnmount() {
-    let {onScrollBottom} = this.props;
+    const {onScrollBottom} = this.props;
     window.removeEventListener('scroll', onScrollBottom);
   }
 
   _removeScroll() {
-    let {onScrollBottom} = this.props;
+    const {onScrollBottom} = this.props;
     window.removeEventListener('scroll', onScrollBottom);
   }
 
   render() {
-    let { dispatch, entityId, entity, entityArticles, onScrollBottom, next, articleIsReceiving, followed} = this.props;
+    const { dispatch, entityId, entity, entityArticles, next, articleIsReceiving, followed} = this.props;
     const entityLoading = (<span>The entity is loading</span>);
     const articleLoading = <CenterLoading name='articles'/>;
 
@@ -76,27 +76,12 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = (dispatch, props) => {
-  const entityId = parseInt(props.params.entityId, 10);
   return {
-    dispatch: action => dispatch(action)
-  };
-};
-
-const mergeProps = (stateProps, dispatchProps, ownProps) => {
-  const {next, entityId} = stateProps;
-  const {dispatch} = dispatchProps;
-  return {
-    ...stateProps,
-    onScrollBottom: (ev) => {
-      ev.preventDefault();
-      if ( ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) && next ) dispatch(actionCreators.fetchEntityArticles(entityId));
-    },
     dispatch: action => dispatch(action)
   };
 };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
-  mergeProps
+  mapDispatchToProps
 )(Entity);

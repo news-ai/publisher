@@ -12,7 +12,8 @@ class Article extends Component {
   }
 
   render() {
-    const {article, entities, entityScores, dispatch} = this.props;
+    const {article, entities, entityScores, toggleFollow, following} = this.props;
+
     const entitiesLoading = (<span>The entities are loading</span>);
     const articleLoading = (<span>The article is loading</span>);
     const entitiesProcessing = (
@@ -59,7 +60,7 @@ class Article extends Component {
                         <span className='two columns'>Relevance</span>
                         </div>
                         <div className='entity-body'>
-                      {entities.map((entity, i) => <EntityListItem key={entity.id} entityScore={entityScores[i]} {...entity} />)}
+                      {entities.map((entity, i) => <EntityListItem key={entity.id} following={following} toggleFollow={toggleFollow} entityScore={entityScores[i]} {...entity} />)}
                         </div>
                       </div>
                     : entitiesProcessing
@@ -79,12 +80,14 @@ const mapStateToProps = (state, props) => {
     articleId: props.params.articleId,
     entities: article ? article.entity_scores.map( score => score.entity) : undefined,
     entityScores: article ? article.entity_scores.map( obj => obj.score) : undefined,
+    following: state.entityReducer.following
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    dispatch: action => dispatch(action)
+    dispatch: action => dispatch(action),
+    toggleFollow: id => dispatch(actionCreators.toggleFollow(id, 'entities'))
   };
 };
 

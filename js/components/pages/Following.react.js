@@ -4,14 +4,14 @@ import { Link } from 'react-router';
 import * as actionCreators from '../../actions/AppActions';
 
 class Following extends Component {
-  componentDidMount() {
+  componentWillMount() {
   	const { dispatch } = this.props;
-    dispatch(actionCreators.fetchFeed('entities'));
+    dispatch(actionCreators.fetchFollow('entities'));
   }
 
   componentWillUnmount() {
     const { dispatch } = this.props;
-    dispatch(actionCreators.fetchFeed('entities'));
+    dispatch(actionCreators.fetchFollow('entities'));
   }
 
 	render() {
@@ -34,17 +34,20 @@ class Following extends Component {
       }}>
 			{ entities.length > 0 ? entities.map( entity => (
         <div className='following-entity' style={{
+          marginTop: '8px',
           width: '240px',
-          display: 'inline',
-          paddingLeft: '5px',
-          paddingRight: '5px'
+          display: 'flex',
+          alignItems: 'center',
+          padding: '5px 10px 5px 10px',
+          border: '1px solid lightgray',
         }}>
 						<div>
 							<Link to={`/entities/${entity.id}`}>
 								<div className='round-btn'>{entity.name}</div>
 							</Link>
-              <i className='fa fa-plus fa-lg pull-right' style={{
+              <i className='fa fa-plus fa-lg' style={{
                 color: following[entity.id] ? 'black' : 'lightgray',
+                alignSelf: 'flex-end'
               }} ariaHidden='true' onClick={ _ => dispatch(actionCreators.toggleFollow(entity.id, 'entities'))}></i>
 						</div>	
           </div>
@@ -60,7 +63,8 @@ const mapStateToProps = state => {
 	const entities = entityIds.map(id => state.entityReducer[id]);
 	return {
     following: state.entityReducer.following,
-		entities
+		entities,
+    entityIds
 	};
 }
 
@@ -70,7 +74,21 @@ const mapDispatchToProps = dispatch => {
 	};
 };
 
+const mergeProps = (stateProps, dispatchProps, ownProps) => {
+  const {next, entityId} = stateProps;
+  const {dispatch} = dispatchProps;
+  return {
+    ...stateProps,
+    onScrollBottom: (ev) => {
+      ev.preventDefault();
+      if ( ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) && next ) dispatch(actionCreators.fetchEntityArticles(entityId));
+    },
+    dispatch: action => dispatch(action)
+  };
+};
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
+  mergeProps
 )(Following);
