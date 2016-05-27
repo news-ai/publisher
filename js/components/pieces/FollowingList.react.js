@@ -5,6 +5,7 @@ function FollowingList({list, followType, following, toggleFollow}) {
   return (
       <div style={{
         margin: 'auto',
+        paddingLeft: '15px',
         display: 'flex',
         flexWrap: 'wrap',
         flexDirection: 'row',
