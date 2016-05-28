@@ -7,6 +7,9 @@ export const initialState = {
   entityReducer: {
     isReceiving: false,
     following: {},
+    follows: [],
+    followPageCount: 0,
+    followIdx: 0
   },
   authorReducer: {
     isReceiving: false
@@ -15,6 +18,9 @@ export const initialState = {
     isReceiving: false,
     following: {},
     publishers: [],
+    followPageCount: 0,
+    followIdx: 0,
+    follows: [],
     searchInput: {
       filtered: [],
       selected: [],

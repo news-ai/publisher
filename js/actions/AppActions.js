@@ -9,8 +9,17 @@ import * as authorActions from './authorActions';
 import {
 	TOGGLE_FOLLOW,
   FETCH_FOLLOW,
-  FLUSH_FOLLOW
+  FLUSH_FOLLOW,
+  UPDATE_FOLLOW_PAGE
 } from '../constants/AppConstants';
+
+export const updateFollowPage = (followType, move) => {
+  return {
+    type: UPDATE_FOLLOW_PAGE,
+    followType,
+    move
+  };
+};
 
 export const flushFollow = followType => {
   return {
@@ -36,6 +45,26 @@ export const fetchFollow = followType => {
       const json = JSON.parse(body);
       dispatch({ type: FETCH_FOLLOW, body: json, followType});
     });
+  };
+};
+
+export const nextPage = (followType) => {
+  return (dispatch, getState) => {
+    let pageCount, follows, followIdx;
+    if (followType === 'entities') {
+      pageCount = getState().entityReducer.followPageCount;
+      follows = getState().entityReducer.follows;
+      followIdx = getState().entityReducer.followIdx;
+    } else if (followType === 'publishers') {
+      pageCount = getState().publisherReducer.followPageCount;
+      follows = getState().publisherReducer.follows;
+      followIdx = getState().publisherReducer.followIdx;
+    }
+    if (follows.length < pageCount && followIdx === follows.length - 1) {
+      return dispatch(fetchFollow(followType)).then( _ => dispatch(updateFollowPage(followType, 1)));
+    } else if (followIdx < pageCount - 1) {
+      return dispatch(updateFollowPage(followType, 1));
+    }
   };
 };
 

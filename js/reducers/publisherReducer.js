@@ -9,7 +9,9 @@ import {
   SELECT_PUBLISHER,
   DELETE_PUBLISHER,
   TOGGLE_FOLLOW,
-  FETCH_FOLLOW
+  FETCH_FOLLOW,
+  FLUSH_FOLLOW,
+  UPDATE_FOLLOW_PAGE
 } from '../constants/AppConstants';
 
 import { assignToEmpty } from '../utils/assign';
@@ -29,13 +31,23 @@ function publisherReducer(state = initialState.publisherReducer, action) {
     action.type === SELECT_PUBLISHER ||
     action.type === DELETE_PUBLISHER ||
     action.type === TOGGLE_FOLLOW ||
-    action.type === FETCH_FOLLOW
+    action.type === FETCH_FOLLOW ||
+    action.type === UPDATE_FOLLOW_PAGE
     ) accessing = true;
   else return state;
 
   let obj = assignToEmpty(state, {});
   obj.searchInput = assignToEmpty(state.searchInput, {});
   switch (action.type) {
+    case UPDATE_FOLLOW_PAGE:
+      if (action.followType !== 'publishers') return state;
+      obj.followIdx = state.followIdx + action.move;
+      return obj;
+    case FLUSH_FOLLOW:
+      if (action.followType !== 'publishers') return state;
+      obj.following = {};
+      obj.next = undefined;
+      return obj;
     case TOGGLE_FOLLOW:
       if (action.followType !== 'publishers') return state;
       obj.following = assignToEmpty(state.following, {});
@@ -47,13 +59,18 @@ function publisherReducer(state = initialState.publisherReducer, action) {
       return obj;
     case FETCH_FOLLOW:
       if (action.followType !== 'publishers') return state;
-      obj.following = {};
+      const isDuplicate = !state.follows.every( list => !_.isEqual(list, action.body.results.map(e => e.publisher.id )));
+      if (isDuplicate) return state;
+      obj.following = assignToEmpty(state.following, {});
+      obj.follows = [...state.follows];
+      obj.follows.push(action.body.results.map( e => e.publisher.id ));
       action.body.results.map( e => {
         obj.following[e.publisher.id] = true;
         obj[e.publisher.id] = assignToEmpty(e.publisher, {
           publisher_articles: []
         });
       });
+      obj.followPageCount = Math.floor(action.body.count / 20) + 1; 
       obj.next = action.body.next;
       return obj;
     case REQUEST_PUBLISHER:

@@ -5,8 +5,17 @@ import FollowingList from '../pieces/FollowingList.react';
 
 
 class Following extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      entityIdx: 0,
+      pubIdx: 0
+    };
+  }
   componentWillMount() {
   	const { dispatch } = this.props;
+    dispatch(actionCreators.flushFollow('entities'));
+    dispatch(actionCreators.flushFollow('publishers'));
     dispatch(actionCreators.fetchFollow('entities'));
     dispatch(actionCreators.fetchFollow('publishers'));
   }
@@ -18,7 +27,8 @@ class Following extends Component {
   }
 
 	render() {
-		const { fetchFollow, entities, entityFollowing, toggleEntityFollow, entityNext, publishers, publisherFollowing, togglePublisherFollow, pubNext } = this.props;
+		const { dispatch, entities, entityFollowing, toggleEntityFollow, entityNext, entityPageIdx, entityMaxPages,
+      publishers, publisherFollowing, togglePublisherFollow, pubNext, pubPageIdx, pubMaxPages } = this.props;
 		return (
 			<div className='container'>
       <div style={{
@@ -28,7 +38,15 @@ class Following extends Component {
       }}>
         <span>Entities you Followed</span>
       </div>
-      <FollowingList fetchFollow={fetchFollow} list={entities} next={entityNext} following={entityFollowing} toggleFollow={toggleEntityFollow} followType='entities' />
+      <FollowingList
+      list={entities}
+      following={entityFollowing}
+      toggleFollow={toggleEntityFollow}
+      followType='entities'
+      pageIdx={entityPageIdx}
+      maxPages={entityMaxPages}
+      clickNext={ _ => dispatch(actionCreators.nextPage('entities'))}
+      clickPrev={ _ => dispatch(actionCreators.updateFollowPage('entities', -1))}/>
       <div style={{
         marginTop: '20px',
         marginBottom: '5px',
@@ -36,26 +54,39 @@ class Following extends Component {
       }}>
         <span>Publishers you Followed</span>
       </div>
-      <FollowingList fetchFollow={fetchFollow} list={publishers} next={pubNext} following={publisherFollowing} toggleFollow={togglePublisherFollow} followType='publishers' />
+      <FollowingList
+      list={publishers}
+      next={pubNext}
+      following={publisherFollowing}
+      toggleFollow={togglePublisherFollow}
+      followType='publishers'
+      pageIdx={pubPageIdx}
+      maxPages={pubMaxPages}
+      clickPrev={ _ => dispatch(actionCreators.updateFollowPage('publishers', -1))}
+      clickNext={ _ => dispatch(actionCreators.nextPage('publishers'))}/>
       </div>
 		)
 	}
 }
 
 const mapStateToProps = state => {
-  const pubIds = Object.keys(state.publisherReducer.following).filter( id => state.publisherReducer[id]);
-  const publishers = pubIds.map(id => state.publisherReducer[id]);
-	const entityIds = Object.keys(state.entityReducer.following).filter( id => state.entityReducer[id]);
-	const entities = entityIds.map(id => state.entityReducer[id]);
+  const pubIds = state.publisherReducer.follows[state.publisherReducer.followIdx];
+  const publishers = pubIds ? pubIds.map(id => state.publisherReducer[id]): [];
+	const entityIds = state.entityReducer.follows[state.entityReducer.followIdx];
+	const entities = entityIds ? entityIds.map(id => state.entityReducer[id]): [];
 	return {
     entityFollowing: state.entityReducer.following,
 		entities,
     entityIds,
     entityNext: state.entityReducer.next,
+    entityMaxPages: state.entityReducer.followPageCount,
+    entityPageIdx: state.entityReducer.followIdx,
     publisherFollowing: state.publisherReducer.following,
     publishers,
     pubIds,
-    pubNext: state.publisherReducer.next
+    pubNext: state.publisherReducer.next,
+    pubMaxPages: state.publisherReducer.followPageCount,
+    pubPageIdx: state.publisherReducer.followIdx
 	};
 }
 
@@ -64,7 +95,8 @@ const mapDispatchToProps = dispatch => {
 		dispatch: action => dispatch(action),
     toggleEntityFollow: id => dispatch(actionCreators.toggleFollow(id, 'entities')),
     togglePublisherFollow: id => dispatch(actionCreators.toggleFollow(id, 'publishers')),
-    fetchFollow: followType => dispatch(actionCreators.fetchFollow(followType))
+    nextFollowPage: followType => dispatch(actionCreators.updateFollowPage(updateFollowPage, 1)),
+    prevFollowPage: followType => dispatch(actionCreators.updateFollowPage(updateFollowPage, -1))
 	};
 };
 

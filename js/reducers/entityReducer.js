@@ -7,10 +7,12 @@ import {
   RECEIVE_ENTITY_ARTICLES,
   TOGGLE_FOLLOW,
   FETCH_FOLLOW,
-  FLUSH_FOLLOW
+  FLUSH_FOLLOW,
+  UPDATE_FOLLOW_PAGE
 } from '../constants/AppConstants';
 import { assignToEmpty } from '../utils/assign';
 import { initialState } from './initialState';
+import _ from 'lodash';
 
 function entityReducer(state = initialState.entityReducer, action) {
   if (window.isDev) Object.freeze(state);
@@ -24,12 +26,17 @@ function entityReducer(state = initialState.entityReducer, action) {
     action.type === RECEIVE_ENTITY_ARTICLES ||
     action.type === TOGGLE_FOLLOW ||
     action.type === FETCH_FOLLOW ||
-    action.type === FLUSH_FOLLOW
+    action.type === FLUSH_FOLLOW ||
+    action.type === UPDATE_FOLLOW_PAGE
     ) accessing = true;
   else return state;
 
   let obj = assignToEmpty(state, {});
   switch (action.type) {
+    case UPDATE_FOLLOW_PAGE:
+      if (action.followType !== 'entities') return state;
+      obj.followIdx = state.followIdx + action.move;
+      return obj;
     case TOGGLE_FOLLOW:
       if (action.followType !== 'entities') return state;
       obj.following = assignToEmpty(state.following, {});
@@ -41,18 +48,25 @@ function entityReducer(state = initialState.entityReducer, action) {
       return obj;
     case FETCH_FOLLOW:
       if (action.followType !== 'entities') return state;
+      const isDuplicate = !state.follows.every( list => !_.isEqual(list, action.body.results.map(e => e.entity.id )));
+      if (isDuplicate) return state;
       obj.following = assignToEmpty(state.following, {});
+      obj.follows = [...state.follows];
+      obj.follows.push(action.body.results.map( e => e.entity.id ));
       action.body.results.map( e => {
         obj.following[e.entity.id] = true;
         obj[e.entity.id] = assignToEmpty(e.entity, {
           entity_articles: []
         });
       });
+      obj.followPageCount = Math.floor(action.body.count / 20) + 1;
       obj.next = action.body.next;
       return obj;
     case FLUSH_FOLLOW:
       if (action.followType !== 'entities') return state;
       obj.following = {};
+      obj.follows = [];
+      obj.next = undefined;
       return obj;
     case REQUEST_ENTITIES:
       obj.isReceiving = true;

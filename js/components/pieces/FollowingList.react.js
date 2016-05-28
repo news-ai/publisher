@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 
-function FollowingList({fetchFollow, list, next, followType, following, toggleFollow}) {
-
-      //{ next !== null && next !== undefined ? <button onClick={ _ => fetchFollow(followType)}>More</button> : null }
+function FollowingList({list, followType, following, toggleFollow, clickPrev, clickNext, pageIdx, maxPages}) {
   return (
-      <div style={{
+    <div style={{
         margin: 'auto',
         paddingLeft: '15px',
+    }}>
+      <div style={{
         display: 'flex',
         flexWrap: 'wrap',
         flexDirection: 'row',
@@ -34,6 +34,11 @@ function FollowingList({fetchFollow, list, next, followType, following, toggleFo
           </div>
         )) : <span>You are not following any {followType}.</span> }
       </div>
+        <div className='row' style={{marginTop: '25px'}}>
+        { pageIdx > 0 && pageIdx < maxPages ? <button onClick={clickPrev}>Previous</button> : null }
+        { pageIdx < maxPages - 1 ? <button onClick={clickNext}>Next</button> : null }
+        </div>
+    </div>
     );
 }
 
