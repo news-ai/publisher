@@ -7,20 +7,30 @@ import CenterLoading from '../pieces/CenterLoading.react';
 
 
 class Publisher extends Component {
+  constructor(props) {
+    super(props);
+    this._onScrollBottom = this._onScrollBottom.bind(this);
+  }
+
   componentDidMount() {
-    const { dispatch, publisherId, publisher, publisherArticles, onScrollBottom } = this.props;
+    const { dispatch, publisherId, publisher, publisherArticles } = this.props;
     if (publisher === undefined) dispatch(actionCreators.fetchPublisher(publisherId)).then( _ => dispatch(actionCreators.fetchPublisherArticles(publisherId)));
     if (publisher !== undefined && publisherArticles === undefined) dispatch(actionCreators.fetchPublisherArticles(publisherId));
-    window.addEventListener('scroll', onScrollBottom, false);
+    window.addEventListener('scroll', this._onScrollBottom);
   }
 
   componentWillUnmount() {
-    const {onScrollBottom} = this.props;
-    window.removeEventListener('scroll', onScrollBottom);
+    window.removeEventListener('scroll', this._onScrollBottom);
+  }
+
+  _onScrollBottom(ev) {
+    const {dispatch, entityId} = this.props;
+    ev.preventDefault();
+    if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) dispatch(actionCreators.fetchPublisherArticles(publisherId));
   }
   
   render() {
-    const { dispatch, publisher, publisherArticles, onScrollBottom, next, articleIsReceiving, followed} = this.props;
+    const { dispatch, publisher, publisherArticles, next, articleIsReceiving, followed} = this.props;
     const publisherLoading = (<span>The publisher is loading</span>);
     const articleLoading = <CenterLoading name='articles' />;
 
@@ -76,22 +86,7 @@ const mapDispatchToProps = (dispatch, props) => {
   };
 };
 
-const mergeProps = (stateProps, dispatchProps, ownProps) => {
-  let {next, publisherId} = stateProps;
-  let {dispatch} = dispatchProps;
-
-  return {
-    ...stateProps,
-    onScrollBottom: ev => {
-      ev.preventDefault();
-      if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) dispatch(actionCreators.fetchPublisherArticles(publisherId));
-    },
-    dispatch: action => dispatch(action)
-  };
-};
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-  mergeProps
 )(Publisher);

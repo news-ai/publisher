@@ -7,16 +7,26 @@ import CenterLoading from '../pieces/CenterLoading.react';
 
 
 class Entity extends Component {
+  constructor(props) {
+    super(props);
+    this._onScrollBottom = this._onScrollBottom.bind(this);
+  }
+
   componentDidMount() {
-    const {dispatch, entityId, entity, entityArticles, onScrollBottom } = this.props;
+    const {dispatch, entityId, entity, entityArticles } = this.props;
     if (entity === undefined) dispatch(actionCreators.fetchEntity(entityId)).then( _ => dispatch(actionCreators.fetchEntityArticles(entityId)));
     if (entity !== undefined && entityArticles === undefined) dispatch(actionCreators.fetchEntityArticles(entityId));
-    window.addEventListener('scroll', onScrollBottom);
+    window.addEventListener('scroll', this._onScrollBottom);
   }
 
   componentWillUnmount() {
-    const {onScrollBottom} = this.props;
-    window.removeEventListener('scroll', onScrollBottom);
+    window.removeEventListener('scroll', this._onScrollBottom);
+  }
+
+  _onScrollBottom(ev) {
+    const {dispatch, entityId} = this.props;
+    ev.preventDefault();    
+    if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) dispatch(actionCreators.fetchEntityArticles(entityId));   
   }
 
   render() {
@@ -74,21 +84,7 @@ const mapDispatchToProps = (dispatch, props) => {
   };
 };
 
-const mergeProps = (stateProps, dispatchProps, ownProps) => {    
-  const {entityId} = stateProps;    
-  const {dispatch} = dispatchProps;   
-  return {
-    ...stateProps,
-    onScrollBottom: (ev) => {   
-      ev.preventDefault();    
-      if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) dispatch(actionCreators.fetchEntityArticles(entityId));   
-    },
-    dispatch: action => dispatch(action)
-  };
-};
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-  mergeProps
 )(Entity);

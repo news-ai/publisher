@@ -7,19 +7,29 @@ import ArticleInputBar from '../pieces/ArticleInputBar.react';
 import CenterLoading from '../pieces/CenterLoading.react';
 
 class DiscoveryFeed extends Component {
+  constructor(props) {
+    super(props);
+    this._onScrollBottom = this._onScrollBottom.bind(this);
+  }
+
   componentDidMount() {
-    const { articles, dispatch, onScrollBottom } = this.props;
+    const { articles, dispatch } = this.props;
     if (articles.length === 0) dispatch(actionCreators.fetchDiscoveryFeed());
-    window.addEventListener('scroll', onScrollBottom);
+    window.addEventListener('scroll', this._onScrollBottom);
   }
 
   componentWillUnmount() {
-    const { onScrollBottom } = this.props;
-    window.removeEventListener('scroll', onScrollBottom);
+    window.removeEventListener('scroll', this._onScrollBottom);
+  }
+
+  _onScrollBottom(ev) {
+    const { dispatch } = this.props;
+    ev.preventDefault();
+    if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) dispatch(actionCreators.fetchDiscoveryFeed());
   }
 
   render() {
-    const { articles, articleIsReceiving, next, onScrollBottom, discovery } = this.props;
+    const { articles, articleIsReceiving, next, discovery } = this.props;
     const articleLoading = <CenterLoading name='articles'/>;
     
     return (
@@ -61,21 +71,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const mergeProps = (stateProps, dispatchProps, ownProps) => {
-  const {next} = stateProps;
-  const {dispatch} = dispatchProps;
-  return {
-    ...stateProps,
-    ...dispatchProps,
-    onScrollBottom: ev => {
-      ev.preventDefault();
-      if ((window.innerHeight + window.scrollY + 20) >= document.body.offsetHeight) dispatch(actionCreators.fetchDiscoveryFeed());
-    },
-  };
-};
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-  mergeProps
 )(DiscoveryFeed);
