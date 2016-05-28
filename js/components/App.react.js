@@ -13,7 +13,7 @@ class App extends Component {
   render() {
     return (
       <div className='wrapper'>
-          <div className='container'>
+          <div style={{marginBottom: '70px'}}>
             <Navigation isLogin={this.props.isLogin} />
           </div>
         {
@@ -21,7 +21,7 @@ class App extends Component {
           this.props.children :
           this.props.data.personReducer.isReceiving ?
           (
-            <div className='container article-list-container'>
+            <div className='pusher article-list-container'>
             <CenterLoading name='feed' />
           </div>)
           : <Login /> }

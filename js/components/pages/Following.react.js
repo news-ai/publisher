@@ -30,7 +30,7 @@ class Following extends Component {
 		const { dispatch, entities, entityFollowing, toggleEntityFollow, entityNext, entityPageIdx, entityMaxPages,
       publishers, publisherFollowing, togglePublisherFollow, pubNext, pubPageIdx, pubMaxPages } = this.props;
 		return (
-			<div className='container'>
+			<div>
       <div style={{
         marginTop: '20px',
         marginBottom: '5px',

@@ -66,6 +66,7 @@ function entityReducer(state = initialState.entityReducer, action) {
       if (action.followType !== 'entities') return state;
       obj.following = {};
       obj.follows = [];
+      obj.followIdx = 0;
       obj.next = undefined;
       return obj;
     case REQUEST_ENTITIES:
