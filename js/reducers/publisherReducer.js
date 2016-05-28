@@ -46,6 +46,8 @@ function publisherReducer(state = initialState.publisherReducer, action) {
     case FLUSH_FOLLOW:
       if (action.followType !== 'publishers') return state;
       obj.following = {};
+      obj.followIdx = 0;
+      obj.follows = [];
       obj.next = undefined;
       return obj;
     case TOGGLE_FOLLOW:
