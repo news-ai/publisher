@@ -131,7 +131,7 @@ export function fetchEntitySearch(value) {
       const json = JSON.parse(body).hits;
       const entities = json.hits.map( obj => obj._source.data);
       return Promise.all([
-        ...entities,
+        ...entities.map( entity => dispatch(receiveEntity(entity))),
         dispatch(updateFiltered(entities.map(entity => entity.id), value, 'entityInput'))
         ]);
     });
