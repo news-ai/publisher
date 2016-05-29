@@ -32,6 +32,7 @@ export function receiveFeed(json, next) {
 
 export function fetchFeed() {
   return (dispatch, getState) => {
+    if (getState().articleReducer.isReceiving) return;
     dispatch(requestFeed());
     dispatch(requestArticles());
     const fetchLink = getState().feedReducer.next ?
