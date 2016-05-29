@@ -125,13 +125,14 @@ export function setValue(value, inputType) {
 export function fetchEntitySearch(value) {
   return dispatch => {
     dispatch(setValue(value, 'entityInput'));
-    return fetch(`${window.CONTEXT_API_BASE}/entities?name=${value}`, { credentials: 'include' })
+    return fetch(`https://search.newsai.org/entity/entity/_search?q=data.name:${value}&size=10`, { credentials: 'include' })
     .then( response => response.text())
     .then( body => {
-      const json = JSON.parse(body);
+      const json = JSON.parse(body).hits;
+      const entities = json.hits.map( obj => obj._source.data);
       return Promise.all([
-        ...json.results.map( entity => dispatch(receiveEntity(entity))),
-        dispatch(updateFiltered(json.results.map(entity => entity.id), value, 'entityInput'))
+        ...entities,
+        dispatch(updateFiltered(entities.map(entity => entity.id), value, 'entityInput'))
         ]);
     });
   };
