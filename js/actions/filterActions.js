@@ -125,7 +125,7 @@ export function setValue(value, inputType) {
 export function fetchEntitySearch(value) {
   return dispatch => {
     dispatch(setValue(value, 'entityInput'));
-    return fetch(`https://search.newsai.org/entity/entity/_search?q=data.name:${value}&size=10`, { credentials: 'include' })
+    return fetch(`https://search.newsai.org/entity/entity/_search?q=data.name:${value}&size=10`)
     .then( response => response.text())
     .then( body => {
       const json = JSON.parse(body).hits;
