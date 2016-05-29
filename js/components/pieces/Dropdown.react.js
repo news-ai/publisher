@@ -11,6 +11,15 @@ class Dropdown extends Component {
   }
 
   componentDidMount() {
+    $('.ui.search')
+    .search({
+      apiSettings: {
+        onResponse: function(res) {
+          console.log(res);
+        }
+      },
+      url: 'https://search.newsai.org/entity/entity/_search?q=data.name:{query}&size=10'
+    });
   }
 
   componentDidUpdate() {
@@ -18,8 +27,12 @@ class Dropdown extends Component {
 
   render() {
     return (
-        <div>
-            <h2>Dropdown</h2>
+      <div className='ui search'>
+        <div className='ui icon input'>
+        <input className='prompt' type='text' placeholder='Entity name...'></input>
+        <i className='search icon'></i>
+        </div>
+        <div className='results'></div>
       </div> 
     );
   }
