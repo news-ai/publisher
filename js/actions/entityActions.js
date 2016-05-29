@@ -83,4 +83,26 @@ export function fetchEntity(entityId) {
   };
 }
 
+export function fetchEntitiesArticles() {
+  return (dispatch, getState) => {
+    if (getState().filterReducer.entityInput.selected.length === 0) return;
+    if (getState().filterReducer.entityInput.next === null) return;
+    const fetchLink = getState().filterReducer.entityInput.next ||
+    `${window.CONTEXT_API_BASE}/entities/${getState().filterReducer.entityInput.selected.join(',')}/articles${removeCache()}`;
+    if (fetchLink === null) return;
+    dispatch(requestArticles());
+    return fetch(fetchLink, { credentials: 'include'})
+      .then( response => response.text())
+      .then( body => {
+        if (!isJsonString(body)) return;
+        const json = JSON.parse(body);
+        return Promise.all([
+          dispatch(receiveArticles(json.results)),
+          dispatch(setNext(json.next, 'entityInput')),
+          dispatch(setFilterArticleIds(json.results.map( article => article.id ), 'entityInput'))
+          ]);
+      });
+  };
+}
+
 
