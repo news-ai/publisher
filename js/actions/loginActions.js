@@ -27,7 +27,7 @@ function loginFail() {
 }
 
 export function loginWithGoogle() {
-  window.location.href = `https://context.newsai.org/login/google-oauth2`;
+  window.location.href = 'https://context.newsai.org/login/google-oauth2?next=/publisher' + window.location.pathname; 
 }
 
 export function fetchPerson() {
