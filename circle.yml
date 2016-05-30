@@ -7,6 +7,10 @@ test:
     - echo "No tests are needed"
 
 deployment:
+  staging:
+    branch: develop
+    commands:
+      - ssh $SSH "cd $STAGINGDIRECTORY && git pull -u origin develop && /home/api/.nvm/v5.10.1/bin/npm install && /home/api/.nvm/v5.10.1/bin/npm run build"
   production:
     branch: master
     commands:
