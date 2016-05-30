@@ -1,40 +1,34 @@
-
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 class Dropdown extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      value: null
-    };
+    this._onChange = this._onChange.bind(this);
   }
 
   componentDidMount() {
-    $('.ui.search')
-    .search({
-      apiSettings: {
-        onResponse: function(res) {
-          console.log(res);
-        }
-      },
-      url: 'https://search.newsai.org/entity/entity/_search?q=data.name:{query}&size=10'
-    });
+    $('.ui.selection.dropdown').dropdown();
   }
 
   componentDidUpdate() {
+    console.log($('.ui.selection.dropdown').dropdown('get value'));
+  }
+
+  _onChange(e) {
+    console.log(e.target.value);
   }
 
   render() {
     return (
-      <div className='ui search'>
-        <div className='ui icon input'>
-        <input className='prompt' type='text' placeholder='Entity name...'></input>
-        <i className='search icon'></i>
+      <div className='ui fluid multiple search selection dropdown'>
+        <input onChange={this._onChange} type='hidden' name='entity' />
+        <div className='default text'>Select Entities</div>
+        <i className='dropdown icon'></i>
+        <div className='menu'>
         </div>
-        <div className='results'></div>
-      </div> 
-    );
+      </div>
+);
   }
 }
 
