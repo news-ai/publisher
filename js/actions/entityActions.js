@@ -84,6 +84,7 @@ export function fetchEntity(entityId) {
 }
 
 export function fetchEntitiesArticles() {
+  // articles from multiple entities
   return (dispatch, getState) => {
     if (getState().filterReducer.entityInput.selected.length === 0) return;
     if (getState().filterReducer.entityInput.next === null) return;

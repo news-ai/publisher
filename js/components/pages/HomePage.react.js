@@ -6,6 +6,7 @@ import ArticleList from '../pieces/ArticleList.react';
 import AdditionalLoading from '../pieces/AdditionalLoading.react';
 import CenterLoading from '../pieces/CenterLoading.react';
 import Filter from '../pieces/Filter.react';
+import Dropdown from '../pieces/Dropdown.react';
 
 class HomePage extends Component {
   constructor(props) {
@@ -49,6 +50,15 @@ class HomePage extends Component {
                 <Filter />
                 </div> : null }
               </div>
+              <Dropdown
+              isLoading={true}
+              data={
+                [
+          { value: 'one', label: 'ONE' },
+          { value: 'two', label: 'TWO' },
+                ]
+              }
+               />
             <ArticleList articles={articles} />
             </div>
             ) :
