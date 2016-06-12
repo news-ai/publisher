@@ -9,7 +9,7 @@ import Filter from '../pieces/Filter.react';
 
 class HomePage extends Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
       filterTab: false
     }
@@ -36,6 +36,7 @@ class HomePage extends Component {
     }
     return (
       <div className='container article-list-container'>
+                <Filter />
           { (articles && (next === null || next)) ? (
             <div>
               <div style={{margin: '5px'}}>
@@ -49,7 +50,6 @@ class HomePage extends Component {
                 <Filter />
                 </div> : null }
               </div>
-                <Filter />
             <ArticleList articles={articles} />
             </div>
             ) :
