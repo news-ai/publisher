@@ -70,6 +70,7 @@ class Typeahead extends Component {
       multi
       simpleValue
       allowCreate
+      filterOption={function(){ return true; }}
       isLoading={this.state.isLoading}
       value={this.state.value}
       placeholder="Select your favourite(s)"
