@@ -12,14 +12,6 @@ export const FETCH_FOLLOW = 'FETCH_FOLLOW';
 export const FLUSH_FOLLOW = 'FLUSH_FOLLOW';
 export const UPDATE_FOLLOW_PAGE = 'UPDATE_FOLLOW_PAGE';
 
-export const FILTER = 'FILTER';
-export const ROLLOVER = 'ROLLOVER';
-export const SELECT = 'SELECT';
-export const DELETE = 'DELETE';
-export const RECEIVE_ARTICLE_IDS = 'RECEIVE_ARTICLE_IDS';
-export const SET_NEXT = 'SET_NEXT';
-export const SET_VALUE = 'SET_VALUE';
-
 export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const REQUEST_LOGIN = 'REQUEST_LOGIN';
 export const RECEIVE_LOGIN = 'RECEIVE_LOGIN';

@@ -49,6 +49,7 @@ class HomePage extends Component {
                 <Filter />
                 </div> : null }
               </div>
+                <Filter />
             <ArticleList articles={articles} />
             </div>
             ) :

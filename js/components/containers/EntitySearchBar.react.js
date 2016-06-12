@@ -1,22 +1,37 @@
 import { connect } from 'react-redux';
 import * as actionCreators from '../../actions/filterActions';
-import Typeahead from '../pieces/Typeahead.react';
+import React from 'react';
+import { Link } from 'react-router';
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
+
+
+function logChange(val) {
+  console.log("Selected: " + val);
+}
+
+function Typeahead({ map, title }) {
+  return (
+    <div>
+    EYYY
+    <Select name='form-field-name'
+    isLoading={true}
+    onChange={logChange}
+    />
+    </div>
+  );
+}
 
 const mapStateToProps = state => {
   return {
     title: 'Entity Search',
     map: state.entityReducer,
-    ...state.filterReducer.entityInput
   };
 };
 
 
 const mapDispatchToProps = dispatch => {
   return {
-    filterHandler: query => dispatch(actionCreators.fetchEntitySearch(query)),
-    keyPressHandler: keyCode => dispatch(actionCreators.updateActiveTypeaheadField(keyCode, 'entityInput')),
-    deleteSelection: i => dispatch(actionCreators.deleteTypeaheadSelection(i, 'entityInput')),
-    onHover: i => dispatch(actionCreators.onHoverTypeahead(i, 'entityInput')),
   };
 };
 
